@@ -7,9 +7,14 @@ namespace HeightmapVisualizer
 		{
 			// Set up form properties
 			this.Text = "Drawing Example";
-			this.Width = 400;
-			this.Height = 300;
+			this.Width = 16 * 100;
+			this.Height = 9 * 100;
+
+			AllocConsole();
 		}
+
+		[System.Runtime.InteropServices.DllImport("kernel32.dll")]
+		private static extern bool AllocConsole();
 
 		// Override the OnPaint method to perform custom drawing
 		protected override void OnPaint(PaintEventArgs e)

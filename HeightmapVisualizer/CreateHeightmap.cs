@@ -24,10 +24,9 @@ namespace HeightmapVisualizer
 			{
 				for(int j = 0; j < hm.Map.GetLength(1); j++)
 				{
-					hm.Map[i, j] = (float) random.NextDouble() * 255;
+					hm.Map[i, j] = 100;//(float) random.NextDouble() * 10;
 				}
 			}
 		}
-
 	}
 }
