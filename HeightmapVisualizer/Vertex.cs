@@ -21,5 +21,17 @@ namespace HeightmapVisualizer
 			Y = y;
 			Z = z;
 		}
+
+		public Vertex(Vector3 position)
+		{
+			X = position.X;
+			Y = position.Y;
+			Z = position.Z;
+		}
+
+		public Vector3 ToVector3()
+		{
+			return new Vector3(X, Y, Z);
+		}
 	}
 }

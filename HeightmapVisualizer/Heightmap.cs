@@ -29,9 +29,9 @@ namespace HeightmapVisualizer
 				for (int j = 0; j < Map.GetLength(1); j++)
 				{
 					map3D[i, j] = new Cuboid(
-						i * SquareSize, 
-						j * SquareSize, 
-						10,
+						i * SquareSize * SquareSize, 
+						0, 
+						j * SquareSize * SquareSize,
 						Map[i, j], 
 						SquareSize);
 				}
