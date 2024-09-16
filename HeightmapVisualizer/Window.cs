@@ -1,9 +1,10 @@
 ﻿
 using System.Numerics;
+using HeightmapVisualizer.UI;
 
 namespace HeightmapVisualizer
 {
-	internal class Window : Form
+    internal class Window : Form
 	{
 		public static Window GetInstance()
 		{
@@ -35,13 +36,14 @@ namespace HeightmapVisualizer
 			float yaw = 0f;
 			float pitch = 10f;
 
-			new Camera(position, screen, aspect, fov, nearClippingPlane, yaw, pitch);
+			new Player.Camera(position, screen, aspect, fov, nearClippingPlane, yaw, pitch);
 
 			AllocConsole();
 
 			// create a new thread
 			new Menu();
-			Thread t = new Thread(Menu.Update);
+			new Player.Controller();
+			Thread t = new Thread(Player.Controller.Update);
 
 			// start the thread
 			t.Start();
@@ -63,7 +65,7 @@ namespace HeightmapVisualizer
 
 			DrawDebug.Draw(e, g, hm);
 
-			Button.Draw(g);
+			UI.Button.Draw(g);
 		}
 	}
 }

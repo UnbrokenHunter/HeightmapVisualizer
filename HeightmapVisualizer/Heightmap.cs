@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HeightmapVisualizer.Shapes;
 
 namespace HeightmapVisualizer
 {
-	internal class Heightmap
+    internal class Heightmap
 	{
 		public int Width, Height;
 		public float[,] Map;

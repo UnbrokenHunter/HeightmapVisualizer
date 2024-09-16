@@ -5,10 +5,11 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using HeightmapVisualizer.Shapes;
 
 namespace HeightmapVisualizer
 {
-	internal class DrawHeightmap
+    internal class DrawHeightmap
 	{
 		public static void Draw(PaintEventArgs e, Graphics g, Heightmap hm)
 		{

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
+using HeightmapVisualizer.Player;
+using HeightmapVisualizer.Shapes;
 
 namespace HeightmapVisualizer
 {
-	internal class DrawDebug
+    internal class DrawDebug
 	{
 		public static void Draw(PaintEventArgs e, Graphics g, Heightmap hm)
 		{
