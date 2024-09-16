@@ -5,8 +5,22 @@ namespace HeightmapVisualizer
 {
 	internal class Window : Form
 	{
-		public Window()
+		public static Window GetInstance()
 		{
+			if (Instance != null)
+				return Instance;
+			else
+				return new Window();
+		}
+		private static Window Instance = GetInstance();
+
+		private Window()
+		{
+			if (Instance == null)
+				Instance = this;
+			else
+				throw new InvalidOperationException();
+
 			// Set up form properties
 			this.Text = "Projections";
 			this.Width = 16 * 100;
@@ -26,21 +40,12 @@ namespace HeightmapVisualizer
 			AllocConsole();
 
 			// create a new thread
-			Thread t = new Thread(Worker);
+			new Menu();
+			Thread t = new Thread(Menu.Update);
 
 			// start the thread
 			t.Start();
 		}
-
-		static void Worker()
-		{
-			while (true)
-			{
-				Console.WriteLine(Cursor.Position.ToString()); // Make Menu and change parameters, and add a redraw button for now
-				Thread.Sleep(100);
-			}
-		}
-
 
 		[System.Runtime.InteropServices.DllImport("kernel32.dll")]
 		private static extern bool AllocConsole();
@@ -54,9 +59,11 @@ namespace HeightmapVisualizer
 			Graphics g = e.Graphics;
 
 			Heightmap hm = new CreateHeightmap(30, 30).Map;
-			DrawHeightmap.Draw(e, g, hm);
+			//DrawHeightmap.Draw(e, g, hm);
 
-			DrawDebug.Draw(e, g, hm);		
+			DrawDebug.Draw(e, g, hm);
+
+			Button.Draw(g);
 		}
 	}
 }
