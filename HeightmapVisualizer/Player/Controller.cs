@@ -96,17 +96,21 @@ namespace HeightmapVisualizer.Player
 			DragHandler.UpdateDrag();
 			if (DragHandler.IsDragging)
 			{
-				Console.WriteLine("Dragging" + DragHandler.GetCurrentPosition() + " " + DragHandler.GetLastPosition());
 				Vector2 direction = new Vector2(DragHandler.GetCurrentPosition().X - DragHandler.GetLastPosition().X, DragHandler.GetCurrentPosition().Y - DragHandler.GetLastPosition().Y);
 
 
 				// Sensitivity
 				float sensitivity = 0.005f;
 
+				// Convert to positive between 0 and 360
+				//direction.X %= (float)Math.Tau;
+				//direction.Y %= (float)Math.Tau;
+				//direction.Y %= (float)Math.Tau;
+
 				// Apply sensitivity scaling to direction
 				direction *= sensitivity;
 
-				// Calculate pitch and yaw directly based on direction (no atan here)
+				// Calculate pitch and yaw directly based on direction
 				float yaw = direction.X;
 				float pitch = direction.Y;
 

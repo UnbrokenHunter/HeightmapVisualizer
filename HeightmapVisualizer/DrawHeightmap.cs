@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using HeightmapVisualizer.Shapes;
+﻿using HeightmapVisualizer.Shapes;
 
 namespace HeightmapVisualizer
 {
     internal class DrawHeightmap
 	{
-		public static void Draw(PaintEventArgs e, Graphics g, Heightmap hm)
+		public static void Draw(Graphics g, Cuboid[,] hm3D)
 		{
-			if (e == null || g == null || hm == null) return;
+			if (g == null || hm3D == null) return;
 
-			Cuboid[,] hm3D = hm.Map3D();
-
-			for (int i = 0; i < hm.Map.GetLength(0); i++)
+			for (int i = 0; i < hm3D.GetLength(0); i++)
 			{
-				for (int j = 0; j < hm.Map.GetLength(1); j++)
+				for (int j = 0; j < hm3D.GetLength(1); j++)
 				{
 					Cuboid value = hm3D[i, j];
 					Pen pen = new (Color.FromArgb(255, Math.Min((int) value.height / 12, 255), Math.Min((int) value.height / 6, 255), Math.Min((int) value.height, 255)));

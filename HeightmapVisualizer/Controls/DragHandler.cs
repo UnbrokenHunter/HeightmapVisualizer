@@ -25,6 +25,8 @@ namespace HeightmapVisualizer.Controls
 				if (!isDragging)
 				{
 					originalPosition = Cursor.Position; // Store the original position (screen coordinates)
+					lastPosition = originalPosition;
+					currentPosition = originalPosition;
 					isDragging = true;
 					Console.WriteLine($"Dragging started at: {originalPosition}");
 				}
