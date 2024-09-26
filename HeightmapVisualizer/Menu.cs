@@ -1,11 +1,12 @@
 ﻿using System.Numerics;
 using HeightmapVisualizer.Controls;
-using HeightmapVisualizer.Player;
+using HeightmapVisualizer.Scene;
 
 namespace HeightmapVisualizer
 {
-	internal class Menu
+    internal class Menu
 	{
+		/*
 		private UI.Button x;
 		private UI.Button y;
 		private UI.Button z;
@@ -39,13 +40,14 @@ namespace HeightmapVisualizer
 				y.text = $"Y:{Camera.Instance.position.Y}";
 				z.text = $"Z:{Camera.Instance.position.Z}";
 
-				pitch.text = $"Pitch:{Camera.Instance.pitch}";
-				yaw.text = $"Yaw:{Camera.Instance.yaw}";
+				pitch.text = $"Quat:{Camera.Instance.rotation}";
+				yaw.text = $"Euler:{Camera.Instance.EulerRotation()}";
 
 				fov.text = $"FOV:{Camera.Instance.fov}";
 
 				Thread.Sleep(60);
 			}
 		}
+		*/
 	}
 }

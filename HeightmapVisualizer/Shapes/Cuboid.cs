@@ -1,71 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HeightmapVisualizer.Primitives;
+using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Shapes
 {
-    internal class Cuboid
+    internal class Cuboid : Shape
     {
+        public Vector3 corner, size;
 
-        public float x, z, height, rectSize;
-
-        // Upper Front Left & Right
-        public Vertex ufl;
-        public Vertex ufr;
-
-        // Upper Back Left & Right
-        public Vertex ubl;
-        public Vertex ubr;
-
-        // Down Front Left & Right
-        public Vertex dfr;
-        public Vertex dfl;
-
-        // Down Back Left & Right
-        public Vertex dbl;
-        public Vertex dbr;
-
-        public Edge[] edges = new Edge[12];
-
-        public Cuboid(float x, float y, float z, float height, float rectSize)
+        public Cuboid(Transform transform, Vector3 cornerOffset, Vector3 size) : base(transform)
         {
-            this.x = x;
-            this.z = z;
-            this.height = height;
-            this.rectSize = rectSize;
+            this.corner = cornerOffset;
+            this.size = size;
+
+            transform.Vertices = new Vertex[8];
 
             // Bottom vertices (y = 0)
-            dbl = new Vertex(x, y, z);
-            dbr = new Vertex(x + rectSize, y, z);
-            dfl = new Vertex(x, y, z + rectSize);
-            dfr = new Vertex(x + rectSize, y, z + rectSize);
+            transform.Vertices[0] = new Vertex(new Vector3(corner.x, corner.y, corner.z));
+            transform.Vertices[1] = new Vertex(new Vector3(corner.x + size.x, corner.y, corner.z));
+            transform.Vertices[2] = new Vertex(new Vector3(corner.x, corner.y, corner.z + size.z));
+            transform.Vertices[3] = new Vertex(new Vector3(corner.x + size.x, corner.y, corner.z + size.z));
 
-            // Top vertices (y = height)
-            ubl = new Vertex(x, y - height, z);
-            ubr = new Vertex(x + rectSize, y - height, z);
-            ufl = new Vertex(x, y - height, z + rectSize);
-            ufr = new Vertex(x + rectSize, y - height, z + rectSize);
+            // Top vertices (y = size.y)
+            transform.Vertices[4] = new Vertex(new Vector3(corner.x, corner.y - size.y, corner.z));
+            transform.Vertices[5] = new Vertex(new Vector3(corner.x + size.x, corner.y - size.y, corner.z));
+            transform.Vertices[6] = new Vertex(new Vector3(corner.x, corner.y - size.y, corner.z + size.z));
+            transform.Vertices[7] = new Vertex(new Vector3(corner.x + size.x, corner.y - size.y, corner.z + size.z));
 
+            transform.Faces = new Face[12]
+            {
+				new Face(transform.Vertices[6], transform.Vertices[7], transform.Vertices[4]),
+				new Face(transform.Vertices[5], transform.Vertices[7], transform.Vertices[4]),
+				new Face(transform.Vertices[2], transform.Vertices[3], transform.Vertices[0]),
+				new Face(transform.Vertices[1], transform.Vertices[3], transform.Vertices[0]),
 
-            // Define the edges
-            edges[0] = new Edge(dbl, dbr);
-            edges[1] = new Edge(dfl, dbl);
-            edges[2] = new Edge(dfl, dfr);
-            edges[3] = new Edge(dfr, dbr);
+				new Face(transform.Vertices[6], transform.Vertices[4], transform.Vertices[0]),
+				new Face(transform.Vertices[6], transform.Vertices[0], transform.Vertices[0]),
+				new Face(transform.Vertices[7], transform.Vertices[5], transform.Vertices[1]),
+				new Face(transform.Vertices[7], transform.Vertices[1], transform.Vertices[1]),
 
-            edges[4] = new Edge(ubl, ubr);
-            edges[5] = new Edge(ufl, ubl);
-            edges[6] = new Edge(ufl, ufr);
-            edges[7] = new Edge(ufr, ubr);
-
-            edges[8] = new Edge(dbl, ubl);
-            edges[9] = new Edge(dfl, ufl);
-            edges[10] = new Edge(dfr, ufr);
-            edges[11] = new Edge(dbr, ubr);
-
+				new Face(transform.Vertices[5], transform.Vertices[4], transform.Vertices[0]),
+				new Face(transform.Vertices[1], transform.Vertices[0], transform.Vertices[5]),
+				new Face(transform.Vertices[7], transform.Vertices[6], transform.Vertices[2]),
+				new Face(transform.Vertices[3], transform.Vertices[2], transform.Vertices[7])
+			};
         }
-    }
+
+		public override void Init()
+		{
+			foreach (Face face in Transform.Faces)
+			{
+				foreach (Edge edge in face.Edges)
+				{
+					foreach (Vertex vertex in edge.Points)
+					{
+						vertex.Transform = Transform;
+					}
+				}
+			}
+		}
+
+		public override void Update()
+		{
+			//throw new NotImplementedException();
+		}
+	}
 }

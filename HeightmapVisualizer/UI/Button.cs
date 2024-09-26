@@ -9,6 +9,7 @@ namespace HeightmapVisualizer.UI
 {
     class Button
     {
+        /*
         private static List<Button> buttons = new List<Button>();
 
         public string text;
@@ -63,5 +64,6 @@ namespace HeightmapVisualizer.UI
             return position1.X <= relativeCursor.X && position2.X >= relativeCursor.X &&
                 position1.Y <= relativeCursor.Y && position2.Y >= relativeCursor.Y;
         }
+        */
     }
 }

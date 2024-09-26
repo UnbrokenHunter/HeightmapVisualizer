@@ -1,11 +1,12 @@
 ﻿using System.Numerics;
-using HeightmapVisualizer.Player;
-using HeightmapVisualizer.Shapes;
+using HeightmapVisualizer.Primitives;
+using HeightmapVisualizer.Scene;
 
 namespace HeightmapVisualizer
 {
     internal class DrawDebug
 	{
+		/*
 		public static void Draw(PaintEventArgs e, Graphics g, Heightmap hm)
 		{
 			if (e == null || g == null || hm == null) return;
@@ -60,5 +61,6 @@ namespace HeightmapVisualizer
 			}
 
 		}
+		*/
 	}
 }

@@ -1,3 +1,6 @@
+using HeightmapVisualizer.Shapes;
+using HeightmapVisualizer.Primitives;
+
 namespace HeightmapVisualizer
 {
 	internal static class Program
@@ -10,6 +13,7 @@ namespace HeightmapVisualizer
 		{
 			// To customize application configuration such as set high DPI settings or default font,
 			// see https://aka.ms/applicationconfiguration.
+
 			ApplicationConfiguration.Initialize();
 			Application.Run(Window.GetInstance());
 		}
