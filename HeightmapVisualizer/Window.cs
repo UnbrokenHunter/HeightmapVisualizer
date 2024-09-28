@@ -10,36 +10,38 @@ namespace HeightmapVisualizer
 {
     internal class Window : Form
 	{
-		/*
-
-		private Heightmap hm;
-		private Cuboid[,] hm3d;
-
-		*/
+		private Scene.Scene scene;
 
 		public static Window GetInstance()
 		{
-			if (Instance != null)
-				return Instance;
-			else
-				return new Window();
+			if (Instance == null)
+				Instance = new Window();
+			return Instance;
 		}
-		private static Window Instance = GetInstance();
+		private static Window Instance;
 
 		private Window()
 		{
 			AllocConsole();
 
+			// Set up form properties
+			this.Text = "Projections";
+			this.Width = 16 * 100;
+			this.Height = 9 * 100;
+
+			this.DoubleBuffered = true;
+
+			this.scene = CreateScene();
+			scene.Init();
+		}
+
+		private Scene.Scene CreateScene()
+		{
 			Camera camera = new Camera(new Units.Transform(), this.Bounds);
 			camera.Controller = new Controller();
 			Gameobject cube = new Cuboid(new Units.Transform(), new Units.Vector3(-1, -1, -1), new Units.Vector3(1, 1, 1));
 
-			new Scene.Scene(camera, new Gameobject[] { cube });
-
-			// PUT THIS IN LOOP
-			Window.GetInstance().Invalidate();
-			Thread.Sleep(1);
-
+			return new Scene.Scene(camera, new Gameobject[] { cube });
 		}
 
 
@@ -47,11 +49,6 @@ namespace HeightmapVisualizer
 		/*
 		private Window()
 		{
-			if (Instance == null)
-				Instance = this;
-			else
-				throw new InvalidOperationException();
-
 			// Set up form properties
 			this.Text = "Projections";
 			this.Width = 16 * 100;
@@ -91,14 +88,10 @@ namespace HeightmapVisualizer
 		{
 			base.OnPaint(e);
 
-			// Get the Graphics object to draw on the form
-			Graphics g = e.Graphics;
+			scene.Update(e.Graphics);
 
-			DrawHeightmap.Draw(g, hm3d);
-
-			DrawDebug.Draw(e, g, hm);
-
-			UI.Button.Draw(g);
+			Thread.Sleep(1);
+			Window.GetInstance().Invalidate();
 		}
 
 		[System.Runtime.InteropServices.DllImport("kernel32.dll")]

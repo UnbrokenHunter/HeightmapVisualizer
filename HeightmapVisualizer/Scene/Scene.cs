@@ -3,32 +3,48 @@ namespace HeightmapVisualizer.Scene
 {
 	internal class Scene
 	{
-		public Camera Camera { get; set; }
-		public Gameobject[] Shapes { get; set; }
+		public Camera camera { get; set; }
+		public Gameobject[] gameobjects { get; set; }
 
-		public Scene(Camera camera, Gameobject[] shapes) 
+		public Scene(Camera camera, Gameobject[] gameobjects) 
 		{
-			Camera = camera;
-			Shapes = shapes;
+			this.camera = camera;
+			this.gameobjects = gameobjects;
 		}
 
-		public void UpdateShapes()
+		private void UpdateGameobjects()
 		{
-			foreach (var shape in Shapes)
+			foreach (var gameobject in gameobjects)
 			{
-				shape.Update();
+				gameobject.Update();
 			}
 		}
 
-		public void UpdateControllers()
+		private void RenderCamera(Graphics g)
 		{
-			foreach (var shape in Shapes)
+			foreach (var gameobject in gameobjects)
 			{
-				if (shape.Controller != null)
+				var renderable = gameobject.GetRenderable();
+				if (renderable != null)
 				{
-					shape.Controller.Update(shape.Transform);
+					renderable.Render(g, camera);
 				}
 			}
+		}
+
+		public void Init()
+		{
+			foreach (var gameobject in gameobjects)
+			{ 
+				gameobject.Init(); 
+			}
+		}
+
+		public void Update(Graphics g)
+		{
+			UpdateGameobjects();
+
+			RenderCamera(g);
 		}
 
 	}

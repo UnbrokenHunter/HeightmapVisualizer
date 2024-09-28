@@ -1,13 +1,11 @@
 ﻿
+using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Scene
 {
-    internal class Camera 
-    {
-		public Controller Controller { get; set; }
-
-		public Transform Transform;  // Camera position (x_cam, y_cam, z_cam)
+    internal class Camera : Gameobject
+    { 
         public Rectangle Space; // Screen Space
         public float Aspect;
         public float Fov;
@@ -17,27 +15,26 @@ namespace HeightmapVisualizer.Scene
 			Rectangle space, 
             float aspect = 16f/9f, 
             float fov = 90f, 
-            float nearClippingPlane = 0.1f) 
+            float nearClippingPlane = 0.1f) : base(transform)
         {
-            this.Transform = transform;
             this.Space = space;
             this.Aspect = aspect;
             this.Fov = fov;
             this.NearClippingPlane = nearClippingPlane;
-        }
+        } 
 
 
 		// Project a 3D point to 2D screen space with perspective
-		public Vector2 ProjectVertex(Vector3 point)
+		public Vector2 ProjectVertex(Vertex vertex)
         {
             // Translate point relative to camera position
-            Vector3 translatedPoint = point - Transform.Position;
+            Vector3 translatedPoint = vertex.Position() - Transform.Position;
 
             // Rotate point based on camera's orientation (yaw and pitch)
-            Vector3 rotatedPoint = RotateVectorByQuaternion(translatedPoint, rotation);
+            Vector3 rotatedPoint = Quaternion.Rotate(translatedPoint, Transform.Rotation);
 
             // Perform perspective projection
-            float zClamped = Math.Max(rotatedPoint.Z, NearClippingPlane); // Ensure depth is positive
+            float zClamped = Math.Max(rotatedPoint.z, NearClippingPlane); // Ensure depth is positive
 
             // Convert to 2D screen coordinates
             float xScreen = Fov * rotatedPoint.x / zClamped + Space.Width / 2;
@@ -46,12 +43,17 @@ namespace HeightmapVisualizer.Scene
             return new Vector2(xScreen, yScreen);
         }
 
-		public void Update()
+		public override void Update()
 		{
             if (Controller != null)
             {
                 Controller.Update(Transform);
             }
+		}
+
+		public override void Init()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -51,16 +51,68 @@ namespace HeightmapVisualizer.Units
 
 		#endregion
 
-		#region Rotation
+		#region Operations
 
-		public static Quaternion Rotate(Quaternion q1, Quaternion q2)
+		public static Quaternion ToInverse(Quaternion q)
 		{
-			throw new NotImplementedException();
+			return new Quaternion(q.w, -q.x, -q.y, -q.z);
 		}
 
-		public static Quaternion Rotate(Quaternion q1, Vector3 e1)
+		public static Quaternion operator +(Quaternion q1, Quaternion q2)
 		{
-			throw new NotImplementedException();
+			return new Quaternion(
+				q1.w + q2.w,
+				q1.x + q2.x,
+				q1.y + q2.y,
+				q2.z + q2.z
+			);
+		}
+
+		public static Quaternion operator -(Quaternion q1, Quaternion q2)
+		{
+			return new Quaternion(
+				q1.w - q2.w,
+				q1.x - q2.x,
+				q1.y - q2.y,
+				q2.z - q2.z
+			);
+		}
+
+		public static Quaternion operator *(Quaternion r, Quaternion s)
+		{
+			var t0 = (r.w * s.w) - (r.x + s.x) - (r.y * s.y) - (r.z * s.z);
+
+			var t1 = (r.w * s.x) + (r.x + s.w) - (r.y * s.z) + (r.z + s.y); 
+
+			var t2 = (r.w * s.y) + (r.x + s.w) + (r.y * s.w) - (r.z * s.x);
+
+			var t3 = (r.w * s.z) - (r.x * s.y) + (r.y * s.x) + (r.z * s.w);
+
+			return new Quaternion(t0, t1, t2, t3);
+		}
+
+		private static Quaternion PointToQuaternion(Vector3 v) // For Rotatating A Point
+		{
+			return new Quaternion(0, v.x, v.y, v.z);
+		}
+
+		#endregion
+
+		#region Rotation
+
+		public static Vector3 Rotate(Vector3 p1, Quaternion q1)
+		{
+			Quaternion p = PointToQuaternion(p1);
+			Quaternion q2 = ToInverse(q1);
+
+			Quaternion rotation = q1 * p * q2;
+
+			if (rotation.w != 0)
+			{
+				Console.WriteLine($"Quaternion Rotation resulted in w = {rotation.w} instead of 0. {q1} {p} {q2}");
+			}
+
+			return new Vector3(rotation.x, rotation.y, rotation.z);
 		}
 
 		#endregion

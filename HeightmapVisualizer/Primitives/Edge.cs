@@ -2,7 +2,7 @@
 
 namespace HeightmapVisualizer.Primitives
 {
-    internal class Edge
+	internal class Edge
     {
         public Vertex[] Points;
         public Face Faces;
@@ -20,8 +20,8 @@ namespace HeightmapVisualizer.Primitives
             if (Points[0] == null || Points[1] == null)
                 return;
 
-            var p1 = cam.ProjectVertex(Points[0].RelativePosition);
-            var p2 = cam.ProjectVertex(Points[1].RelativePosition);
+            var p1 = cam.ProjectVertex(Points[0]);
+            var p2 = cam.ProjectVertex(Points[1]);
 
             g.DrawLine(pen, p1.x, p1.y, p2.x, p2.y);
         }

@@ -8,17 +8,17 @@ namespace HeightmapVisualizer.Scene
         
         private Vector3 KeyInput = new Vector3();
 
-        public Controller()
+        public void Init()
         {
-            // Enable key preview so the form receives key events
-            Window.GetInstance().KeyPreview = true;
+			// Enable key preview so the form receives key events
+			Window.GetInstance().KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
 
-            // Subscribe to the KeyDown and KeyUp events
-            Window.GetInstance().KeyDown += OnKeyDown;
-            Window.GetInstance().KeyUp += OnKeyUp;
-        }
+			// Subscribe to the KeyDown and KeyUp events
+			Window.GetInstance().KeyDown += OnKeyDown;
+			Window.GetInstance().KeyUp += OnKeyUp;
+		}
 
-        public void Update(Transform objectTransform)
+		public void Update(Transform objectTransform)
         {
             while (true)
             {
@@ -30,7 +30,7 @@ namespace HeightmapVisualizer.Scene
         private void Move(Transform objectTransform)
         {
             float movementSpeed = 2f;
-			objectTransform.Position += KeyInput * movementSpeed;
+			objectTransform.Move(KeyInput * movementSpeed);
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -91,7 +91,7 @@ namespace HeightmapVisualizer.Scene
 
         private void Pan(Transform objectTransform)
         {
-            DragHandler.UpdateDrag();
+            DragHandler.UpdateDrag(); // TODO MAKE A UNIVERSAL HANDLER FOR ALL OF THIS
             if (DragHandler.IsDragging)
             {
                 float x = DragHandler.GetCurrentPosition().X - DragHandler.GetLastPosition().X;
@@ -114,7 +114,7 @@ namespace HeightmapVisualizer.Scene
 
                 // Apply pitch and yaw adjustments
                 var rotation = new Vector3(pitch, yaw, 0f);
-				objectTransform.Rotation = Camera.Instance.EulerRotation(rotation);
+				objectTransform.Rotation += Quaternion.ToQuaternion(rotation);
 
             }
         }
