@@ -11,11 +11,11 @@ namespace HeightmapVisualizer.Scene
         public void Init()
         {
 			// Enable key preview so the form receives key events
-			Window.GetInstance().KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
+			Window.Instance.KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
 
 			// Subscribe to the KeyDown and KeyUp events
-			Window.GetInstance().KeyDown += OnKeyDown;
-			Window.GetInstance().KeyUp += OnKeyUp;
+			Window.Instance.KeyDown += OnKeyDown;
+			Window.Instance.KeyUp += OnKeyUp;
 		}
 
 		public void Update(Transform objectTransform)

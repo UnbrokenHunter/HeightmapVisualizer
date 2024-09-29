@@ -20,6 +20,11 @@ namespace HeightmapVisualizer.Units
 			Rotation = rotation;
 		}
 
+		public override string ToString()
+		{
+			return $"{this.GetHashCode()},\n{Position},\n{Rotation},\n{Forward}";
+		}
+
 		public Vector3 ToWorldSpace(Vector3 v)
 		{
 			return (Right * v.x) + (Up * v.y) + (Forward * v.z);

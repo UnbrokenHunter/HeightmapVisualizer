@@ -15,7 +15,7 @@ namespace HeightmapVisualizer
 			// see https://aka.ms/applicationconfiguration.
 
 			ApplicationConfiguration.Initialize();
-			Application.Run(Window.GetInstance());
+			Application.Run(new Window());
 		}
 	}
 }

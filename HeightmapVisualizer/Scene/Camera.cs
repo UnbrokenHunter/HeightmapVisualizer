@@ -42,18 +42,5 @@ namespace HeightmapVisualizer.Scene
 
             return new Vector2(xScreen, yScreen);
         }
-
-		public override void Update()
-		{
-            if (Controller != null)
-            {
-                Controller.Update(Transform);
-            }
-		}
-
-		public override void Init()
-		{
-			throw new NotImplementedException();
-		}
 	}
 }
