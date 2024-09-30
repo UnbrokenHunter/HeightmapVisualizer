@@ -202,7 +202,7 @@ namespace HeightmapVisualizer.Units
 			// Correct multiplication order for passive rotation: q * p * q^(-1)
 			Quaternion rotation = qInverse * p * q1; // This is active rotation
 
-			if (float.IsNaN(rotation.w) || rotation.w != 0)
+			if (float.IsNaN(rotation.w) || Math.Round(rotation.w, 3) != 0)
 			{
 				Console.WriteLine($"Quaternion Rotation resulted in w = {rotation.w} instead of 0. {q1} {p} {qInverse}");
 			}

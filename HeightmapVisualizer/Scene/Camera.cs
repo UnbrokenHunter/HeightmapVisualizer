@@ -4,7 +4,7 @@ using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Scene
 {
-    internal class Camera : Gameobject
+    public class Camera : Gameobject
     { 
         public Rectangle Space; // Screen Space
         public float Aspect;
@@ -25,10 +25,10 @@ namespace HeightmapVisualizer.Scene
 
 
 		// Project a 3D point to 2D screen space with perspective
-		public Vector2 ProjectVertex(Vertex vertex)
+		public Vector2 ProjectPoint(Vector3 point)
         {
             // Translate point relative to camera position
-            Vector3 translatedPoint = vertex.Position() - Transform.Position;
+            Vector3 translatedPoint = point - Transform.Position;
 
             // Rotate point based on camera's orientation (yaw and pitch)
             Vector3 rotatedPoint = Quaternion.Rotate(translatedPoint, Transform.Rotation);

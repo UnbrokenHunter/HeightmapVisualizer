@@ -53,7 +53,7 @@ namespace HeightmapVisualizer.Shapes
 			{
 				foreach (Edge edge in face.Edges)
 				{
-					foreach (Vertex vertex in edge.Points)
+					foreach (Vertex vertex in edge.Vertices)
 					{
 						vertex.Transform = Transform;
 					}
@@ -61,9 +61,9 @@ namespace HeightmapVisualizer.Shapes
 			}
 		}
 
-		public override Renderable? GetRenderable()
+		public override Mesh? GetRenderable()
 		{
-			return new Renderable(Faces, Color.AntiqueWhite);
+			return new Mesh(Faces, Color.AntiqueWhite);
 		}
 	}
 }

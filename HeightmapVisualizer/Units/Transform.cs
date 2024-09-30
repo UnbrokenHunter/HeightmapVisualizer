@@ -3,7 +3,7 @@ using HeightmapVisualizer.Primitives;
 
 namespace HeightmapVisualizer.Units
 {
-	internal class Transform
+	public class Transform
 	{
 		public Vector3 Position { get; set; }
 		public Quaternion Rotation { get; set; }
@@ -22,7 +22,7 @@ namespace HeightmapVisualizer.Units
 
 		public override string ToString()
 		{
-			return $"{this.GetHashCode()},\n{Position},\n{Rotation},\n{Forward}";
+			return $"{this.GetHashCode()},\n\tPosition: {Position},\n\tRotation: {Rotation},\n\tForward: {Forward}";
 		}
 
 		public Vector3 ToWorldSpace(Vector3 v)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HeightmapVisualizer.Units
 {
-	internal class Vector2
+	public class Vector2
 	{
 		public float x { get; set; }
 		public float y { get; set; }

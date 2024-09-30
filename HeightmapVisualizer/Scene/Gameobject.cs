@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace HeightmapVisualizer.Scene
 {
-	internal abstract class Gameobject
+	public abstract class Gameobject
 	{
-		public Transform Transform { get; set; }
-		public Controller Controller { get; set; }
+		internal Transform Transform { get; set; }
+		internal Controller Controller { get; set; }
 
 		public Gameobject() : this(new Transform()) { }
 
-		public Gameobject(Transform transform) 
+		internal Gameobject(Transform transform)
 		{
 			Transform = transform;
 		}
@@ -37,6 +37,6 @@ namespace HeightmapVisualizer.Scene
 			}
 		}
 
-		public virtual Renderable? GetRenderable() { return null; }
+		public virtual Mesh? GetRenderable() { return null; }
 	}
 }

@@ -20,11 +20,8 @@ namespace HeightmapVisualizer.Scene
 
 		public void Update(Transform objectTransform)
         {
-            while (true)
-            {
-                Pan(objectTransform);
-                Move(objectTransform);
-            }
+            Pan(objectTransform);
+            Move(objectTransform);
         }
 
         private void Move(Transform objectTransform)
