@@ -31,7 +31,9 @@ namespace HeightmapVisualizer.Primitives
 			// Nested function to handle the GetOrCreate logic for edges
 			Edge GetOrCreateEdge(Vector3 v1, Vector3 v2)
 			{
-				if (mesh.edgeDict.TryGetValue((v1, v2), out var existingEdge1))
+				//Console.WriteLine($"---------------------\nPoint 1: {v1} \n\n Point 2: {v2} \n\n {string.Join("\n", mesh.edgeDict.Values)} \n------------------- ");
+
+                if (mesh.edgeDict.TryGetValue((v1, v2), out var existingEdge1))
 				{
 					existingEdge1.Tris.Add(this);
 					return existingEdge1;
@@ -46,6 +48,7 @@ namespace HeightmapVisualizer.Primitives
 					var newEdge = new Edge(mesh, v1, v2);
 					newEdge.Tris.Add(this);
 					mesh.edgeDict[(v1, v2)] = newEdge;
+					//Console.WriteLine("A New Value was created: " + newEdge);
 					return newEdge;
 				}
 			}

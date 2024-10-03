@@ -50,5 +50,16 @@ namespace HeightmapVisualizer.Primitives
 				edge.Draw(g, cam);
 			}
 		}
-	}
+
+		/// <summary>
+		/// Overrides the Gameobject Method "GetRenderable()" to return itself. By doing this, it allows
+		/// other gameobjects to instead have references to Meshs, rather than itself being a mesh. This 
+		/// could be useful for example, to allow having multiple meshes controlled by one object.
+		/// </summary>
+		/// <returns>This object</returns>
+        public override Mesh? GetRenderable()
+        {
+            return this;
+        }
+    }
 }

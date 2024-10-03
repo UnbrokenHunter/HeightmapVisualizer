@@ -13,7 +13,7 @@ namespace HeightmapVisualizer.Scene
 
         public Camera(Transform transform,
 			Rectangle space, 
-            float aspect = 16f/9f, 
+            float aspect = 16f/9f, // This is currently not tied to anything
             float fov = 90f, 
             float nearClippingPlane = 0.1f) : base(transform)
         {
