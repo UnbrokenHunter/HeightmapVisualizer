@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.UI
 {
     class Button
     {
-        /*
         private static List<Button> buttons = new List<Button>();
 
         public string text;
@@ -27,7 +22,7 @@ namespace HeightmapVisualizer.UI
             position2 = position1 + size;
             this.onClick = onClick;
 
-            Window.GetInstance().MouseClick += new MouseEventHandler(Click);
+            //Window.Instance.MouseClick += new MouseEventHandler(Click);
         }
 
         public static void Draw(Graphics g)
@@ -38,8 +33,8 @@ namespace HeightmapVisualizer.UI
 
             foreach (Button b in buttons)
             {
-                g.DrawRectangle(pen, (int)b.position1.X, (int)b.position1.Y, (int)b.position2.X, (int)b.position2.Y);
-                g.DrawString(b.text, font, brush, b.position1.X, b.position1.Y);
+                g.DrawRectangle(pen, (int)b.position1.x, (int)b.position1.y, (int)b.position2.x, (int)b.position2.y);
+                g.DrawString(b.text, font, brush, b.position1.x, b.position1.y);
             }
         }
 
@@ -59,11 +54,10 @@ namespace HeightmapVisualizer.UI
         public bool MouseInBounds()
         {
             var cursor = Cursor.Position;
-            var screen = Window.GetInstance().Bounds;
+            var screen = Window.Instance.Bounds;
             var relativeCursor = new Vector2(cursor.X - screen.X, cursor.Y - screen.Y);
-            return position1.X <= relativeCursor.X && position2.X >= relativeCursor.X &&
-                position1.Y <= relativeCursor.Y && position2.Y >= relativeCursor.Y;
+            return position1.x <= relativeCursor.x && position2.x >= relativeCursor.x &&
+                position1.y <= relativeCursor.y && position2.y >= relativeCursor.y;
         }
-        */
     }
 }

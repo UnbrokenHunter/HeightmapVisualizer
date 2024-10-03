@@ -1,11 +1,9 @@
 ﻿
-using System.Numerics;
-using System.Windows.Forms.VisualStyles;
 using HeightmapVisualizer.Controls;
-using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Shapes;
 using HeightmapVisualizer.UI;
+using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer
 {
@@ -15,7 +13,7 @@ namespace HeightmapVisualizer
 
 		public static Window Instance;
 
-
+		private Menu menu = new();
 
 		public Window()
 		{
@@ -44,9 +42,13 @@ namespace HeightmapVisualizer
 		{
 			Camera camera = new Camera(new Units.Transform(), this.Bounds);
 			camera.Controller = new Controller();
-			Gameobject cube = Cuboid.CreateCorners(new Units.Vector3(-1, -1, -1), new Units.Vector3(1, 1, 1));
+			Gameobject cube = Cuboid.CreateCorners(new Vector3(-1, -1, -1), new Vector3(1, 1, 1));
+            Gameobject floorPlane = Plane.CreateCentered(new Vector3(0, 5, 0), new Vector2(10, 10));
+            Gameobject wallPlane = Plane.CreateCentered(new Vector3(0, -5, 0), 
+				Quaternion.ToQuaternion(new Vector3((float) Math.PI / 2,0, 0)), 
+				new Vector2(10, 10));
 
-			return new Scene.Scene(camera, new Gameobject[] { cube, camera });
+            return new Scene.Scene(camera, new Gameobject[] { cube, floorPlane, wallPlane, camera });
 		}
 
 		private void Update()
@@ -55,6 +57,8 @@ namespace HeightmapVisualizer
 			{
 				Thread.Sleep(10);
 				MouseHandler.Update();
+
+				menu.Update(scene.camera);
 
 				Invalidate(); // Calls the OnPaint Method
 			}
@@ -68,7 +72,8 @@ namespace HeightmapVisualizer
 			scene.Update(e.Graphics);
 			MouseHandler.Debug(e.Graphics);
 
-			Console.WriteLine(scene.camera.Transform);
+			UI.Button.Draw(e.Graphics);
+
 		}
 
 		[System.Runtime.InteropServices.DllImport("kernel32.dll")]
