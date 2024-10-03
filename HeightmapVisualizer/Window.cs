@@ -1,6 +1,7 @@
 ﻿
 using System.Numerics;
 using System.Windows.Forms.VisualStyles;
+using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Shapes;
@@ -14,6 +15,8 @@ namespace HeightmapVisualizer
 
 		public static Window Instance;
 
+
+
 		public Window()
 		{
 			if (Instance != null)
@@ -25,8 +28,8 @@ namespace HeightmapVisualizer
 
 			// Set up form properties
 			this.Text = "Projections";
-			this.Width = 16 * 100;
-			this.Height = 9 * 100;
+			this.Width = 16 * 200;
+			this.Height = 9 * 200;
 
 			this.DoubleBuffered = true;
 
@@ -50,8 +53,10 @@ namespace HeightmapVisualizer
 		{
 			while (true)
 			{
-				Thread.Sleep(20);
-				Invalidate();
+				Thread.Sleep(10);
+				MouseHandler.Update();
+
+				Invalidate(); // Calls the OnPaint Method
 			}
 		}
 
@@ -61,6 +66,7 @@ namespace HeightmapVisualizer
 			base.OnPaint(e);
 
 			scene.Update(e.Graphics);
+			MouseHandler.Debug(e.Graphics);
 
 			Console.WriteLine(scene.camera.Transform);
 		}

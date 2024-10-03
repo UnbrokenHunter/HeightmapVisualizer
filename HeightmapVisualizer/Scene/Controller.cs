@@ -26,7 +26,7 @@ namespace HeightmapVisualizer.Scene
 
         private void Move(Transform objectTransform)
         {
-            float movementSpeed = 2f;
+            float movementSpeed = 0.5f;
 			objectTransform.Move(KeyInput * movementSpeed);
         }
 
@@ -88,26 +88,19 @@ namespace HeightmapVisualizer.Scene
 
         private void Pan(Transform objectTransform)
         {
-            DragHandler.UpdateDrag(); // TODO MAKE A UNIVERSAL HANDLER FOR ALL OF THIS
-            if (DragHandler.IsDragging)
+            if (MouseHandler.Dragging)
             {
-                float x = DragHandler.GetCurrentPosition().X - DragHandler.GetLastPosition().X;
-                float y = DragHandler.GetCurrentPosition().Y - DragHandler.GetLastPosition().Y;
+                var vector2 = MouseHandler.MouseTrend;
 
 				// Sensitivity
-				float sensitivity = 0.005f;
+				float sensitivity = 0.05f;
 
-				// Convert to positive between 0 and 360
-				//direction.X %= (float)Math.Tau;
-				//direction.Y %= (float)Math.Tau;
-
-				// Apply sensitivity scaling to direction
-				x *= sensitivity;
-				y *= sensitivity;
+                // Apply sensitivity scaling to direction
+                vector2 *= sensitivity;
 
 				// Calculate pitch and yaw directly based on direction
-				float yaw = x;
-                float pitch = y;
+				float yaw = vector2.x;
+                float pitch = vector2.y;
 
                 // Apply pitch and yaw adjustments
                 var rotation = new Vector3(pitch, yaw, 0f);
