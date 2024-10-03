@@ -36,5 +36,21 @@ namespace UnitTests
 
             Assert.Equal(5, mesh.vertexDict.Count);
         }
+
+        [Fact]
+        public void CombineIdenticalEdges_OnPlane_Test()
+        {
+            var mesh = Plane.CreateCentered(new Vector3(0, 0, 0), new Vector3(1, 1, 1));
+
+            Assert.Equal(5, mesh.edgeDict.Count);
+        }
+
+        [Fact]
+        public void CombineIdenticalVerts_OnPlane_Test()
+        {
+            var mesh = Plane.CreateCentered(new Vector3(0, 0, 0), new Vector3(1, 1, 1));
+
+            Assert.Equal(4, mesh.vertexDict.Count);
+        }
     }
 }
