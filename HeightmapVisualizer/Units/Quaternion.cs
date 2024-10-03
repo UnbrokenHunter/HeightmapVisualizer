@@ -121,10 +121,7 @@ namespace HeightmapVisualizer.Units
 
 		#region Operations
 
-		public static Quaternion Identity()
-		{
-			return new Quaternion(1, 0, 0, 0);
-		}
+		public static Quaternion Identity => new Quaternion(1, 0, 0, 0);
 
 		public static Quaternion ToInverse(Quaternion q)
 		{

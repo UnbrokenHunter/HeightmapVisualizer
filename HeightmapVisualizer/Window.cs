@@ -41,7 +41,7 @@ namespace HeightmapVisualizer
 		{
 			Camera camera = new Camera(new Units.Transform(), this.Bounds);
 			camera.Controller = new Controller();
-			Gameobject cube = new Cuboid(new Units.Transform(), new Units.Vector3(-1, -1, -1), new Units.Vector3(1, 1, 1));
+			Gameobject cube = Cuboid.CreateCentered(new Units.Vector3(-1, -1, -1), new Units.Vector3(1, 1, 1));
 
 			return new Scene.Scene(camera, new Gameobject[] { cube, camera });
 		}
