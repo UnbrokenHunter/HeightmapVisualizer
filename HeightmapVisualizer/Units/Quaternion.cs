@@ -117,11 +117,19 @@ namespace HeightmapVisualizer.Units
 			return new Quaternion((float)w, (float)x, (float)y, (float)z);
 		}
 
-		#endregion
+        public static Quaternion CreateFromAxisAngle(Vector3 axis, float angle)
+        {
+            float halfAngle = angle * .5f;
+            float s = (float)System.Math.Sin(halfAngle);
+            Quaternion q = new Quaternion(axis.x * s, axis.y * s, axis.z * s, (float)System.Math.Cos(halfAngle));
+            return q;
+        }
 
-		#region Operations
+        #endregion
 
-		public static Quaternion Identity => new Quaternion(1, 0, 0, 0);
+        #region Operations
+
+        public static Quaternion Identity => new Quaternion(1, 0, 0, 0);
 
 		public static Quaternion ToInverse(Quaternion q)
 		{
@@ -207,7 +215,34 @@ namespace HeightmapVisualizer.Units
 			return new Vector3(rotation.x, rotation.y, rotation.z);
 		}
 
-		#endregion
+        /// <summary>
+        /// Evaluates a rotation needed to be applied to an object positioned at sourcePoint to face destPoint
+        /// </summary>
+        /// <param name="sourcePoint">Coordinates of source point</param>
+        /// <param name="destPoint">Coordinates of destionation point</param>
+        /// <returns></returns>
+        public static Quaternion LookAt(Vector3 sourcePoint, Vector3 destPoint)
+        {
+            Vector3 forwardVector = Vector3.Normalize(destPoint - sourcePoint);
 
-	}
+            float dot = Vector3.Dot(Vector3.Forward, forwardVector);
+
+            if (Math.Abs(dot - (-1.0f)) < 0.000001f)
+            {
+                return new Quaternion(Vector3.Up.x, Vector3.Up.y, Vector3.Up.z, 3.1415926535897932f);
+            }
+            if (Math.Abs(dot - (1.0f)) < 0.000001f)
+            {
+                return Quaternion.Identity;
+            }
+
+            float rotAngle = (float)Math.Acos(dot);
+            Vector3 rotAxis = Vector3.Cross(Vector3.Forward, forwardVector);
+            rotAxis = Vector3.Normalize(rotAxis);
+            return CreateFromAxisAngle(rotAxis, rotAngle);
+        }
+
+        #endregion
+
+    }
 }
