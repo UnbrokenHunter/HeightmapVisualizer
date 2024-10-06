@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HeightmapVisualizer.Shapes;
-
-namespace HeightmapVisualizer
+﻿namespace HeightmapVisualizer
 {
     internal class Heightmap
-	{
-		/*
+    {
+        /*
 		public int Width, Height;
 		public float[,] Map;
 		public static float SquareSize = 4f;
@@ -42,5 +35,5 @@ namespace HeightmapVisualizer
 			return map3D;
 		}
 		*/
-	}
+    }
 }

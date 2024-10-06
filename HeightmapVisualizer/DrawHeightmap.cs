@@ -1,11 +1,8 @@
-﻿using HeightmapVisualizer.Primitives;
-using HeightmapVisualizer.Shapes;
-
-namespace HeightmapVisualizer
+﻿namespace HeightmapVisualizer
 {
     internal class DrawHeightmap
-	{
-		/*
+    {
+        /*
 		public static void Draw(Graphics g, Cuboid[,] hm3D)
 		{
 			if (g == null || hm3D == null) return;
@@ -27,6 +24,6 @@ namespace HeightmapVisualizer
 			}
 		}
 		*/
-	}
+    }
 }
 
