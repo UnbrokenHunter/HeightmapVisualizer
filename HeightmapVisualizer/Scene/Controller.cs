@@ -1,24 +1,25 @@
 ﻿using HeightmapVisualizer.Controls;
+using HeightmapVisualizer.UI;
 using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Scene
 {
     internal class Controller
     {
-        
+
         private Vector3 KeyInput = new Vector3();
 
         public void Init()
         {
-			// Enable key preview so the form receives key events
-			Window.Instance.KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
+            // Enable key preview so the form receives key events
+            Window.Instance.KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
 
-			// Subscribe to the KeyDown and KeyUp events
-			Window.Instance.KeyDown += OnKeyDown;
-			Window.Instance.KeyUp += OnKeyUp;
-		}
+            // Subscribe to the KeyDown and KeyUp events
+            Window.Instance.KeyDown += OnKeyDown;
+            Window.Instance.KeyUp += OnKeyUp;
+        }
 
-		public void Update(Transform objectTransform)
+        public void Update(Transform objectTransform)
         {
             Pan(objectTransform);
             Move(objectTransform);
@@ -26,8 +27,8 @@ namespace HeightmapVisualizer.Scene
 
         private void Move(Transform objectTransform)
         {
-            float movementSpeed = 0.5f;
-			objectTransform.Move(KeyInput * movementSpeed);
+            float movementSpeed = 0.1f;
+            objectTransform.Move(KeyInput * movementSpeed);
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -85,27 +86,33 @@ namespace HeightmapVisualizer.Scene
             }
         }
 
-
         private void Pan(Transform objectTransform)
         {
             if (MouseHandler.Dragging)
             {
-                var vector2 = MouseHandler.MouseTrend;
+                var vector2 = MouseHandler.DragOffset;
 
-				// Sensitivity
-				float sensitivity = 0.05f;
+                var window = Window.Instance;
+                var cam = window.Scene.Camera;
+
+
+                var originOfClick = MouseHandler.DragStart.ToVector2();
+                var relativeMouseOffset = originOfClick - vector2;
+
+                var anglePerPixel = new Vector2(cam.Fov / window.Width, (cam.Fov / cam.Aspect) / window.Height);
+
+                var angle = relativeMouseOffset * anglePerPixel - (cam.Fov / 2);
+
+                // Sensitivity
+                float sensitivity = 1f;
 
                 // Apply sensitivity scaling to direction
-                vector2 *= sensitivity;
+                angle *= sensitivity;
 
-				// Calculate pitch and yaw directly based on direction
-				float yaw = vector2.x;
-                float pitch = vector2.y;
+                var yaw = Quaternion.CreateFromAxisAngle(Vector3.Up, angle.x); // Yaw
+                var pitch = Quaternion.CreateFromAxisAngle(Vector3.Right, angle.y); // Pitch
 
-                // Apply pitch and yaw adjustments
-                var rotation = new Vector3(pitch, yaw, 0f);
-				objectTransform.Rotation += Quaternion.ToQuaternion(rotation);
-
+                objectTransform.Rotation = pitch * yaw;
             }
         }
     }
