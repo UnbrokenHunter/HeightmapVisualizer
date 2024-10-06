@@ -15,6 +15,7 @@ namespace HeightmapVisualizer.Controls
         public static Point DragStart { get; private set; }
         public static Point DragEnd { get; private set; }
         public static bool Dragging { get; private set; }
+        public static Vector2 DragOffset { get; private set; }
 
 
         public delegate void OnClick(Point point);
@@ -97,8 +98,14 @@ namespace HeightmapVisualizer.Controls
                 DragEnd = Cursor.Position;
                 Console.WriteLine($"Dragging ended at: {Cursor.Position}");
             }
+
+            if (Dragging)
+                DragOffset = new Vector2(DragStart.X - MousePosition.X, DragStart.Y - MousePosition.Y);
+            else
+                DragOffset = new Vector2();
+
         }
-    
+
         private static void UpdateClicking()
         {
             if (Control.MouseButtons == MouseButtons.Left)
