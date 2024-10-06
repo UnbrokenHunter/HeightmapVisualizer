@@ -1,51 +1,50 @@
 ﻿
 namespace HeightmapVisualizer.Scene
 {
-	internal class Scene
-	{
-		public Camera camera { get; set; }
-		public Gameobject[] gameobjects { get; set; }
+    public class Scene
+    {
+        public Camera Camera { get; set; }
+        public Gameobject[] Gameobjects { get; set; }
 
-		public Scene(Camera camera, Gameobject[] gameobjects) 
-		{
-			this.camera = camera;
-			this.gameobjects = gameobjects;
-		}
+        public Scene(Camera camera, Gameobject[] gameobjects)
+        {
+            this.Camera = camera;
+            this.Gameobjects = gameobjects;
+        }
 
-		private void UpdateGameobjects()
-		{
-			foreach (var gameobject in gameobjects)
-			{
-				gameobject.Update();
-			}
-		}
+        public void Init()
+        {
+            foreach (var gameobject in Gameobjects)
+            {
+                gameobject.Init();
+            }
+        }
 
-		private void RenderCamera(Graphics g)
-		{
-			foreach (var gameobject in gameobjects)
-			{
-				var renderable = gameobject.GetRenderable();
-				if (renderable != null)
-				{
-					renderable.Render(g, camera);
-				}
-			}
-		}
+        public void Update(Graphics g)
+        {
+            UpdateGameobjects();
 
-		public void Init()
-		{
-			foreach (var gameobject in gameobjects)
-			{ 
-				gameobject.Init(); 
-			}
-		}
+            RenderCamera(g);
+        }
 
-		public void Update(Graphics g)
-		{
-			UpdateGameobjects();
+        private void UpdateGameobjects()
+        {
+            foreach (var gameobject in Gameobjects)
+            {
+                gameobject.Update();
+            }
+        }
 
-			RenderCamera(g);
-		}
-
-	}
+        private void RenderCamera(Graphics g)
+        {
+            foreach (var gameobject in Gameobjects)
+            {
+                var renderable = gameobject.GetRenderable();
+                if (renderable != null)
+                {
+                    renderable.Render(g, Camera);
+                }
+            }
+        }
+    }
 }

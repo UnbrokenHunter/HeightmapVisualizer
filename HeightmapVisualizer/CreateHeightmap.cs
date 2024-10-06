@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HeightmapVisualizer
+﻿namespace HeightmapVisualizer
 {
-	internal class CreateHeightmap
-	{
-		/*
+    internal class CreateHeightmap
+    {
+        /*
 		public Heightmap Map;
 
 		public CreateHeightmap(int xSize, int ySize) 
@@ -30,5 +24,5 @@ namespace HeightmapVisualizer
 			}
 		}
 		*/
-	}
+    }
 }
