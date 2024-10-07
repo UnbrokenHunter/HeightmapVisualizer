@@ -99,7 +99,7 @@ namespace HeightmapVisualizer.Scene
                 var originOfClick = MouseHandler.DragStart.ToVector2();
                 var relativeMouseOffset = originOfClick - vector2;
 
-                var anglePerPixel = new Vector2(cam.Fov / window.Width, (cam.Fov / cam.Aspect) / window.Height);
+                var anglePerPixel = cam.Fov / window.ScreenSize;
 
                 var angle = relativeMouseOffset * anglePerPixel - (cam.Fov / 2);
 

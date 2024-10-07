@@ -12,6 +12,9 @@ namespace HeightmapVisualizer
 
         public static Window Instance;
 
+        public Vector2 ScreenSize => new Vector2(Width, Height);
+        public Vector2 ScreenCenter => ScreenSize / 2;
+
         private Menu menu = new();
 
         public Window()
