@@ -1,27 +1,30 @@
-﻿
-using HeightmapVisualizer.Primitives;
-using HeightmapVisualizer.Units;
+﻿using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Scene
 {
     public class Camera : Gameobject
-    { 
-        public Rectangle Space; // Screen Space
-        public float Aspect;
-        public float Fov;
-        public float NearClippingPlane;
+    {
+        public Rectangle Space { get; private set; } // Screen Space
+        public float Aspect { get; private set; }
+        public Vector2 Fov { get; private set; }
+        public float NearClippingPlane { get; private set; }
+        public float FarClippingPlane { get; private set; }
+
+        public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.x / 2)));
 
         public Camera(Transform transform,
-			Rectangle space, 
-            float aspect = 16f/9f, // This is currently not tied to anything
-            float fov = 90f, 
-            float nearClippingPlane = 0.1f) : base(transform)
+            Rectangle space,
+            float aspect = 16f / 9f, // This is currently not tied to anything
+            float fov = 90f,
+            float nearClippingPlane = 0.0001f,
+            float farClippingPlane = 100000f) : base(transform)
         {
             this.Space = space;
             this.Aspect = aspect;
-            this.Fov = fov;
+            this.Fov = new Vector2(fov, fov / aspect);
             this.NearClippingPlane = nearClippingPlane;
-        } 
+            this.FarClippingPlane = farClippingPlane;
+        }
 
 
 		// Project a 3D point to 2D screen space with perspective
@@ -33,14 +36,15 @@ namespace HeightmapVisualizer.Scene
             // Rotate point based on camera's orientation (yaw and pitch)
             Vector3 rotatedPoint = Quaternion.Rotate(translatedPoint, Transform.Rotation);
 
-            // Perform perspective projection
+
+            Vector2 pointIn2D = new Vector2(rotatedPoint.x, rotatedPoint.y);
+
             float zClamped = Math.Max(rotatedPoint.z, NearClippingPlane); // Ensure depth is positive
 
-            // Convert to 2D screen coordinates
-            float xScreen = Fov * rotatedPoint.x / zClamped + Space.Width / 2;
-            float yScreen = Fov * rotatedPoint.y / zClamped + Space.Height / 2;
+            // Perform perspective projection
+            Vector2 projected = (pointIn2D * FocalLength) / zClamped + Window.Instance.ScreenCenter;
 
-            return new Vector2(xScreen, yScreen);
+            return projected;
         }
-	}
+    }
 }
