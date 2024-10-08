@@ -29,12 +29,21 @@ namespace HeightmapVisualizer.Primitives
         /// Initializes a new instance of the <see cref="Mesh"/> class with the provided faces.
         /// The constructor automatically triangulates the faces and stores them in the mesh. 
         /// Additionally, it ensures that vertices and edges are reused where possible to avoid duplicates.
+        /// 
+        /// A color can also be set here. What ever color is set on the mesh will be treated as the default.
+        /// A Face can also set a color. If a face has a set color, it will have priotiry, however, if there is not
+        /// color selected on a given face, it will default to the color of the mesh.
+        /// 
         /// </summary>
         /// <param name="faces">An array of faces (IFace) used to construct the mesh.</param>
-        public Mesh(Face[] faces)
+        /// <param name="color">The default color of this mesh. If a face does not have an override, then that face will default to this color.</param>
+        public Mesh(Face[] faces, Color? color = null)
         {
+            // You cannot set black as a default value for some reason
+            Color defaultColor = color ?? Color.Black;
+
             // Triangulate the faces and store the resulting triangles
-            Tris = faces.SelectMany(e => e.Triangulate(this)).ToList();
+            Tris = faces.SelectMany(e => e.Triangulate(this, defaultColor)).ToList();
         }
 
         /// <summary>
@@ -59,6 +68,28 @@ namespace HeightmapVisualizer.Primitives
         /// <returns>This object</returns>
         public override Mesh? GetRenderable()
         {
+            return this;
+        }
+
+        /// <summary>
+        /// Changes the color of all faces of the mesh to the selected color
+        /// </summary>
+        /// <param name="color">The color to change to</param>
+        /// <returns></returns>
+        public Mesh SetColor(Color color)
+        {
+            foreach (Tri tri in Tris)
+            {
+                tri.SetColor(color);
+                foreach (Edge e in tri.Edges)
+                {
+                    e.SetColor(color);
+                    foreach (Vertex v in e.Vertices)
+                    {
+                        v.SetColor(color);
+                    }
+                }
+            }
             return this;
         }
     }

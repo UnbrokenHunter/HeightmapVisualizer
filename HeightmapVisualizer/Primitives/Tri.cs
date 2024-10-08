@@ -7,7 +7,7 @@ namespace HeightmapVisualizer.Primitives
     /// Represents a triangle (Tri) in 3D space as part of a mesh.
     /// Defined by three edges that connect three vertices.
     /// </summary>
-    internal class Tri : Primitive, IEquatable<Tri>
+    internal sealed class Tri : Primitive, IEquatable<Tri>
     {
         /// <summary>
         /// The edges that define the triangle. A triangle has exactly three edges.
@@ -21,10 +21,11 @@ namespace HeightmapVisualizer.Primitives
         /// vertices exists, it will be reused; otherwise, a new edge will be created.
         /// </summary>
         /// <param name="mesh">The mesh to which this triangle belongs.</param>
+        /// <param name="color">The color to draw this Tri with</param>
         /// <param name="p1">The first vertex position of the triangle.</param>
         /// <param name="p2">The second vertex position of the triangle.</param>
         /// <param name="p3">The third vertex position of the triangle.</param>
-        public Tri(Mesh mesh, Vector3 p1, Vector3 p2, Vector3 p3) : base(mesh)
+        public Tri(Mesh mesh, Color color, Vector3 p1, Vector3 p2, Vector3 p3) : base(mesh, color)
         {
             Edges = new Edge[3];
 
@@ -45,7 +46,7 @@ namespace HeightmapVisualizer.Primitives
                 }
                 else
                 {
-                    var newEdge = new Edge(mesh, v1, v2);
+                    var newEdge = new Edge(mesh, color, v1, v2);
                     newEdge.Tris.Add(this);
                     mesh.edgeDict[(v1, v2)] = newEdge;
                     //Console.WriteLine("A New Value was created: " + newEdge);

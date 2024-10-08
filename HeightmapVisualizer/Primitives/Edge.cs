@@ -7,7 +7,7 @@ namespace HeightmapVisualizer.Primitives
     /// Represents an edge in 3D space, defined by two vertices.
     /// An edge can be part of multiple triangles (tris).
     /// </summary>
-    internal class Edge : Primitive, IEquatable<Edge>
+    internal sealed class Edge : Primitive, IEquatable<Edge>
     {
         /// <summary>
         /// An array of two vertices that define the edge.
@@ -27,7 +27,7 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="mesh">The mesh to which this edge belongs.</param>
         /// <param name="p1">The first vertex position of the edge.</param>
         /// <param name="p2">The second vertex position of the edge.</param>
-        public Edge(Mesh mesh, Vector3 p1, Vector3 p2) : base(mesh)
+        public Edge(Mesh mesh, Color color, Vector3 p1, Vector3 p2) : base(mesh, color)
         {
             Vertices = new Vertex[2];
 
@@ -41,7 +41,7 @@ namespace HeightmapVisualizer.Primitives
                 }
                 else
                 {
-                    var newVertex = new Vertex(mesh, position);
+                    var newVertex = new Vertex(mesh, color, position);
                     newVertex.Edges.Add(this);
                     mesh.vertexDict[position] = newVertex;
                     return newVertex;
@@ -67,7 +67,7 @@ namespace HeightmapVisualizer.Primitives
             var p1 = cam.ProjectPoint(Vertices[0].Position);
             var p2 = cam.ProjectPoint(Vertices[1].Position);
 
-            g.DrawLine(new Pen(Color.Black), p1.x, p1.y, p2.x, p2.y);
+            g.DrawLine(new Pen(color), p1.x, p1.y, p2.x, p2.y);
         }
 
         #region Overriding Equality

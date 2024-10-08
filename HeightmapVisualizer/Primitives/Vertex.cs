@@ -8,7 +8,7 @@ namespace HeightmapVisualizer.Primitives
     /// Stores a local position and provides a method to compute its global position.
     /// Also tracks the edges this vertex is part of.
     /// </summary>
-    internal class Vertex : Primitive, IEquatable<Vertex>
+    internal sealed class Vertex : Primitive, IEquatable<Vertex>
     {
         /// <summary>
         /// A list of edges this vertex is a part of.
@@ -25,7 +25,7 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         /// <param name="mesh">The mesh to which this vertex belongs.</param>
         /// <param name="position">The local position of the vertex in 3D space.</param>
-        public Vertex(Mesh mesh, Vector3 position) : base(mesh)
+        public Vertex(Mesh mesh, Color color, Vector3 position) : base(mesh, color)
         {
             this.LocalPosition = position;
         }

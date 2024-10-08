@@ -14,11 +14,18 @@ namespace HeightmapVisualizer.Primitives
         private readonly Vector3[] points;
 
         /// <summary>
+        /// The color of this face. If null, will default to the color of this face's mesh
+        /// </summary>
+        private readonly Color? color;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Face"/> class with the specified points.
         /// </summary>
         /// <param name="points">An array of <see cref="Vector3"/> points that define the face.</param>
-        public Face(Vector3[] points)
-        {
+        /// <param name="color">The color to draw this face as. If left blank, will default to the color of the mesh</param>
+        public Face(Vector3[] points, Color? color = null)
+        {               
+            this.color = color;
             this.points = points;
         }
 
@@ -29,12 +36,15 @@ namespace HeightmapVisualizer.Primitives
         /// For concave polygons or polygons with holes, this method would not produce correct results.
         /// </summary>
         /// <param name="mesh">The mesh to which the resulting triangles will belong.</param>
+        /// <param name="defaultColor">The color of the mesh. This will be the default color if a face does not have one selected</param>
         /// <returns>An array of <see cref="Tri"/> objects representing the triangulated face.</returns>
-        internal Tri[] Triangulate(Mesh mesh)
+        internal Tri[] Triangulate(Mesh mesh, Color defaultColor)
         {
             // Note: This method only works correctly for convex polygons.
             // To handle concave polygons or polygons with holes, a more advanced triangulation algorithm,
             // such as ear clipping or Delaunay triangulation, would be required in the future.
+
+            Color colorToUse = color ?? defaultColor;
 
             List<Tri> tris = new();
 
@@ -43,14 +53,14 @@ namespace HeightmapVisualizer.Primitives
             // Mesh is a Line
             if (n == 2)
             {
-                tris.Add(new Tri(mesh, points[0], points[0], points[1]));
+                tris.Add(new Tri(mesh, colorToUse, points[0], points[0], points[1]));
             }
             else
             {
                 // Mesh is not a line
                 for (int i = 1; i < n - 1; i++)
                 {
-                    tris.Add(new Tri(mesh, points[0], points[i], points[i + 1]));
+                    tris.Add(new Tri(mesh, colorToUse, points[0], points[i], points[i + 1]));
                 }
             }
 
