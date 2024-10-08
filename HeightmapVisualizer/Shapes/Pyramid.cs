@@ -14,11 +14,12 @@ namespace HeightmapVisualizer.Shapes
         /// <param name="position">The center position of the pyramid in the scene.</param>
         /// <param name="rotation">The rotation of the pyramid (as a quaternion).</param>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
+        /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
-        public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector3 size)
+        public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null)
         {
             var faces = CreatePyramidFaces(size.x, size.z, size.y, true);
-            var mesh = new Mesh(faces);
+            var mesh = new Mesh(faces, color);
             mesh.Transform.Position = position;
             mesh.Transform.Rotation = rotation;
             return mesh;
@@ -29,10 +30,11 @@ namespace HeightmapVisualizer.Shapes
         /// </summary>
         /// <param name="position">The center position of the pyramid in the scene.</param>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
+        /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
-        public static Mesh CreateCentered(Vector3 position, Vector3 size)
+        public static Mesh CreateCentered(Vector3 position, Vector3 size, Color? color = null)
         {
-            return CreateCentered(position, Quaternion.Identity, size);
+            return CreateCentered(position, Quaternion.Identity, size, color);
         }
 
         /// <summary>
@@ -41,11 +43,12 @@ namespace HeightmapVisualizer.Shapes
         /// <param name="position">The corner position of the pyramid in the scene.</param>
         /// <param name="rotation">The rotation of the pyramid (as a quaternion).</param>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
+        /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
-        public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector3 size)
+        public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null)
         {
             var faces = CreatePyramidFaces(size.x, size.z, size.y, false);
-            var mesh = new Mesh(faces);
+            var mesh = new Mesh(faces, color);
             mesh.Transform.Position = position;
             mesh.Transform.Rotation = rotation;
             return mesh;
@@ -56,10 +59,11 @@ namespace HeightmapVisualizer.Shapes
         /// </summary>
         /// <param name="position">The corner position of the pyramid in the scene.</param>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
+        /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
-        public static Mesh CreateCorners(Vector3 position, Vector3 size)
+        public static Mesh CreateCorners(Vector3 position, Vector3 size, Color? color = null)
         {
-            return CreateCorners(position, Quaternion.Identity, size);
+            return CreateCorners(position, Quaternion.Identity, size, color);
         }
 
         /// <summary>

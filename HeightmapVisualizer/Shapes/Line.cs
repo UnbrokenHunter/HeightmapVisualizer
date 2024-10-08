@@ -1,5 +1,6 @@
 ﻿using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Units;
+using System.Drawing;
 
 namespace HeightmapVisualizer.Shapes
 {
@@ -13,14 +14,15 @@ namespace HeightmapVisualizer.Shapes
         /// </summary>
         /// <param name="start">The starting point of the line.</param>
         /// <param name="end">The ending point of the line.</param>
+        /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the line between the two points.</returns>
-        public static Mesh CreateCorners(Vector3 start, Vector3 end)
+        public static Mesh CreateCorners(Vector3 start, Vector3 end, Color? color = null)
         {
             // Create the edge representing the line between the start and end points
             var faces = new Face[] { new Face(new[] { start, end }) };
 
             // Create the mesh with the faces (edges)
-            var mesh = new Mesh(faces);
+            var mesh = new Mesh(faces, color);
 
             return mesh;
         }
@@ -31,8 +33,9 @@ namespace HeightmapVisualizer.Shapes
         /// <param name="position">The starting position of the line.</param>
         /// <param name="direction">The direction vector in which the line extends.</param>
         /// <param name="length">The length of the line.</param>
+        /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the ray-like line.</returns>
-        public static Mesh CreateRay(Vector3 position, Vector3 direction, float length)
+        public static Mesh CreateRay(Vector3 position, Vector3 direction, float length, Color? color = null)
         {
             // Normalize the direction vector to ensure correct scaling
             Vector3 normalizedDirection = Vector3.Normalize(direction);
@@ -44,7 +47,7 @@ namespace HeightmapVisualizer.Shapes
             var faces = new Face[] { new Face(new[] { position, endPoint }) };
 
             // Create the mesh with the faces (edges)
-            var mesh = new Mesh(faces);
+            var mesh = new Mesh(faces, color);
 
             return mesh;
         }
