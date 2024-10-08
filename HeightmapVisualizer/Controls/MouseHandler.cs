@@ -100,7 +100,7 @@ namespace HeightmapVisualizer.Controls
             }
 
             if (Dragging)
-                DragOffset = new Vector2(DragStart.X - MousePosition.X, DragStart.Y - MousePosition.Y);
+                DragOffset = DragStart.ToVector2() - MousePosition.ToVector2();
             else
                 DragOffset = new Vector2();
 
