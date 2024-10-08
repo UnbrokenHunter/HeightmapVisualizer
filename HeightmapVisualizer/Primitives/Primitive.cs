@@ -36,6 +36,15 @@ namespace HeightmapVisualizer.Primitives
         public abstract void Draw(Graphics g, Camera cam);
 
         /// <summary>
+        /// Returns the drawing color of the primitive
+        /// </summary>
+        /// <returns>The drawing color of the primitive</returns>
+        internal Color GetColor()
+        {
+            return color;
+        }
+
+        /// <summary>
         /// Changes the color of this Primitive to the newly selected one
         /// </summary>
         /// <param name="color">The new color</param>
