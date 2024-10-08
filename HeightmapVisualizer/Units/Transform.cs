@@ -5,9 +5,9 @@
         public Vector3 Position { get; set; }
         public Quaternion Rotation { get; set; }
 
-        public Vector3 Forward => Quaternion.Rotate(new Vector3(0, 0, 1), Rotation);
-        public Vector3 Up => Quaternion.Rotate(new Vector3(0, 1, 0), Rotation);
-        public Vector3 Right => Quaternion.Rotate(new Vector3(1, 0, 0), Rotation);
+        public Vector3 Forward => Quaternion.Rotate(Vector3.Forward, Rotation);
+        public Vector3 Up => Quaternion.Rotate(Vector3.Up, Rotation);
+        public Vector3 Right => Quaternion.Rotate(Vector3.Right, Rotation);
 
         public Transform() : this(new Vector3(), new Quaternion()) { }
 
