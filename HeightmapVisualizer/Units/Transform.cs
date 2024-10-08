@@ -28,9 +28,9 @@
 
         }
 
-        public void Move(Vector3 v)
+        public void Move(Vector3 vector)
         {
-            Position += ToWorldSpace(v);
+            Position += Quaternion.Rotate(vector, Quaternion.ToInverse(Rotation));
         }
 
     }

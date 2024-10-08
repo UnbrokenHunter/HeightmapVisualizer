@@ -1,4 +1,6 @@
-﻿using HeightmapVisualizer.Units;
+﻿using HeightmapVisualizer.Primitives;
+using HeightmapVisualizer.Shapes;
+using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Scene
 {
@@ -45,6 +47,18 @@ namespace HeightmapVisualizer.Scene
             Vector2 projected = (pointIn2D * FocalLength) / zClamped + Window.Instance.ScreenCenter;
 
             return projected;
+        }
+
+        public override Mesh? GetRenderable()
+        {
+            var combined = MeshUtility.CombineGeometry(
+                MeshUtility.CombineGeometry(
+                    Line.CreateRay(Transform.Position, Transform.Forward, 5, Color.CornflowerBlue),
+                    Line.CreateRay(Transform.Position, Transform.Up, 5, Color.Green)
+                ),
+                Line.CreateRay(Transform.Position, Transform.Right, 5, Color.Red)
+            );
+            return combined;
         }
     }
 }
