@@ -13,7 +13,7 @@ namespace HeightmapVisualizer.Primitives
         /// <summary>
         /// A list of triangles that form the mesh.
         /// </summary>
-        private readonly List<Tri> Tris;
+        internal readonly List<Tri> Tris;
 
         /// <summary>
         /// Dictionary to track unique vertices in the mesh, allowing for reuse of existing vertices.

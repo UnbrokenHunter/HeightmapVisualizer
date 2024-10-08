@@ -15,6 +15,11 @@ namespace HeightmapVisualizer.Primitives
         internal Edge[] Edges { get; }
 
         /// <summary>
+        /// The three original points used to create the object
+        /// </summary>
+        internal Vector3[] Points { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Tri"/> class with the given mesh and three vertex positions.
         /// Automatically constructs the three edges that form the triangle. This constructor ensures that any identical
         /// edges already in the mesh are reused by checking the mesh's edge dictionary. If an edge between the same two
@@ -27,6 +32,9 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="p3">The third vertex position of the triangle.</param>
         public Tri(Mesh mesh, Color color, Vector3 p1, Vector3 p2, Vector3 p3) : base(mesh, color)
         {
+
+            Points = new Vector3[3] { p1, p2, p3 };
+
             Edges = new Edge[3];
 
             // Nested function to handle the GetOrCreate logic for edges
