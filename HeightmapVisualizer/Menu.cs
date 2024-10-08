@@ -29,7 +29,7 @@ namespace HeightmapVisualizer
 
             Quat.text = $"Quaterion: {cam.Transform.Rotation}";
             NQuat.text = $"Normalized Quaterion: {Quaternion.Normalize(cam.Transform.Rotation)}";
-            Euler.text = $"Euler Angles:{Quaternion.ToEulerAngles(cam.Transform.Rotation)}";
+            Euler.text = $"Euler Angles:{Quaternion.ToPitchYawRoll(cam.Transform.Rotation)}";
 
             fov.text = $"FOV:{cam.Fov}";
         }

@@ -1,5 +1,6 @@
 ﻿using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Units;
+using System.Drawing;
 
 namespace UnitTests
 {
@@ -20,7 +21,7 @@ namespace UnitTests
             var mesh = new Mesh(new Face[] { face });
 
             // Act
-            var tris = face.Triangulate(mesh);
+            var tris = face.Triangulate(mesh, Color.Black);
 
             // Assert
             Assert.Equal(2, tris.Length); // Quad should produce 2 triangles
@@ -40,7 +41,7 @@ namespace UnitTests
             var mesh = new Mesh(new Face[] { face });
 
             // Act
-            var tris = face.Triangulate(mesh);
+            var tris = face.Triangulate(mesh, Color.Black);
 
             // Assert
             Assert.Single(tris); // Quad should produce 2 triangles
@@ -62,7 +63,7 @@ namespace UnitTests
             var mesh = new Mesh(new Face[] { face });
 
             // Act
-            var tris = face.Triangulate(mesh);
+            var tris = face.Triangulate(mesh, Color.Black);
 
             // Assert
             Assert.Equal(3, tris.Length); // Pentagon should produce 3 triangles
