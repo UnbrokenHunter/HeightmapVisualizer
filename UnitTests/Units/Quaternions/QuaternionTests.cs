@@ -296,27 +296,18 @@ namespace UnitTests.Units.Quaternions
             Assert.Equal(expectedLengthSquared, lengthSquared);
         }
 
-        [Fact]
-        public void ToEulerAngles_StandardQuaternion_Test()
-        {
-            // Test for standard quaternion to Euler angles conversion
-            Assert.Equal(
-                new Vector3(z: 1.5707963f, x: 1.5707963f, y: 0f),
-                Quaternion.ToEulerAngles(new Quaternion(0.5f, 0.5f, 0.5f, 0.5f))
-            );
-        }
+        #region ToPitchYawRoll Around 1 Axis (Non-Gimble Lock)
 
         [Fact]
-        public void ToEulerAngles_GimbalLock_Test()
+        public void ToPitchYawRoll_45DegreesAroundYAxis()
         {
-            // Quaternion for 90-degree rotation around the X-axis (gimbal lock scenario)
-            Quaternion q = new Quaternion(0.7071068f, 0.7071068f, 0f, 0f);
+            Quaternion q = new Quaternion(0.9238796f, 0f, 0.3826834f, 0f);
 
             // Expected Euler angles (in radians)
-            Vector3 expectedEulerAngles = new Vector3(z: 0f, x: 1.5707963f, y: 0f);
+            Vector3 expectedEulerAngles = new Vector3(0f, 0.7853981f, 0f);
 
             // Convert quaternion to Euler angles
-            Vector3 resultEulerAngles = Quaternion.ToEulerAngles(q);
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
 
             // Assert they are approximately equal (within tolerance)
             Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
@@ -324,36 +315,495 @@ namespace UnitTests.Units.Quaternions
         }
 
         [Fact]
-        public void ToEulerAngles_90DegreesAroundY_Test()
+        public void ToPitchYawRoll_Negative45DegreesAroundYAxis()
         {
-            // Quaternion for 90-degree rotation around Y-axis
-            Quaternion q = new Quaternion(0.7071f, 0f, 0.7071f, 0f);
+            Quaternion q = new Quaternion(0.9238796f, 0f, -0.3826834f, 0f);
 
             // Expected Euler angles (in radians)
-            Vector3 expectedEulerAngles = new Vector3(0f, 1.5707963f, 0f);
+            Vector3 expectedEulerAngles = new Vector3(0f, 5.497787f, 0f);
 
             // Convert quaternion to Euler angles
-            Vector3 resultEulerAngles = Quaternion.ToEulerAngles(q);
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
 
-            // Assert they are equal (within some tolerance)
-            Assert.Equal(expectedEulerAngles, resultEulerAngles);
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
         }
 
         [Fact]
-        public void ToEulerAngles_45DegreesAroundXYZ_Test()
+        public void ToPitchYawRoll_45DegreesAroundXAxis()
         {
-            // Quaternion representing a 45-degree rotation around X, Y, and Z axes
-            Quaternion q = new Quaternion(0.8446232f, 0.1913417f, 0.4619398f, 0.1913417f);
+            Quaternion q = new Quaternion(0.9238796f, 0.3826834f, 0f, 0f);
 
             // Expected Euler angles (in radians)
-            Vector3 expectedEulerAngles = new Vector3(0.7853982f, 0.7853982f, 0.7853982f);
+            Vector3 expectedEulerAngles = new Vector3(0.7853982f, 0f, 0f);
 
             // Convert quaternion to Euler angles
-            Vector3 resultEulerAngles = Quaternion.ToEulerAngles(q);
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
 
-            // Assert they are equal (within some tolerance)
-            Assert.Equal(expectedEulerAngles, resultEulerAngles);
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
         }
+
+        [Fact]
+        public void ToPitchYawRoll_Negative45DegreesAroundXAxis()
+        {
+            Quaternion q = new Quaternion(0.9238796f, -0.3826834f, 0f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(5.497787f, 0f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_45DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.9238796f, 0f, 0f, 0.3826834f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0f, 0.7853981f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_Negative45DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.9238796f, 0f, 0f, -0.3826834f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0f, 5.497787f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        #endregion
+
+        #region ToPitchYawRoll Around 1 Axis (Gimble Lock)
+
+        [Fact]
+        public void ToPitchYawRoll_90DegreesAroundYAxis()
+        {
+            // Quaternion for 90-degree rotation around the Y-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(0.7071068f, 0f, 0.7071068f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 1.570796f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_270DegreesAroundYAxis()
+        {
+            // Quaternion for 270 degree rotation around the Y-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(-0.7071068f, 0f, 0.7071068f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 4.712389f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_180DegreesAroundYAxis()
+        {
+            // Quaternion for 180-degree rotation around the Y-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(0, 0f, 1f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 3.141593f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_360DegreesAroundYAxis()
+        {
+            // Quaternion for 360-degree rotation around the Y-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(-1f, 0f, 0f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_90DegreesAroundXAxis()
+        {
+            // Quaternion for 90-degree rotation around the X-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(0.7071068f, 0.7071068f, 0f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(1.570796f, 0f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_270DegreesAroundXAxis()
+        {
+            // Quaternion for 270-degree rotation around the X-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(-0.7071068f, 0.7071068f, 0f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(4.712389f, 0f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_180DegreesAroundXAxis()
+        {
+            // Quaternion for 180-degree rotation around the X-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(0, 1f, 0f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0, 3.141593f, 3.141593f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_360DegreesAroundXAxis()
+        {
+            // Quaternion for 360-degree rotation around the X-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(-1f, 0f, 0f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_90DegreesAroundZAxis()
+        {
+            // Quaternion for 90-degree rotation around the Z-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(0.7071068f, 0f, 0f, 0.7071068f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0f, 1.570796f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_270DegreesAroundZAxis()
+        {
+            // Quaternion for 270-degree rotation around the Z-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(-0.7071068f, 0f, 0f, 0.7071068f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0f, 4.712389f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_180DegreesAroundZAxis()
+        {
+            // Quaternion for 180-degree rotation around the Z-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(0, 0f, 0f, 1f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0f, 3.141593f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_360DegreesAroundZAxis()
+        {
+            // Quaternion for 360-degree rotation around the Z-axis (gimbal lock scenario)
+            Quaternion q = new Quaternion(-1f, 0f, 0f, 0f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        #endregion
+
+        #region ToPitchYawRoll Around 2 Axies (Non Gimble Lock)
+
+        [Fact]
+        public void ToPitchYawRoll_30DegreesAroundXAxis_45DegreesAroundYAxis()
+        {
+            Quaternion q = new Quaternion(0.8923991f, 0.2391177f, 0.3696438f, -0.09904577f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0.5235988f, 0.7853982f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_45DegreesAroundXAxis_30DegreesAroundYAxis()
+        {
+            Quaternion q = new Quaternion(0.8923991f, 0.3696438f, 0.2391177f, -0.09904577f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0.7853981f, 0.5235988f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_30DegreesAroundXAxis_45DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.8923991f, 0.2391177f, -0.09904576f, 0.3696438f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0.5235989f, 0, 0.7853981f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_45DegreesAroundXAxis_30DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.8923991f, 0.3696438f, -0.09904578f, 0.2391177f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0.7853982f, 0, 0.5235988f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_30DegreesAroundYAxis_45DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.8923991f, 0.09904578f, 0.2391177f, 0.3696438f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0.5235988f, 0.7853982f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_45DegreesAroundYAxis_30DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.8923991f, 0.09904578f, 0.3696438f, 0.2391177f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0.7853982f, 0.5235988f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+
+        #endregion
+
+        #region ToPitchYawRoll Around 2 Axis (Gimble Lock) 
+
+        [Fact]
+        public void ToPitchYawRoll_90DegreesAroundXAxis_45DegreesAroundYAxis()
+        {
+            Quaternion q = new Quaternion(0.6532815f, 0.6532815f, 0.2705981f, -0.2705981f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(1.570796f, 0.7853982f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_45DegreesAroundXAxis_90DegreesAroundYAxis()
+        {
+            Quaternion q = new Quaternion(0.6532815f, 0.2705981f, 0.6532815f, -0.2705981f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0.7853982f, 1.570796f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_90DegreesAroundXAxis_45DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.6532815f, 0.6532815f, -0.2705981f, 0.2705981f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(1.570796f, 5.497787f, 0f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_45DegreesAroundXAxis_90DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.6532815f, 0.2705981f, -0.2705981f, 0.6532815f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0.7853982f, 0f, 1.570796f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_90DegreesAroundYAxis_45DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.6532815f, 0.2705981f, 0.6532815f, 0.2705981f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 1.570796f, 0.7853982f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        [Fact]
+        public void ToPitchYawRoll_45DegreesAroundYAxis_90DegreesAroundZAxis()
+        {
+            Quaternion q = new Quaternion(0.6532815f, 0.2705981f, 0.2705981f, 0.6532815f);
+
+            // Expected Euler angles (in radians)
+            Vector3 expectedEulerAngles = new Vector3(0f, 0.7853982f, 1.570796f);
+
+            // Convert quaternion to Euler angles
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
+
+            // Assert they are approximately equal (within tolerance)
+            Assert.True(AreApproximatelyEqual(expectedEulerAngles, resultEulerAngles),
+                        $"Expected: {expectedEulerAngles}, Actual: {resultEulerAngles}");
+        }
+
+        #endregion
 
         [Fact]
         public void ToEulerAngles_IdentityQuaternion_Test()
@@ -365,7 +815,7 @@ namespace UnitTests.Units.Quaternions
             Vector3 expectedEulerAngles = new Vector3(0f, 0f, 0f);
 
             // Convert quaternion to Euler angles
-            Vector3 resultEulerAngles = Quaternion.ToEulerAngles(q);
+            Vector3 resultEulerAngles = Quaternion.ToPitchYawRoll(q);
 
             // Assert they are equal (within some tolerance)
             Assert.Equal(expectedEulerAngles, resultEulerAngles);
@@ -378,7 +828,7 @@ namespace UnitTests.Units.Quaternions
             // Test for standard Euler angles to quaternion conversion
             Assert.Equal(
                 new Quaternion(0.5f, 0.5f, 0.5f, 0.5f),
-                Quaternion.ToQuaternion(new Vector3(z: 1.5707963f, x: 1.5707963f, y: 0f))
+                Quaternion.CreateFromPitchYawRoll(new Vector3(z: 1.5707963f, x: 1.5707963f, y: 0f))
             );
         }
 
@@ -389,10 +839,10 @@ namespace UnitTests.Units.Quaternions
             Vector3 eulerAngles = new Vector3(0f, 0f, 0.7853982f);
 
             // Expected quaternion
-            Quaternion expectedQuaternion = new Quaternion(0.9238795f, 0f, 0f, 0.3826834f);
+            Quaternion expectedQuaternion = new Quaternion(0.9238795f, 0f, 0.3826835f, 0f);
 
             // Convert Euler angles to Quaternion
-            Quaternion resultQuaternion = Quaternion.ToQuaternion(eulerAngles);
+            Quaternion resultQuaternion = Quaternion.CreateFromPitchYawRoll(eulerAngles);
 
             // Assert they are equal (within some tolerance)
             Assert.Equal(expectedQuaternion, resultQuaternion);
@@ -405,10 +855,10 @@ namespace UnitTests.Units.Quaternions
             Vector3 eulerAngles = new Vector3(1.5707963f, 0f, 0f);
 
             // Expected quaternion
-            Quaternion expectedQuaternion = new Quaternion(0.7071068f, 0.7071068f, 0f, 0f);
+            Quaternion expectedQuaternion = new Quaternion(0.7071068f, 0f, 0f, 0.7071067f);
 
             // Convert Euler angles to Quaternion
-            Quaternion resultQuaternion = Quaternion.ToQuaternion(eulerAngles);
+            Quaternion resultQuaternion = Quaternion.CreateFromPitchYawRoll(eulerAngles);
 
             // Assert they are equal (within some tolerance)
             Assert.Equal(expectedQuaternion, resultQuaternion);
@@ -424,7 +874,7 @@ namespace UnitTests.Units.Quaternions
             Quaternion expectedQuaternion = new Quaternion(1f, 0f, 0f, 0f);
 
             // Convert Euler angles to Quaternion
-            Quaternion resultQuaternion = Quaternion.ToQuaternion(eulerAngles);
+            Quaternion resultQuaternion = Quaternion.CreateFromPitchYawRoll(eulerAngles);
 
             // Assert they are equal (within some tolerance)
             Assert.Equal(expectedQuaternion, resultQuaternion);
@@ -539,15 +989,101 @@ namespace UnitTests.Units.Quaternions
             Vector3 euler = new Vector3(0.5f, 0.5f, 0.5f);
 
             // Convert to quaternion
-            Quaternion q = Quaternion.ToQuaternion(euler);
+            Quaternion q = Quaternion.CreateFromPitchYawRoll(euler);
 
             // Convert back to Euler angles
-            Vector3 eulerBack = Quaternion.ToEulerAngles(q);
+            Vector3 eulerBack = Quaternion.ToPitchYawRoll(q);
 
             // Compare the original Euler angles with the result after conversion
             Assert.True(AreApproximatelyEqual(euler, eulerBack),
                         $"Original: {euler}, After round-trip: {eulerBack}");
         }
+
+        [Fact]
+        public void ToEulerAnglesAndBack_RoundTripConversion2_Test()
+        {
+            // Define an initial set of Euler angles
+            Vector3 euler = Vector3.Normalize(new Vector3(9, 0, 0));
+
+            // Convert to quaternion
+            Quaternion q = Quaternion.CreateFromPitchYawRoll(euler);
+
+            // Convert back to Euler angles
+            Vector3 eulerBack = Quaternion.ToPitchYawRoll(q);
+
+            // Compare the original Euler angles with the result after conversion
+            Assert.True(AreApproximatelyEqual(euler, eulerBack),
+                        $"Original: {euler}, After round-trip: {eulerBack}");
+        }
+
+        [Fact]
+        public void ToEulerAnglesAndBack_RoundTripConversion3_Test()
+        {
+            // Define an initial set of Euler angles
+            Vector3 euler = new Vector3(0f, 0.5f, 1f);
+
+            // Convert to quaternion
+            Quaternion q = Quaternion.CreateFromPitchYawRoll(euler);
+
+            // Convert back to Euler angles
+            Vector3 eulerBack = Quaternion.ToPitchYawRoll(q);
+
+            // Compare the original Euler angles with the result after conversion
+            Assert.True(AreApproximatelyEqual(euler, eulerBack),
+                        $"Original: {euler}, After round-trip: {eulerBack}");
+        }
+
+        [Fact]
+        public void ToQuaternionAndBack_RoundTripConversion1_Test()
+        {
+            // Define an initial Quaternion
+            Quaternion quat = new Quaternion(0.5f, 0.5f, 0.5f, 0.5f);
+
+            // Convert to Euler Angles
+            Vector3 v = Quaternion.ToPitchYawRoll(quat);
+
+            // Convert back to Quaternion
+            Quaternion quatBack = Quaternion.CreateFromPitchYawRoll(v);
+
+            // Compare the original Quaternion with the result after conversion
+            Assert.True(AreApproximatelyEqual(quat, quatBack),
+                        $"Original: {quat}, After round-trip: {quatBack}");
+        }
+
+        [Fact]
+        public void ToQuaternionAndBack_RoundTripConversion2_Test()
+        {
+            // Define an initial Quaternion
+            Quaternion quat = new Quaternion(1f, 0f, 0f, 0f);
+
+            // Convert to Euler Angles
+            Vector3 v = Quaternion.ToPitchYawRoll(quat);
+
+            // Convert back to Quaternion
+            Quaternion quatBack = Quaternion.CreateFromPitchYawRoll(v);
+
+            // Compare the original Quaternion with the result after conversion
+            Assert.True(AreApproximatelyEqual(quat, quatBack),
+                        $"Original: {quat}, After round-trip: {quatBack}");
+        }
+
+        [Fact]
+        public void ToQuaternionAndBack_RoundTripConversion3_Test()
+        {
+            // Define an initial Quaternion
+            Quaternion quat = Quaternion.Normalize(new Quaternion(12f, 9f, 4f, 0f));
+
+            // Convert to Euler Angles
+            Vector3 v = Quaternion.ToPitchYawRoll(quat);
+
+            // Convert back to Quaternion
+            Quaternion quatBack = Quaternion.CreateFromPitchYawRoll(v);
+
+            // Compare the original Quaternion with the result after conversion
+            Assert.True(AreApproximatelyEqual(quat, quatBack),
+                        $"Original: {quat}, After round-trip: {quatBack}");
+        }
+
 
         [Fact]
         public void Equals_TestIfObjectIsEqualToItself()

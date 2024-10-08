@@ -134,28 +134,36 @@ namespace HeightmapVisualizer.Units
         /// </summary>
         /// <param name="q">The Quaternion to convert</param>
         /// <returns>A Vector3 that contains (Roll, Pitch, Yaw)</returns>
-        public static Vector3 ToEulerAngles(Quaternion q)
+        public static Vector3 ToPitchYawRoll(Quaternion q1)
         {
+            double test = q1.x * q1.y + q1.z * q1.w;
+            double heading, attitude, bank;
 
-            // Roll (X-axis rotation)
-            double sinr_cosp = 2 * (q.w * q.x + q.y * q.z);
-            double cosr_cosp = 1 - 2 * (q.x * q.x + q.y * q.y);
-            float roll = (float)Math.Atan2(sinr_cosp, cosr_cosp);
+            if (test > 0.499) // singularity at north pole
+            {
+                heading = 2 * Math.Atan2(q1.x, q1.w);
+                attitude = Math.PI / 2;
+                bank = 0;
+                return new Vector3((float)bank, (float)heading, (float)attitude);
+            }
 
-            // Pitch (Y-axis rotation)
-            double sinp = 2 * (q.w * q.y - q.z * q.x); // Possible Fix: Use 2 * (q.w * q.y - q.z * q.x) instead of the square root
-            float pitch;
-            if (Math.Abs(sinp) >= 1)
-                pitch = (float)Math.CopySign(Math.PI / 2, sinp); // Clamp to 90 degrees if out of bounds
-            else
-                pitch = (float)Math.Asin(sinp); // Possible Fix: Use Math.Asin instead of Atan2 to avoid incorrect calculation
+            if (test < -0.499) // singularity at south pole
+            {
+                heading = -2 * Math.Atan2(q1.x, q1.w);
+                attitude = -Math.PI / 2;
+                bank = 0;
+                return new Vector3((float)bank, (float)heading, (float)attitude);
+            }
 
-            // Yaw (Z-axis rotation)
-            double siny_cosp = 2 * (q.w * q.z + q.x * q.y);
-            double cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z);
-            float yaw = (float)Math.Atan2(siny_cosp, cosy_cosp);
+            double sqx = q1.x * q1.x;
+            double sqy = q1.y * q1.y;
+            double sqz = q1.z * q1.z;
 
-            return new Vector3(roll, pitch, yaw);
+            heading = Math.Atan2(2 * q1.y * q1.w - 2 * q1.x * q1.z, 1 - 2 * sqy - 2 * sqz);
+            attitude = Math.Asin(2 * test);
+            bank = Math.Atan2(2 * q1.x * q1.w - 2 * q1.y * q1.z, 1 - 2 * sqx - 2 * sqz);
+
+            return new Vector3((float)bank, (float)heading, (float)attitude);
         }
 
         /// <summary>
@@ -163,22 +171,36 @@ namespace HeightmapVisualizer.Units
         /// </summary>
         /// <param name="e">The Vector3 containing the Euler angles (roll, pitch, yaw)</param>
         /// <returns>A Quaternion representing the rotation</returns>
-        public static Quaternion ToQuaternion(Vector3 e)
+        public static Quaternion CreateFromPitchYawRoll(Vector3 e)
         {
-            // Convert Euler angles (roll, pitch, yaw) to quaternion
-            double cy = Math.Cos(e.z * 0.5); // Yaw
-            double sy = Math.Sin(e.z * 0.5);
-            double cp = Math.Cos(e.y * 0.5); // Pitch
-            double sp = Math.Sin(e.y * 0.5);
-            double cr = Math.Cos(e.x * 0.5); // Roll
-            double sr = Math.Sin(e.x * 0.5);
+            var pitch = e.x;
+            var yaw = e.y;
+            var roll = e.z;
 
-            var w = cr * cp * cy + sr * sp * sy;
-            var x = sr * cp * cy - cr * sp * sy;
-            var y = cr * sp * cy + sr * cp * sy;
-            var z = cr * cp * sy - sr * sp * cy;
+            //  Roll first, about axis the object is facing, then
+            //  pitch upward, then yaw to face into the new heading
+            float sr, cr, sp, cp, sy, cy;
 
-            return new Quaternion((float)w, (float)x, (float)y, (float)z);
+            float halfRoll = roll * 0.5f;
+            sr = MathF.Sin(halfRoll);
+            cr = MathF.Cos(halfRoll);
+
+            float halfPitch = pitch * 0.5f;
+            sp = MathF.Sin(halfPitch);
+            cp = MathF.Cos(halfPitch);
+
+            float halfYaw = yaw * 0.5f;
+            sy = MathF.Sin(halfYaw);
+            cy = MathF.Cos(halfYaw);
+
+            Quaternion result = new();
+
+            result.x = cy * sp * cr + sy * cp * sr;
+            result.y = sy * cp * cr - cy * sp * sr;
+            result.z = cy * cp * sr - sy * sp * cr;
+            result.w = cy * cp * cr + sy * sp * sr;
+
+            return result;
         }
 
         /// <summary>

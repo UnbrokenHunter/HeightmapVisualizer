@@ -39,19 +39,19 @@ namespace HeightmapVisualizer.Scene
                     KeyInput.z = 1;
                     break;
                 case Keys.A:
-                    KeyInput.x = 1;
+                    KeyInput.x = -1;
                     break;
                 case Keys.S:
                     KeyInput.z = -1;
                     break;
                 case Keys.D:
-                    KeyInput.x = -1;
+                    KeyInput.x = 1;
                     break;
                 case Keys.Q:
-                    KeyInput.y = -1;
+                    KeyInput.y = 1;
                     break;
                 case Keys.E:
-                    KeyInput.y = 1;
+                    KeyInput.y = -1;
                     break;
                 case Keys.Escape:
                     Console.WriteLine("Escape key pressed! Exiting...");
@@ -87,32 +87,39 @@ namespace HeightmapVisualizer.Scene
         }
 
         private void Pan(Transform objectTransform)
-        {
+        { 
             if (MouseHandler.Dragging)
             {
-                var vector2 = MouseHandler.DragOffset;
+                // Sensitivity
+                float sensitivity = 4f;
 
                 var window = Window.Instance;
                 var cam = window.Scene.Camera;
 
-
-                var originOfClick = MouseHandler.DragStart.ToVector2();
-                var relativeMouseOffset = originOfClick - vector2;
-
+                var relativeMouseOffset = MouseHandler.MouseTrend;
                 var anglePerPixel = cam.Fov / window.ScreenSize;
 
-                var angle = relativeMouseOffset * anglePerPixel - (cam.Fov / 2);
 
-                // Sensitivity
-                float sensitivity = 1f;
+                var angle = relativeMouseOffset * anglePerPixel;
 
                 // Apply sensitivity scaling to direction
                 angle *= sensitivity;
 
-                var yaw = Quaternion.CreateFromAxisAngle(Vector3.Up, angle.x); // Yaw
-                var pitch = Quaternion.CreateFromAxisAngle(Vector3.Right, angle.y); // Pitch
 
-                objectTransform.Rotation = pitch * yaw;
+                var yaw = Quaternion.CreateFromAxisAngle(Vector3.Up, angle.x); // Yaw
+                var pitch = Quaternion.CreateFromAxisAngle(Vector3.Right, -angle.y); // Pitch
+
+                // Apply Rotation
+                var quaternionRotation = Quaternion.Normalize(objectTransform.Rotation * (pitch * yaw));
+
+                // Convert to Euler to remove Roll
+                var eulerRotation = Quaternion.ToPitchYawRoll(quaternionRotation);
+                eulerRotation.z = 0;
+
+                // Convert Back
+                var rotation = Quaternion.CreateFromPitchYawRoll(eulerRotation);
+
+                objectTransform.Rotation = rotation;
             }
         }
     }
