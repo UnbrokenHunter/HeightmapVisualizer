@@ -39,9 +39,19 @@ namespace HeightmapVisualizer.Primitives
             List<Tri> tris = new();
 
             int n = points.Length;
-            for (int i = 1; i < n - 1; i++)
+
+            // Mesh is a Line
+            if (n == 2)
             {
-                tris.Add(new Tri(mesh, points[0], points[i], points[i + 1]));
+                tris.Add(new Tri(mesh, points[0], points[0], points[1]));
+            }
+            else
+            {
+                // Mesh is not a line
+                for (int i = 1; i < n - 1; i++)
+                {
+                    tris.Add(new Tri(mesh, points[0], points[i], points[i + 1]));
+                }
             }
 
             return tris.ToArray();

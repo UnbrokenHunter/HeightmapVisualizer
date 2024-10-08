@@ -50,7 +50,9 @@ namespace HeightmapVisualizer
                 Quaternion.ToQuaternion(new Vector3((float)Math.PI / 2, 0, 0)),
                 new Vector2(10, 10));
 
-            return new Scene.Scene(camera, new Gameobject[] { cube, floorPlane, wallPlane, camera });
+            Gameobject line = Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10));
+
+            return new Scene.Scene(camera, new Gameobject[] { line, cube, floorPlane, wallPlane, camera });
         }
 
         private void Update()
