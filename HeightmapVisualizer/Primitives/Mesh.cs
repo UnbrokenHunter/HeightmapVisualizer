@@ -26,6 +26,11 @@ namespace HeightmapVisualizer.Primitives
         internal Dictionary<(Vector3, Vector3), Edge> edgeDict = new();
 
         /// <summary>
+        /// How the mesh will be displayed
+        /// </summary>
+        internal DrawingMode mode;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Mesh"/> class with the provided faces.
         /// The constructor automatically triangulates the faces and stores them in the mesh. 
         /// Additionally, it ensures that vertices and edges are reused where possible to avoid duplicates.
@@ -37,13 +42,17 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         /// <param name="faces">An array of faces (IFace) used to construct the mesh.</param>
         /// <param name="color">The default color of this mesh. If a face does not have an override, then that face will default to this color.</param>
-        public Mesh(Face[] faces, Color? color = null)
+        /// <param name="mode">How the mesh will be drawn to the screen.</param>
+        public Mesh(Face[] faces, Color? color = null, DrawingMode mode = DrawingMode.Lines)
         {
             // You cannot set black as a default value for some reason
             Color defaultColor = color ?? Color.Black;
 
-            // Triangulate the faces and store the resulting triangles
-            Tris = faces.SelectMany(e => e.Triangulate(this, defaultColor)).ToList();
+            // Set the way that the points are drawn
+            this.mode = mode;
+
+			// Triangulate the faces and store the resulting triangles
+			Tris = faces.SelectMany(e => e.Triangulate(this, defaultColor)).ToList();
         }
 
         /// <summary>
@@ -53,20 +62,44 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="cam">The camera used to project the mesh for rendering.</param>
         public void Render(Graphics g, Camera cam)
         {
-            // Draw all the edges in the mesh
-            foreach (Edge edge in edgeDict.Values)
-            {
-                edge.Draw(g, cam);
-            }
-        }
 
-        /// <summary>
-        /// Overrides the Gameobject Method "GetRenderable()" to return itself. By doing this, it allows
-        /// other gameobjects to instead have references to Meshs, rather than itself being a mesh. This 
-        /// could be useful for example, to allow having multiple meshes controlled by one object.
-        /// </summary>
-        /// <returns>This object</returns>
-        public override Mesh? GetRenderable()
+            if (mode == DrawingMode.Points)
+            {
+                // Draw all the edges in the mesh
+                foreach (Vertex vertex in vertexDict.Values)
+                {
+                    vertex.Draw(g, cam);
+                }
+            }
+
+            else if (mode == DrawingMode.Lines)
+            {
+                // Draw all the edges in the mesh
+                foreach (Edge edge in edgeDict.Values)
+                {
+                    edge.Draw(g, cam);
+                }
+            }
+
+            else if (mode == DrawingMode.Faces)
+            {
+                // Draw all the edges in the mesh
+                foreach (Tri tris in Tris)
+                {
+                    tris.Draw(g, cam);
+                }
+            }
+            else
+                throw new Exception("Drawing mode incorrectly set");
+		}
+
+		/// <summary>
+		/// Overrides the Gameobject Method "GetRenderable()" to return itself. By doing this, it allows
+		/// other gameobjects to instead have references to Meshs, rather than itself being a mesh. This 
+		/// could be useful for example, to allow having multiple meshes controlled by one object.
+		/// </summary>
+		/// <returns>This object</returns>
+		public override Mesh? GetRenderable()
         {
             return this;
         }
