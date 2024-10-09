@@ -1,4 +1,5 @@
 ﻿
+using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.UI
@@ -22,7 +23,7 @@ namespace HeightmapVisualizer.UI
             position2 = position1 + size;
             this.onClick = onClick;
 
-            //Window.Instance.MouseClick += new MouseEventHandler(Click);
+            MouseHandler.OnLeftClick += Click;
         }
 
         public static void Draw(Graphics g)
@@ -39,9 +40,9 @@ namespace HeightmapVisualizer.UI
         }
 
         // Method to simulate clicking the button
-        private void Click(object sender, MouseEventArgs e)
+        private void Click(Point p)
         {
-            if (!MouseInBounds())
+            if (!MouseInBounds(p))
                 return;
             Console.WriteLine("Test");
 
@@ -51,13 +52,10 @@ namespace HeightmapVisualizer.UI
             }
         }
 
-        public bool MouseInBounds()
+        private bool MouseInBounds(Point p)
         {
-            var cursor = Cursor.Position;
-            var screen = Window.Instance.Bounds;
-            var relativeCursor = new Vector2(cursor.X - screen.X, cursor.Y - screen.Y);
-            return position1.x <= relativeCursor.x && position2.x >= relativeCursor.x &&
-                position1.y <= relativeCursor.y && position2.y >= relativeCursor.y;
+            return position1.x <= p.X && position2.x >= p.X &&
+                position1.y <= p.Y && position2.y >= p.Y;
         }
     }
 }
