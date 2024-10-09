@@ -8,20 +8,22 @@ namespace HeightmapVisualizer.UI
     {
         private static List<Button> buttons = new List<Button>();
 
-        public string text;
-        public Vector2 position1;
-        public Vector2 position2;
-        public Action<Button> onClick;  // Delegate to handle the button click action
+		private string text;
+        private Vector2 position1;
+		private Vector2 size;
+		private Action<Button>? onClick;  // Delegate to handle the button click action
+		private bool clip;
 
         // Constructor for the Button class
-        public Button(string text, Vector2 position, Vector2 size, Action<Button> onClick)
+        public Button(string text, Vector2 position, Vector2 size, Action<Button>? onClick = null, bool clips = true) 
         {
             buttons.Add(this);
 
             this.text = text;
-            position1 = position;
-            position2 = position1 + size;
+            this.position1 = position;
+            this.size = size;
             this.onClick = onClick;
+            this.clip = clips;
 
             MouseHandler.OnLeftClick += Click;
         }
@@ -34,8 +36,17 @@ namespace HeightmapVisualizer.UI
 
             foreach (Button b in buttons)
             {
-                g.DrawRectangle(pen, (int)b.position1.x, (int)b.position1.y, (int)b.position2.x, (int)b.position2.y);
+                var rect = new Rectangle((int)b.position1.x, (int)b.position1.y, (int)b.size.x, (int)b.size.y);
+
+                g.DrawRectangle(pen, rect);
+
+				if (b.clip)
+					g.SetClip(rect);
+                
                 g.DrawString(b.text, font, brush, b.position1.x, b.position1.y);
+				
+                if (b.clip)
+                    g.ResetClip();
             }
         }
 
@@ -44,7 +55,8 @@ namespace HeightmapVisualizer.UI
         {
             if (!MouseInBounds(p))
                 return;
-            Console.WriteLine("Test");
+
+            Console.WriteLine("Clicked");
 
             if (onClick != null)
             {
@@ -54,8 +66,13 @@ namespace HeightmapVisualizer.UI
 
         private bool MouseInBounds(Point p)
         {
-            return position1.x <= p.X && position2.x >= p.X &&
-                position1.y <= p.Y && position2.y >= p.Y;
+            return position1.x <= p.X && size.x >= p.X &&
+                position1.y <= p.Y && size.y >= p.Y;
+        }
+
+        public void SetText(string text)
+        {
+            this.text = text;
         }
     }
 }
