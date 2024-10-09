@@ -198,5 +198,10 @@ namespace HeightmapVisualizer.Units
         {
             return (value1 * (1.0f - amount)) + (value2 * amount);
         }
+
+        public static float Distance(Vector3 value1, Vector3 value2)
+        {
+            return (float)Math.Sqrt(Dot(value1, value1) + Dot(value2, value2));
+        }
     }
 }
