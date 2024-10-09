@@ -16,13 +16,13 @@ namespace HeightmapVisualizer.Shapes
         /// <param name="size">The size of the plane (width and depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the plane.</returns>
-        public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector2 size, Color? color = null)
+        public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector2 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
             // Create the faces of the plane based on size, using the position as the center
             var faces = CreatePlaneFaces(size.x, size.y, true);
 
             // Create the mesh with the faces
-            var mesh = new Mesh(faces, color);
+            var mesh = new Mesh(faces, color, mode);
 
             // Apply the position and rotation to the mesh's transform
             mesh.Transform.Position = position;
@@ -38,9 +38,9 @@ namespace HeightmapVisualizer.Shapes
         /// <param name="size">The size of the plane (width and depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the plane.</returns>
-        public static Mesh CreateCentered(Vector3 position, Vector2 size, Color? color = null)
+        public static Mesh CreateCentered(Vector3 position, Vector2 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
-            return CreateCentered(position, Quaternion.Identity, size, color);
+            return CreateCentered(position, Quaternion.Identity, size, color, mode);
         }
 
         /// <summary>
@@ -51,13 +51,13 @@ namespace HeightmapVisualizer.Shapes
         /// <param name="size">The size of the plane (width and depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the plane.</returns>
-        public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector2 size, Color? color = null)
+        public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector2 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
             // Create the faces of the plane based on size, using the position as one of the corners
             var faces = CreatePlaneFaces(size.x, size.y, false);
 
             // Create the mesh with the faces
-            var mesh = new Mesh(faces, color);
+            var mesh = new Mesh(faces, color, mode);
 
             // Apply the position and rotation to the mesh's transform
             mesh.Transform.Position = position;
@@ -73,9 +73,9 @@ namespace HeightmapVisualizer.Shapes
         /// <param name="size">The size of the plane (width and depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the plane.</returns>
-        public static Mesh CreateCorners(Vector3 position, Vector2 size, Color? color = null)
+        public static Mesh CreateCorners(Vector3 position, Vector2 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
-            return CreateCorners(position, Quaternion.Identity, size, color);
+            return CreateCorners(position, Quaternion.Identity, size, color, mode);
         }
 
         /// <summary>

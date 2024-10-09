@@ -42,14 +42,14 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         /// <param name="faces">An array of faces (IFace) used to construct the mesh.</param>
         /// <param name="color">The default color of this mesh. If a face does not have an override, then that face will default to this color.</param>
-        /// <param name="mode">How the mesh will be drawn to the screen.</param>
-        public Mesh(Face[] faces, Color? color = null, DrawingMode mode = DrawingMode.Lines)
+        /// <param name="mode">How the mesh will be drawn to the screen. It will default to lines</param>
+        public Mesh(Face[] faces, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
             // You cannot set black as a default value for some reason
             Color defaultColor = color ?? Color.Black;
 
-            // Set the way that the points are drawn
-            this.mode = mode;
+            // Set the way that the points are drawn, defaults to lines
+            this.mode = mode == DrawingMode.None ? DrawingMode.Lines : mode;
 
 			// Triangulate the faces and store the resulting triangles
 			Tris = faces.SelectMany(e => e.Triangulate(this, defaultColor)).ToList();
@@ -90,7 +90,7 @@ namespace HeightmapVisualizer.Primitives
                 }
             }
             else
-                throw new Exception("Drawing mode incorrectly set");
+                throw new Exception("Drawing mode incorrectly set or set to None");
 		}
 
 		/// <summary>

@@ -78,16 +78,24 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="cam">The camera used for projection.</param>
         public override void Draw(Graphics g, Camera cam)
         {
-            throw new NotImplementedException();
-        }
+			if (LocalPosition == null)
+				return;
 
-        /// <summary>
-        /// Returns a string that represents the current vertex.
-        /// </summary>
-        /// <returns>A string that represents the current vertex's position.</returns>
-        public override string ToString()
+			var p = cam.ProjectPoint(Position);
+
+            int size = 6;
+            var rect = new Rectangle((int)(p.x - size / 2), (int)(p.y - size / 2), size, size);
+
+			g.FillPie(new SolidBrush(color), rect, 0f, 360f);
+		}
+
+		/// <summary>
+		/// Returns a string that represents the current vertex.
+		/// </summary>
+		/// <returns>A string that represents the current vertex's position.</returns>
+		public override string ToString()
         {
-            return $"Vertex: {LocalPosition}";
+            return $"Vertex: {Position}";
         }
     }
 }

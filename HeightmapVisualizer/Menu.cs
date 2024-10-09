@@ -10,8 +10,8 @@ namespace HeightmapVisualizer
 
         public Menu()
         {
-            PositionText = new UI.Button("Position", new Vector2(0, 60), new Vector2(200, 60));
-            EulerRotationText = new UI.Button("Euler Angles", new Vector2(0, 360), new Vector2(200, 60));
+            PositionText = new UI.Button("Position", new Vector2(0, 0), new Vector2(400, 60));
+            EulerRotationText = new UI.Button("Euler Angles", new Vector2(0, 60), new Vector2(400, 60));
         }
 
         public void Update(Camera cam)

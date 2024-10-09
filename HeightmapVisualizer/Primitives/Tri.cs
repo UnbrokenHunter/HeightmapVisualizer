@@ -75,21 +75,29 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="cam">The camera used for projection.</param>
         public override void Draw(Graphics g, Camera cam)
         {
-            foreach (var edge in Edges)
-            {
-                edge.Draw(g, cam);
-            }
-        }
+			if (Points[0] == null || Points[1] == null || Points[2] == null)
+				return;
 
-        #region Overriding Equality
+			var p1 = cam.ProjectPoint(Points[0]);
+			var p2 = cam.ProjectPoint(Points[1]);
+			var p3 = cam.ProjectPoint(Points[2]);
 
-        /// <summary>
-        /// Determines whether the specified <see cref="Tri"/> is equal to the current <see cref="Tri"/>.
-        /// Two triangles are considered equal if they have the same edges, in the same order.
-        /// </summary>
-        /// <param name="other">The triangle to compare with the current triangle.</param>
-        /// <returns>true if the specified triangle is equal to the current triangle; otherwise, false.</returns>
-        public bool Equals(Tri? other)
+            PointF pF(Vector2 v) => new PointF(v.x, v.y);
+
+            var p = new PointF[] { pF(p1), pF(p2), pF(p3) };
+
+			g.FillPolygon(new SolidBrush(color), p);
+		}
+
+		#region Overriding Equality
+
+		/// <summary>
+		/// Determines whether the specified <see cref="Tri"/> is equal to the current <see cref="Tri"/>.
+		/// Two triangles are considered equal if they have the same edges, in the same order.
+		/// </summary>
+		/// <param name="other">The triangle to compare with the current triangle.</param>
+		/// <returns>true if the specified triangle is equal to the current triangle; otherwise, false.</returns>
+		public bool Equals(Tri? other)
         {
             if (other == null)
                 return false;

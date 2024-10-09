@@ -5,6 +5,7 @@ namespace HeightmapVisualizer.Primitives
 	{
 		Points,
 		Lines,
-		Faces
+		Faces,
+		None
 	}
 }

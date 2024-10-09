@@ -45,8 +45,8 @@ namespace HeightmapVisualizer
             Camera camera = new Camera(new Units.Transform(), this.Bounds);
             camera.Controller = new Controller();
             Gameobject cube = Cuboid.CreateCorners(new Vector3(-1, -1, -1), new Vector3(1, 1, 1)).SetColor(Color.Green);
-            Gameobject cube2 = Cuboid.CreateCentered(new Vector3(-5, 2, 0), new Vector3(1, 2, 1), Color.HotPink);
-            Gameobject floorPlane = Plane.CreateCentered(new Vector3(0, 5, 0), new Vector2(10, 10));
+            Gameobject cube2 = Cuboid.CreateCentered(new Vector3(-5, 2, 0), new Vector3(1, 2, 1), Color.HotPink, Primitives.DrawingMode.Points);
+            Gameobject floorPlane = Plane.CreateCentered(new Vector3(0, 5, 0), new Vector2(10, 10), mode: Primitives.DrawingMode.Faces);
             Gameobject wallPlane = Plane.CreateCentered(new Vector3(0, -5, 0),
                 Quaternion.CreateFromPitchYawRoll(new Vector3((float)Math.PI / 2, 0, 0)),
                 new Vector2(10, 10));
