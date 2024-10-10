@@ -1,5 +1,6 @@
 ﻿using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Units;
+using HeightmapVisualizer.Utilities;
 
 namespace HeightmapVisualizer.Primitives
 {
@@ -67,7 +68,12 @@ namespace HeightmapVisualizer.Primitives
             var p1 = cam.ProjectPoint(Vertices[0].Position);
             var p2 = cam.ProjectPoint(Vertices[1].Position);
 
-            g.DrawLine(new Pen(color), p1.x, p1.y, p2.x, p2.y);
+            // One point is on screen
+            if (p1.Item2 || p2.Item2)
+            {
+                g.DrawLine(ColorLookup.FindOrGetPen(color), p1.Item1.x, p1.Item1.y, p2.Item1.x, p2.Item1.y);
+            }
+
         }
 
         #region Overriding Equality

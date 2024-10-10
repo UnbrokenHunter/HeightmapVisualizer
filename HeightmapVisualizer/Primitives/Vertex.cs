@@ -1,5 +1,6 @@
 ﻿using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Units;
+using HeightmapVisualizer.Utilities;
 
 namespace HeightmapVisualizer.Primitives
 {
@@ -83,10 +84,13 @@ namespace HeightmapVisualizer.Primitives
 
 			var p = cam.ProjectPoint(Position);
 
-            int size = 6;
-            var rect = new Rectangle((int)(p.x - size / 2), (int)(p.y - size / 2), size, size);
+            if (p.Item2)
+            {
+                int size = 6;
+                var rect = new Rectangle((int)(p.Item1.x - size / 2), (int)(p.Item1.y - size / 2), size, size);
 
-			g.FillPie(new SolidBrush(color), rect, 0f, 360f);
+			    g.FillPie(ColorLookup.FindOrGetBrush(color), rect, 0f, 360f);
+            }
 		}
 
 		/// <summary>

@@ -30,7 +30,12 @@ namespace HeightmapVisualizer.Scene
 
 
 		// Project a 3D point to 2D screen space with perspective
-		public Vector2 ProjectPoint(Vector3 point)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns>A Tuple with the vector, and whether or not it is on screen.</returns>
+		public Tuple<Vector2, bool> ProjectPoint(Vector3 point)  
         {
             // Translate point relative to camera position
             Vector3 translatedPoint = point - Transform.Position;
@@ -46,10 +51,17 @@ namespace HeightmapVisualizer.Scene
             // Perform perspective projection
             Vector2 projected = (pointIn2D * FocalLength) / zClamped + Window.Instance.ScreenCenter;
 
-            return projected;
-        }
+            // Point Not On Screen
+            if (projected.x > Window.Instance.ScreenSize.x || projected.x < 0 ||
+                projected.y > Window.Instance.ScreenSize.y || projected.y < 0)
+            {
+                return new Tuple<Vector2, bool>(projected, false);
+            }
 
-        public override Mesh? GetRenderable()
+			return new Tuple<Vector2, bool>(projected, true);
+		}
+
+		public override Mesh? GetRenderable()
         {
             var debug = false;
             if (debug)

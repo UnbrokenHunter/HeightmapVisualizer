@@ -1,6 +1,7 @@
 ﻿
 using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Units;
+using HeightmapVisualizer.Utilities;
 
 namespace HeightmapVisualizer.UI
 {
@@ -30,9 +31,9 @@ namespace HeightmapVisualizer.UI
 
         public static void Draw(Graphics g)
         {
-            Pen pen = new Pen(Color.Black);
+            Pen pen = ColorLookup.FindOrGetPen(Color.Black);
             Font font = new Font("Arial", 13f);
-            Brush brush = new SolidBrush(Color.Black);
+            Brush brush = ColorLookup.FindOrGetBrush(Color.Black);
 
             foreach (Button b in buttons)
             {
