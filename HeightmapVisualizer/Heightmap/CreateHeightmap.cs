@@ -1,8 +1,10 @@
-﻿namespace HeightmapVisualizer
+﻿using HeightmapVisualizer.Shapes;
+
+namespace HeightmapVisualizer
 {
     internal class CreateHeightmap
     {
-        /*
+		/*
 		public Heightmap Map;
 
 		public CreateHeightmap(int xSize, int ySize) 
