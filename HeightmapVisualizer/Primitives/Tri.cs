@@ -18,7 +18,7 @@ namespace HeightmapVisualizer.Primitives
         /// <summary>
         /// The three original points used to create the object
         /// </summary>
-        internal Vector3[] Points { get; }
+        internal Vertex[] Points { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tri"/> class with the given mesh and three vertex positions.
@@ -33,8 +33,6 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="p3">The third vertex position of the triangle.</param>
         public Tri(Mesh mesh, Color color, Vector3 p1, Vector3 p2, Vector3 p3) : base(mesh, color)
         {
-
-            Points = new Vector3[3] { p1, p2, p3 };
 
             Edges = new Edge[3];
 
@@ -67,21 +65,32 @@ namespace HeightmapVisualizer.Primitives
             Edges[0] = GetOrCreateEdge(p1, p2);
             Edges[1] = GetOrCreateEdge(p2, p3);
             Edges[2] = GetOrCreateEdge(p3, p1);
-        }
 
-        /// <summary>
-        /// Draws the triangle by rendering each of its edges.
-        /// </summary>
-        /// <param name="g">The graphics context used for drawing.</param>
-        /// <param name="cam">The camera used for projection.</param>
-        public override void Draw(Graphics g, Camera cam)
+            List<Vertex> vector3s = new List<Vertex>();
+			vector3s.Add(Edges[0].Vertices[0]);
+			vector3s.Add(Edges[0].Vertices[1]);
+
+            if (vector3s.Contains(Edges[1].Vertices[0]))
+            {
+                vector3s.Add(Edges[1].Vertices[1]);
+            }
+
+			Points = vector3s.ToArray();
+		}
+
+		/// <summary>
+		/// Draws the triangle by rendering each of its edges.
+		/// </summary>
+		/// <param name="g">The graphics context used for drawing.</param>
+		/// <param name="cam">The camera used for projection.</param>
+		public override void Draw(Graphics g, Camera cam)
         {
 			if (Points[0] == null || Points[1] == null || Points[2] == null)
 				return;
 
-			var p1 = cam.ProjectPoint(Points[0]);
-			var p2 = cam.ProjectPoint(Points[1]);
-			var p3 = cam.ProjectPoint(Points[2]);
+			var p1 = cam.ProjectPoint(Points[0].Position);
+			var p2 = cam.ProjectPoint(Points[1].Position);
+			var p3 = cam.ProjectPoint(Points[2].Position);
 
             PointF pF(Vector2 v) => new PointF(v.x, v.y);
 
@@ -91,6 +100,11 @@ namespace HeightmapVisualizer.Primitives
             {
 				var p = new PointF[] { pF(p1.Item1), pF(p2.Item1), pF(p3.Item1) };
 				g.FillPolygon(ColorLookup.FindOrGetBrush(color), p);
+
+				Edges[0].Draw(g, cam);
+				Edges[1].Draw(g, cam);
+				Edges[2].Draw(g, cam);
+
 			}
 
 		}

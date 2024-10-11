@@ -1,5 +1,6 @@
 ﻿
-using System.Drawing.Drawing2D;
+
+using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Primitives
 {
@@ -37,14 +38,16 @@ namespace HeightmapVisualizer.Primitives
 
             foreach (Tri tri in m1.Tris)
             {
-                faces1.Add(new Face(tri.Points, tri.GetColor()));
+				Vector3[] points = new Vector3[3] { tri.Points[0].Position, tri.Points[1].Position, tri.Points[2].Position };
+                faces1.Add(new Face(points, tri.GetColor()));
             }
 
             var faces2 = new List<Face>();
 
             foreach (Tri tri in m2.Tris)
             {
-                faces2.Add(new Face(tri.Points, tri.GetColor()));
+				Vector3[] points = new Vector3[3] { tri.Points[0].Position, tri.Points[1].Position, tri.Points[2].Position };
+				faces2.Add(new Face(points, tri.GetColor()));
             }
 
             var faces = faces1.Concat(faces2);
