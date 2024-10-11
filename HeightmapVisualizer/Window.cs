@@ -46,7 +46,7 @@ namespace HeightmapVisualizer
             Camera camera = new Camera(new Units.Transform(), this.Bounds);
             camera.Controller = new Controller();
 
-            var values = new float[20, 5];
+            var values = new float[10, 20];
 			//Random random = new Random();
 			for (int i = 0; i < values.GetLength(0); i++)
 			{
@@ -56,7 +56,7 @@ namespace HeightmapVisualizer
 				}
 			}
 
-            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1);
+            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1, mode: DrawingMode.Faces);
             Gameobject[] hm = MeshUtility.Convert2DArrayTo1DArray(heightmap);
 
             Gameobject cube = Cuboid.CreateCorners(new Vector3(-1, -1, -1), new Vector3(1, 1, 1)).SetColor(Color.Green);

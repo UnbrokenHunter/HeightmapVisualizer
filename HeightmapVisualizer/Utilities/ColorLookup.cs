@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System.Drawing.Drawing2D;
 
 namespace HeightmapVisualizer.Utilities
 {
@@ -13,10 +10,12 @@ namespace HeightmapVisualizer.Utilities
 		{
 			brushes.TryGetValue(color, out Brush? value);
 
+
 			if (value == null)
 			{
-				value = new SolidBrush(color);
+				value = new LinearGradientBrush(Point.Empty, new Point(10, 10), color, Color.BlueViolet);
 				brushes.Add(color, value);
+
 			}
 
 			return value;

@@ -48,7 +48,6 @@ namespace HeightmapVisualizer.Scene
                 if (renderable != null)
                 {
                     var distance = Vector3.Distance(Camera.Transform.Position, renderable.Transform.Position);
-
                     renderOrder.Add(new Tuple<float, Mesh>(distance, renderable));
                 }
             }
