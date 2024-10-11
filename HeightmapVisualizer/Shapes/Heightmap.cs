@@ -24,5 +24,19 @@ namespace HeightmapVisualizer.Shapes
             }
             return map3D;
         }
+
+        public static Mesh Combine(Mesh[,] mesh)
+        {
+            var array = MeshUtility.Convert2DArrayTo1DArray(mesh);
+
+            Mesh combined = array[0];
+
+            for (int i = 1; i < array.GetLength(0); i++)
+            {
+				combined = MeshUtility.CombineGeometry(combined, array[i]);
+            }
+
+            return combined;
+        }
     }
 }
