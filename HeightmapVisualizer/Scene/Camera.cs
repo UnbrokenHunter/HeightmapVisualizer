@@ -53,7 +53,8 @@ namespace HeightmapVisualizer.Scene
 
             // Point Not On Screen
             if (projected.x > Window.Instance.ScreenSize.x || projected.x < 0 ||
-                projected.y > Window.Instance.ScreenSize.y || projected.y < 0)
+                projected.y > Window.Instance.ScreenSize.y || projected.y < 0 ||
+                zClamped > FarClippingPlane)
             {
                 return new Tuple<Vector2, bool>(projected, false);
             }
