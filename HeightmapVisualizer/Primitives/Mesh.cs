@@ -1,4 +1,5 @@
-﻿using HeightmapVisualizer.Scene;
+﻿using HeightmapVisualizer.Rendering;
+using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Primitives
