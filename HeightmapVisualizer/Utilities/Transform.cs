@@ -28,7 +28,14 @@
 
         }
 
-        public void Move(Vector3 vector)
+        // Test
+		public Vector3 ToLocalSpace(Vector3 v)
+		{
+            return Quaternion.Rotate(v, Rotation);
+
+		}
+
+		public void Move(Vector3 vector)
         {
             Position += Quaternion.Rotate(vector, Quaternion.ToInverse(Rotation));
         }
