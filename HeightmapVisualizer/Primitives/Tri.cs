@@ -66,14 +66,16 @@ namespace HeightmapVisualizer.Primitives
             Edges[1] = GetOrCreateEdge(p2, p3);
             Edges[2] = GetOrCreateEdge(p3, p1);
 
-            List<Vertex> vector3s = new List<Vertex>();
-			vector3s.Add(Edges[0].Vertices[0]);
-			vector3s.Add(Edges[0].Vertices[1]);
+			List<Vertex> vector3s = new List<Vertex>
+			{
+				Edges[0].Vertices[0],
+				Edges[0].Vertices[1]
+			};
 
-            if (vector3s.Contains(Edges[1].Vertices[0]))
-            {
+			if (vector3s.Contains(Edges[1].Vertices[0]))
                 vector3s.Add(Edges[1].Vertices[1]);
-            }
+            else
+				vector3s.Add(Edges[1].Vertices[0]);
 
 			Points = vector3s.ToArray();
 		}
