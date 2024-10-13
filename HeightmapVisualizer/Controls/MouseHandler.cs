@@ -1,37 +1,66 @@
 ﻿
 using HeightmapVisualizer.Units;
+using HeightmapVisualizer.Utilities;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace HeightmapVisualizer.Controls
 {
     internal static class MouseHandler
     {
-        public static Point MousePosition { get; private set; }
+        public static Vector2 ToNDC(Vector2 point)
+        {
+            // Convert from screen space (pixels) to NDC (-1 to 1)
+            float ndcX = 2.0f * (point.x / Window.Instance.ClientSize.X) - 1.0f;
+            float ndcY = 1.0f - 2.0f * (point.y / Window.Instance.ClientSize.Y);  // Invert Y axis
 
-        public static Point[] LastMousePositions = new Point[5];
+            return new Vector2(ndcX, ndcY);
+        }
+        public static Vector2 FromNDC(Vector2 ndcPoint)
+        {
+            // Convert from NDC (-1 to 1) back to Client Screen Space (pixels)
+            float screenX = ndcPoint.x * Window.Instance.ClientSize.X;
+            float screenY = ndcPoint.y * Window.Instance.ClientSize.Y;  // Invert Y axis
+
+            return new Vector2(screenX, screenY);
+        }
+
+        public static Vector2 MousePosition { get; private set; }
+
+        public static Vector2[] LastMousePositions = new Vector2[5];
 
         public static Vector2 MouseTrend => ComputeAverageDirection(LastMousePositions);
 
 
-        public static Point DragStart { get; private set; }
-        public static Point DragEnd { get; private set; }
+        public static Vector2 DragStart { get; private set; }
+        public static Vector2 DragEnd { get; private set; }
         public static bool Dragging { get; private set; }
         public static Vector2 DragOffset { get; private set; }
 
 
-        public delegate void OnClick(Point point);
+        public delegate void OnClick(Vector2 point);
         public static event OnClick? OnLeftClick;
         public static event OnClick? OnRightClick;
         public static event OnClick? OnMiddleClick;
 
-        public static void Debug(Graphics g)
+        public static void Debug(FrameEventArgs args)
         {
-            g.DrawLines(new Pen(Color.Red), LastMousePositions);
+            // 1. Draw the connected lines (equivalent to g.DrawLines using LineStrip)
+            Vector2[] lineVertices = LastMousePositions; ;  // Assuming LastMousePositions is a list of Vector2
+            GLUtilities.DrawLineStrip(lineVertices, Color.Red);
 
-            g.DrawPie(new Pen(Color.Black), MousePosition.X - 15, MousePosition.Y - 15, 30, 30, 0, 360);
+            // 2. Draw the filled circle at the mouse position (equivalent to g.DrawPie)
+            //GLUtilities.DrawCircle(MousePosition, 15, Color.Black);
 
-            Vector2 trend = ComputeAverageDirection(LastMousePositions);
-            g.DrawLine(new Pen(Color.DarkBlue), MousePosition,
-                new Point((int)(MousePosition.X + trend.x), (int)(MousePosition.Y + trend.y)));
+            // 3. Draw the trend line (equivalent to g.DrawLine)
+            Vector2 trend = ComputeAverageDirection(LastMousePositions);  // Assuming this method exists
+            Vector2[] trendLineVertices = new Vector2[]
+            {
+                MousePosition,
+                MousePosition + trend
+            };
+            GLUtilities.DrawLine(trendLineVertices, Color.DarkBlue);
         }
 
         public static void Update()
@@ -51,24 +80,24 @@ namespace HeightmapVisualizer.Controls
 
             // LastMousePosition[0] should always be the current position and LastMousePosition[1] is the most recent prevous position
             LastMousePositions[1] = MousePosition;
-            MousePosition =
-                new Point(Cursor.Position.X - Window.Instance.Bounds.Location.X - Window.Instance.Cursor.Size.Width / 4,
-                    Cursor.Position.Y - Window.Instance.Bounds.Location.Y - Window.Instance.Cursor.Size.Height);
+
+            // Get mouse position relative to the window
+            MousePosition = ToNDC(new Vector2((int)Window.Instance.MouseState.Position.X, (int)Window.Instance.MouseState.Position.Y));
 
             LastMousePositions[0] = MousePosition;
         }
 
-        public static Vector2 ComputeAverageDirection(Point[] points)
+        public static Vector2 ComputeAverageDirection(Vector2[] points)
         {
             if (points == null)
                 throw new ArgumentException("Cannot compute Average Direction because points is null.");
 
-            int sumX = 0;
-            int sumY = 0;
+            float sumX = 0;
+            float sumY = 0;
             for (int i = 0; i < points.Length - 1; i++)
             {
-                sumX += points[i].X - points[i + 1].X;
-                sumY += points[i].Y - points[i + 1].Y;
+                sumX += points[i].x - points[i + 1].x;
+                sumY += points[i].y - points[i + 1].y;
             }
 
             sumX /= (points.Length);
@@ -80,13 +109,13 @@ namespace HeightmapVisualizer.Controls
         private static void UpdateDragging()
         {
             // Check if the left mouse button is pressed
-            if (Control.MouseButtons == MouseButtons.Left)
+            if (Window.Instance.MouseState.IsButtonDown(MouseButton.Left))
             {
                 // If dragging has not started, record the initial position
                 if (!Dragging)
                 {
-                    DragStart = Cursor.Position; // Store the original position (screen coordinates)
-                    DragEnd = Point.Empty;
+                    DragStart = MousePosition;
+                    DragEnd = new Vector2();
                     Dragging = true;
                     Console.WriteLine($"Dragging started at: {DragStart}");
                 }
@@ -95,12 +124,12 @@ namespace HeightmapVisualizer.Controls
             else if (Dragging) // If the left mouse button is released, stop dragging
             {
                 Dragging = false;
-                DragEnd = Cursor.Position;
-                Console.WriteLine($"Dragging ended at: {Cursor.Position}");
+                DragEnd = MousePosition;
+                Console.WriteLine($"Dragging ended at: {Window.Instance.MouseState.Position}");
             }
 
             if (Dragging)
-                DragOffset = DragStart.ToVector2() - MousePosition.ToVector2();
+                DragOffset = DragStart - MousePosition;
             else
                 DragOffset = new Vector2();
 
@@ -108,11 +137,11 @@ namespace HeightmapVisualizer.Controls
 
         private static void UpdateClicking()
         {
-            if (Control.MouseButtons == MouseButtons.Left)
+            if (Window.Instance.MouseState.IsButtonDown(MouseButton.Left))
                 OnLeftClick?.Invoke(MousePosition);
-            if (Control.MouseButtons == MouseButtons.Right)
+            if (Window.Instance.MouseState.IsButtonDown(MouseButton.Right))
                 OnRightClick?.Invoke(MousePosition);
-            if (Control.MouseButtons == MouseButtons.Middle)
+            if (Window.Instance.MouseState.IsButtonDown(MouseButton.Middle))
                 OnMiddleClick?.Invoke(MousePosition);
         }
     }

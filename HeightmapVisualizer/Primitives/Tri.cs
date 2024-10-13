@@ -101,7 +101,7 @@ namespace HeightmapVisualizer.Primitives
             if (p1.Item2 || p2.Item2 || p3.Item2)
             {
 				var p = new PointF[] { pF(p1.Item1), pF(p2.Item1), pF(p3.Item1) };
-				g.FillPolygon(ColorLookup.FindOrGetBrush(color), p);
+			//	g.FillPolygon(ColorShader.FindOrGetBrush(color), p);
 
 				Edges[0].Draw(g, cam);
 				Edges[1].Draw(g, cam);

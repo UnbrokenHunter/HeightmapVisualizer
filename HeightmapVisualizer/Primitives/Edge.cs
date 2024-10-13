@@ -71,7 +71,7 @@ namespace HeightmapVisualizer.Primitives
             // One point is on screen
             if (p1.Item2 || p2.Item2)
             {
-                g.DrawLine(ColorLookup.FindOrGetPen(color), p1.Item1.x, p1.Item1.y, p2.Item1.x, p2.Item1.y);
+            //    g.DrawLine(ColorShader.FindOrGetPen(color), p1.Item1.x, p1.Item1.y, p2.Item1.x, p2.Item1.y);
             }
 
         }

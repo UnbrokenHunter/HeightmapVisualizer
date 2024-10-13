@@ -23,11 +23,11 @@ namespace HeightmapVisualizer.UI
 		public static void Draw(Graphics g)
 		{
 			Font font = new Font("Arial", 13f);
-			Brush brush = ColorLookup.FindOrGetBrush(Color.Black);
+			//Brush brush = ColorShader.FindOrGetBrush(Color.Black);
 
 			foreach (DebugText b in texts)
 			{
-				g.DrawString(b.text, font, brush, b.position1.x, b.position1.y);
+			//	g.DrawString(b.text, font, brush, b.position1.x, b.position1.y);
 			}
 			texts.Clear();
 		}

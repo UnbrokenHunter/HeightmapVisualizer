@@ -1,8 +1,10 @@
 ﻿
 namespace HeightmapVisualizer.Units
 {
-    public class Vector2
+    public struct Vector2
     {
+        public static int SizeInBytes => sizeof(float) * 2;
+
         public float x { get; set; }
         public float y { get; set; }
 

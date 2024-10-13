@@ -1,25 +1,27 @@
-﻿
-using HeightmapVisualizer.Controls;
+﻿using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Rendering;
 using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Shapes;
 using HeightmapVisualizer.Units;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 
 namespace HeightmapVisualizer
 {
-    internal class Window : Form
+    internal class Window : GameWindow
     {
         public Scene.Scene Scene;
 
         public static Window Instance;
 
-        public Vector2 ScreenSize => new Vector2(Width, Height);
+        public Vector2 ScreenSize => new Vector2(this.ClientSize.X, this.ClientSize.Y);
         public Vector2 ScreenCenter => ScreenSize / 2;
 
         private Menu menu = new();
 
-        public Window()
+        public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
             if (Instance != null)
                 throw new Exception("Two Windows have been created");
@@ -28,36 +30,53 @@ namespace HeightmapVisualizer
 
             AllocConsole();
 
-            // Set up form properties
-            this.Text = "Projections";
-            this.Width = 16 * 200;
-            this.Height = 9 * 200;
-
-            this.DoubleBuffered = true;
-
             this.Scene = CreateScene();
             Scene.Init();
-
-            Thread t1 = new Thread(Update);
-            t1.Start();
         }
+
+        #region Window Things
+
+        protected override void OnResize(ResizeEventArgs e)
+        {
+            base.OnResize(e);
+            // Update the OpenGL viewport to match the new window size
+            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+        }
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+
+            // Set up OpenGL state
+            GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);  // Set clear color
+            GL.Enable(EnableCap.DepthTest);          // Enable depth testing for 3D rendering
+        
+            Scene.InitOpenGL();
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+            // Free resources like buffers, shaders, etc.
+        }
+
+        #endregion
 
         private Scene.Scene CreateScene()
         {
-            Camera camera = new Camera(new Units.Transform(), this.Bounds);
+            Camera camera = new Camera(new Units.Transform());
             camera.Controller = new Controller();
 
             var values = new float[10, 10];
-			//Random random = new Random();
-			for (int i = 0; i < values.GetLength(0); i++)
-			{
-				for (int j = 0; j < values.GetLength(1); j++)
-				{
-					values[i, j] = i * j; // (float) random.NextDouble() * 255;
-				}
-			}
+            for (int i = 0; i < values.GetLength(0); i++)
+            {
+                for (int j = 0; j < values.GetLength(1); j++)
+                {
+                    values[i, j] = i * j; // (float) random.NextDouble() * 255;
+                }
+            }
 
-            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1, mode: DrawingMode.Faces);
+            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1, mode: DrawingMode.Lines);
             Gameobject[] hm = MeshUtility.Convert2DArrayTo1DArray(heightmap);
 
             Gameobject cube = Cuboid.CreateCorners(new Vector3(-1, -1, -1), new Vector3(1, 1, 1)).SetColor(Color.Green);
@@ -72,33 +91,48 @@ namespace HeightmapVisualizer
             var objects = new Gameobject[] { line, cube, cube2, floorPlane, wallPlane, camera };
             objects = objects.Concat(hm).ToArray();
 
-
-			return new Scene.Scene(camera, objects);
+            return new Scene.Scene(camera, objects);
         }
 
-        private void Update()
+        protected override void OnUpdateFrame(FrameEventArgs args)
         {
-            while (true)
+            base.OnUpdateFrame(args);
+
+            Scene.Update();
+            MouseHandler.Update();
+
+            menu.Update(Scene.Camera);
+        }
+
+        // Override the OnRenderFrame method to perform custom drawing
+        protected override void OnRenderFrame(FrameEventArgs args)
+        {
+            base.OnRenderFrame(args);
+
+            // Clear the color and depth buffer before drawing
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            Title = Scene.Camera.Transform.Position.ToString() + " \t " + Scene.Camera.Transform.Rotation.ToString();
+            Scene.Draw(args);
+            MouseHandler.Debug(args);
+
+            UI.Button.Draw(args);
+
+            // Check for any OpenGL errors
+            CheckGLError();
+
+            // Swap buffers to display the rendered content
+            SwapBuffers();
+        }
+
+        // Helper method to check OpenGL errors
+        private void CheckGLError()
+        {
+            ErrorCode error = GL.GetError();
+            if (error != ErrorCode.NoError)
             {
-                Thread.Sleep(10);
-                MouseHandler.Update();
-
-                menu.Update(Scene.Camera);
-
-                Invalidate(); // Calls the OnPaint Method
+                Console.WriteLine($"OpenGL Error: {error}");
             }
-        }
-
-        // Override the OnPaint method to perform custom drawing
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-
-            Scene.Update(e.Graphics);
-            MouseHandler.Debug(e.Graphics);
-
-            UI.Button.Draw(e.Graphics);
-
         }
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]

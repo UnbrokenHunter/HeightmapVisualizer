@@ -6,63 +6,59 @@ namespace HeightmapVisualizer.Scene
 {
     public class Camera : Gameobject
     {
-        public Rectangle Space { get; private set; } // Screen Space
-        public float Aspect { get; private set; }
+        public float AspectRatio => (float)Window.Instance.ClientSize.X / Window.Instance.ClientSize.Y;
+
+        public float FocalLength => (float)(1 / (2 * Math.Tan(MathF.PI / 180 * (Fov.x / 2))));
         public Vector2 Fov { get; private set; }
         public float NearClippingPlane { get; private set; }
         public float FarClippingPlane { get; private set; }
 
-        public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.x / 2)));
-
         public Camera(Transform transform,
-            Rectangle space,
-            float aspect = 16f / 9f, // This is currently not tied to anything
             float fov = 90f,
             float nearClippingPlane = 0.0001f,
             float farClippingPlane = 100000f) : base(transform)
         {
-            this.Space = space;
-            this.Aspect = aspect;
-            this.Fov = new Vector2(fov, fov / aspect);
+            this.Fov = new Vector2(fov, fov / AspectRatio);
             this.NearClippingPlane = nearClippingPlane;
             this.FarClippingPlane = farClippingPlane;
         }
 
 
-		// Project a 3D point to 2D screen space with perspective
+        // Project a 3D point to 2D screen space with perspective
         /// <summary>
         /// 
         /// </summary>
         /// <param name="point"></param>
         /// <returns>A Tuple with the vector, and whether or not it is on screen.</returns>
-		public Tuple<Vector2, bool> ProjectPoint(Vector3 point)  
+        public Tuple<Vector2, bool> ProjectPoint(Vector3 point)
         {
-            // Translate point relative to camera position
+            // Translate point relative to the camera position
             Vector3 translatedPoint = point - Transform.Position;
 
             // Rotate point based on camera's orientation (yaw and pitch)
             Vector3 rotatedPoint = Quaternion.Rotate(translatedPoint, Transform.Rotation);
 
-
-            Vector2 pointIn2D = new Vector2(rotatedPoint.x, rotatedPoint.y);
-
-            float zClamped = Math.Max(rotatedPoint.z, NearClippingPlane); // Ensure depth is positive
+            // Clamping z to the near clipping plane (ensure depth is positive)
+            float zClamped = Math.Max(rotatedPoint.z, NearClippingPlane);
 
             // Perform perspective projection
-            Vector2 projected = (pointIn2D * FocalLength) / zClamped + Window.Instance.ScreenCenter;
+            Vector2 projected = new Vector2(
+                (rotatedPoint.x * FocalLength) / zClamped,  // Project the x-coordinate
+                (rotatedPoint.y * FocalLength) / zClamped * -1 * AspectRatio   // Project the y-coordinate
+            );
 
-            // Point Not On Screen
-            if (projected.x > Window.Instance.ScreenSize.x || projected.x < 0 ||
-                projected.y > Window.Instance.ScreenSize.y || projected.y < 0 ||
+            // Check if point is outside the view frustum in NDC space (-1 to 1 range)
+            if (projected.x > 1 || projected.x < -1 ||
+                projected.y > 1 || projected.y < -1 ||
                 zClamped > FarClippingPlane)
             {
                 return new Tuple<Vector2, bool>(projected, false);
             }
 
-			return new Tuple<Vector2, bool>(projected, true);
-		}
+            return new Tuple<Vector2, bool>(projected, true);  // Point is inside the frustum
+        }
 
-		public override Mesh? GetRenderable()
+        public override Mesh? GetRenderable()
         {
             var debug = false;
             if (debug)

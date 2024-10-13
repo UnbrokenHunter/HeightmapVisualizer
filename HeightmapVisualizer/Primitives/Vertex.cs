@@ -89,7 +89,7 @@ namespace HeightmapVisualizer.Primitives
                 int size = 6;
                 var rect = new Rectangle((int)(p.Item1.x - size / 2), (int)(p.Item1.y - size / 2), size, size);
 
-			    g.FillPie(ColorLookup.FindOrGetBrush(color), rect, 0f, 360f);
+			    //g.FillPie(ColorShader.FindOrGetBrush(color), rect, 0f, 360f);
             }
 		}
 

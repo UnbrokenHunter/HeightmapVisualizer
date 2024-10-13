@@ -1,6 +1,7 @@
 ﻿using HeightmapVisualizer.Controls;
-using HeightmapVisualizer.UI;
 using HeightmapVisualizer.Units;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using OpenTK.Windowing.Common;
 
 namespace HeightmapVisualizer.Scene
 {
@@ -12,7 +13,7 @@ namespace HeightmapVisualizer.Scene
         public void Init()
         {
             // Enable key preview so the form receives key events
-            Window.Instance.KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
+            //Window.Instance.KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
 
             // Subscribe to the KeyDown and KeyUp events
             Window.Instance.KeyDown += OnKeyDown;
@@ -31,9 +32,9 @@ namespace HeightmapVisualizer.Scene
             objectTransform.Move(KeyInput * movementSpeed);
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(KeyboardKeyEventArgs args)
         {
-            switch (e.KeyCode)
+            switch (args.Key)
             {
                 case Keys.W:
                     KeyInput.z = 1;
@@ -55,15 +56,15 @@ namespace HeightmapVisualizer.Scene
                     break;
                 case Keys.Escape:
                     Console.WriteLine("Escape key pressed! Exiting...");
-                    Application.Exit();
+                    Window.Instance.Close();
                     break;
             }
         }
 
         // Handle key up events (optional)
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        private void OnKeyUp(KeyboardKeyEventArgs args)
         {
-            switch (e.KeyCode)
+            switch (args.Key)
             {
                 case Keys.W:
                     KeyInput.z = 0;
@@ -91,12 +92,12 @@ namespace HeightmapVisualizer.Scene
             if (MouseHandler.Dragging)
             {
                 // Sensitivity
-                float sensitivity = 4f;
+                float sensitivity = 1f;
 
                 var window = Window.Instance;
                 var cam = window.Scene.Camera;
 
-                var relativeMouseOffset = MouseHandler.MouseTrend;
+                var relativeMouseOffset = MouseHandler.FromNDC(MouseHandler.MouseTrend);
                 var anglePerPixel = cam.Fov / window.ScreenSize;
 
 
@@ -107,7 +108,7 @@ namespace HeightmapVisualizer.Scene
 
 
                 var yaw = Quaternion.CreateFromAxisAngle(Vector3.Up, angle.x); // Yaw
-                var pitch = Quaternion.CreateFromAxisAngle(Vector3.Right, -angle.y); // Pitch
+                var pitch = Quaternion.CreateFromAxisAngle(Vector3.Right, angle.y); // Pitch
 
                 // Apply Rotation
                 var quaternionRotation = Quaternion.Normalize(objectTransform.Rotation * (pitch * yaw));
