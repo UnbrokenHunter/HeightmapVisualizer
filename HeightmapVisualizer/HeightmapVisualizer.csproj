@@ -17,5 +17,9 @@
 		<Using Remove="System.Windows.Forms" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Assets\" />
+	</ItemGroup>
+
 
 </Project>
