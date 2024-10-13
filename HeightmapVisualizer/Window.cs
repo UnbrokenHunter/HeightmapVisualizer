@@ -47,7 +47,7 @@ namespace HeightmapVisualizer
             Camera camera = new Camera(new Units.Transform(), this.Bounds);
             camera.Controller = new Controller();
 
-            var values = new float[10, 20];
+            var values = new float[10, 10];
 			//Random random = new Random();
 			for (int i = 0; i < values.GetLength(0); i++)
 			{
