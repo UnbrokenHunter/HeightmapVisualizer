@@ -74,7 +74,12 @@ namespace HeightmapVisualizer.Scene
                 PointF pF(Vector2 v) => new PointF(v.x, v.y);
                 var screenPositions = renderable.GetOrCalculateScreenPosition(Camera);
                 var p = new PointF[] { pF(screenPositions[0].Item1), pF(screenPositions[1].Item1), pF(screenPositions[2].Item1) };
-                g.DrawLines(ColorLookup.FindOrGetPen(renderable.Tri.GetColor()), p);
+
+                if (renderable.DrawingMode == DrawingMode.Lines)
+                    g.DrawPolygon(ColorLookup.FindOrGetPen(renderable.Tri.GetColor()), p);
+                if (renderable.DrawingMode == DrawingMode.Faces)
+                    g.FillPolygon(ColorLookup.FindOrGetBrush(renderable.Tri.GetColor()), p);
+
 
             }
         }
