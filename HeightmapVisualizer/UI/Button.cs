@@ -1,6 +1,7 @@
 ﻿
 using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Units;
+using HeightmapVisualizer.Utilities;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 
@@ -32,38 +33,27 @@ namespace HeightmapVisualizer.UI
 
         public static void Draw(FrameEventArgs args)
         {
-            //// Set color to black for drawing (equivalent to the pen color)
-            //GL.Color3(0.0f, 0.0f, 0.0f);  // Black color
+            foreach (Button b in buttons)
+            {
 
-            //foreach (Button b in buttons)
-            //{
-            //    // Convert button position and size to a rectangle
-            //    var rect = new Rectangle((int)b.position1.x, (int)b.position1.y, (int)b.size.x, (int)b.size.y);
+                GLUtilities.DrawRect(b.position1, b.position1 + b.size.x, Color.Black);
 
-            //    // Draw the rectangle (equivalent of g.DrawRectangle)
-            //    GL.Begin(PrimitiveType.LineLoop);
-            //    GL.Vertex2(rect.Left, rect.Top);
-            //    GL.Vertex2(rect.Right, rect.Top);
-            //    GL.Vertex2(rect.Right, rect.Bottom);
-            //    GL.Vertex2(rect.Left, rect.Bottom);
-            //    GL.End();
+                // Handle clipping if necessary (equivalent of g.SetClip)
+                if (b.clip)
+                {
+                    GL.Enable(EnableCap.ScissorTest);
+                    GL.Scissor((int)b.position1.x, (int)(b.position1.y - b.size.y), (int)b.size.x, (int)b.size.y);
+                }
 
-            //    // Handle clipping if necessary (equivalent of g.SetClip)
-            //    if (b.clip)
-            //    {
-            //        GL.Enable(EnableCap.ScissorTest);
-            //        GL.Scissor(rect.Left, rect.Top, rect.Width, rect.Height);
-            //    }
+                // Placeholder for drawing text (equivalent of g.DrawString)
+                //DrawText(b.text, b.position1);
 
-            //    // Placeholder for drawing text (equivalent of g.DrawString)
-            //    //DrawText(b.text, b.position1);
-
-            //    // Reset clipping if necessary (equivalent of g.ResetClip)
-            //    if (b.clip)
-            //    {
-            //        GL.Disable(EnableCap.ScissorTest);
-            //    }
-            //}
+                // Reset clipping if necessary (equivalent of g.ResetClip)
+                if (b.clip)
+                {
+                    GL.Disable(EnableCap.ScissorTest);
+                }
+            }
         }
 
         // Method to simulate clicking the button

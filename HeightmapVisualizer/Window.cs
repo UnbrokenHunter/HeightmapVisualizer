@@ -36,13 +36,6 @@ namespace HeightmapVisualizer
 
         #region Window Things
 
-        protected override void OnResize(ResizeEventArgs e)
-        {
-            base.OnResize(e);
-            // Update the OpenGL viewport to match the new window size
-            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
-        }
-
         protected override void OnLoad()
         {
             base.OnLoad();
@@ -58,6 +51,13 @@ namespace HeightmapVisualizer
         {
             base.OnUnload();
             // Free resources like buffers, shaders, etc.
+        }
+
+        protected override void OnResize(ResizeEventArgs e)
+        {
+            base.OnResize(e);
+            // Update the OpenGL viewport to match the new window size
+            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
         }
 
         #endregion
@@ -76,7 +76,7 @@ namespace HeightmapVisualizer
                 }
             }
 
-            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1, mode: DrawingMode.Lines);
+            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1, mode: DrawingMode.Faces);
             Gameobject[] hm = MeshUtility.Convert2DArrayTo1DArray(heightmap);
 
             Gameobject cube = Cuboid.CreateCorners(new Vector3(-1, -1, -1), new Vector3(1, 1, 1)).SetColor(Color.Green);
