@@ -57,41 +57,17 @@ namespace HeightmapVisualizer.Primitives
         }
 
         /// <summary>
-        /// Renders the mesh by drawing each edge using the provided graphics context and camera.
+        /// Returns all Tris on the mesh that need to be rendered
         /// </summary>
-        /// <param name="g">The graphics context used to render the mesh.</param>
-        /// <param name="cam">The camera used to project the mesh for rendering.</param>
-        public void Render(Graphics g, Camera cam)
+        public Renderable[] PointsToRender()
         {
-
-            if (mode == DrawingMode.Points)
-            {
+                List<Renderable> renderables = new List<Renderable>();
                 // Draw all the edges in the mesh
-                foreach (Vertex vertex in vertexDict.Values)
+                foreach (Tri tri in Tris)
                 {
-                    vertex.Draw(g, cam);
+                    renderables.Add(new Renderable(mode, tri));
                 }
-            }
-
-            else if (mode == DrawingMode.Lines)
-            {
-                // Draw all the edges in the mesh
-                foreach (Edge edge in edgeDict.Values)
-                {
-                    edge.Draw(g, cam);
-                }
-            }
-
-            else if (mode == DrawingMode.Faces)
-            {
-                // Draw all the edges in the mesh
-                foreach (Tri tris in Tris)
-                {
-                    tris.Draw(g, cam);
-                }
-            }
-            else
-                throw new Exception("Drawing mode incorrectly set or set to None");
+                return renderables.ToArray();
 		}
 
 		/// <summary>

@@ -8,7 +8,7 @@ namespace HeightmapVisualizer.Primitives
     /// Represents a triangle (Tri) in 3D space as part of a mesh.
     /// Defined by three edges that connect three vertices.
     /// </summary>
-    internal sealed class Tri : Primitive, IEquatable<Tri>
+    public sealed class Tri : Primitive, IEquatable<Tri>
     {
         /// <summary>
         /// The edges that define the triangle. A triangle has exactly three edges.
@@ -106,7 +106,6 @@ namespace HeightmapVisualizer.Primitives
 				Edges[0].Draw(g, cam);
 				Edges[1].Draw(g, cam);
 				Edges[2].Draw(g, cam);
-
 			}
 
 		}
