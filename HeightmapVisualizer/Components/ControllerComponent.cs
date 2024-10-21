@@ -1,16 +1,21 @@
 ﻿using HeightmapVisualizer.Controls;
+using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.UI;
 using HeightmapVisualizer.Units;
 
-namespace HeightmapVisualizer.Scene
+namespace HeightmapVisualizer.Components
 {
-    internal class Controller
+    internal class ControllerComponent : IComponent
     {
 
         private Vector3 KeyInput = new Vector3();
 
-        public void Init()
+        private Gameobject gameobject;
+
+        public void Init(Gameobject gameobject)
         {
+            this.gameobject = gameobject;
+
             // Enable key preview so the form receives key events
             Window.Instance.KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
 
@@ -19,10 +24,10 @@ namespace HeightmapVisualizer.Scene
             Window.Instance.KeyUp += OnKeyUp;
         }
 
-        public void Update(Transform objectTransform)
+        public void Update()
         {
-            Pan(objectTransform);
-            Move(objectTransform);
+            Pan(gameobject.Transform);
+            Move(gameobject.Transform);
         }
 
         private void Move(Transform objectTransform)
@@ -87,7 +92,7 @@ namespace HeightmapVisualizer.Scene
         }
 
         private void Pan(Transform objectTransform)
-        { 
+        {
             if (MouseHandler.Dragging)
             {
                 // Sensitivity

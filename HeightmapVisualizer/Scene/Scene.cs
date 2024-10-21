@@ -15,14 +15,6 @@ namespace HeightmapVisualizer.Scene
             this.Gameobjects = gameobjects;
         }
 
-        public void Init()
-        {
-            foreach (var gameobject in Gameobjects)
-            {
-                gameobject.Init();
-            }
-        }
-
         public void Update(Graphics g)
         {
             UpdateGameobjects();

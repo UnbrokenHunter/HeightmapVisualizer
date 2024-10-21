@@ -1,4 +1,5 @@
 ﻿
+using HeightmapVisualizer.Components;
 using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Scene;
@@ -35,18 +36,17 @@ namespace HeightmapVisualizer
             this.DoubleBuffered = true;
 
             this.Scene = CreateScene();
-            Scene.Init();
 
-            Thread t1 = new Thread(Update);
+            Thread t1 = new Thread(Gameloop);
             t1.Start();
         }
 
         private Scene.Scene CreateScene()
         {
             Camera camera = new Camera(new Units.Transform(), this.Bounds);
-            camera.Controller = new Controller();
+            camera.AddComponent(new ControllerComponent());
 
-            var values = new float[10, 20];
+            var values = new float[4, 4];
 			//Random random = new Random();
 			for (int i = 0; i < values.GetLength(0); i++)
 			{
@@ -66,7 +66,15 @@ namespace HeightmapVisualizer
                 Quaternion.CreateFromPitchYawRoll(new Vector3((float)Math.PI / 2, 0, 0)),
                 new Vector2(10, 10));
 
-            Gameobject line = Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10));
+            Action<Gameobject> move = delegate (Gameobject g)
+            {
+                g.Transform.Move(Vector3.Forward / 100);
+            };
+
+            cube.AddComponent(new ScriptableComponent(null, move));
+
+
+			Gameobject line = Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10));
 
             var objects = new Gameobject[] { line, cube, cube2, floorPlane, wallPlane, camera };
             objects = objects.Concat(hm).ToArray();
@@ -75,7 +83,7 @@ namespace HeightmapVisualizer
 			return new Scene.Scene(camera, objects);
         }
 
-        private void Update()
+        private void Gameloop()
         {
             while (true)
             {

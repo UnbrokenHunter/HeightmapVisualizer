@@ -1,4 +1,5 @@
-﻿using HeightmapVisualizer.Primitives;
+﻿using HeightmapVisualizer.Components;
+using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Units;
 
 namespace HeightmapVisualizer.Scene
@@ -6,28 +7,29 @@ namespace HeightmapVisualizer.Scene
     public abstract class Gameobject
     {
         internal Transform Transform { get; set; }
-        internal Controller Controller { get; set; }
+        internal List<IComponent> Components { get; private set; }
 
-        public Gameobject() : this(new Transform()) { }
-
-        internal Gameobject(Transform transform)
+        internal Gameobject(Transform? transform = null)
         {
-            Transform = transform;
+            Transform = transform ?? new Transform();
+
+            Components = new List<IComponent>();
         }
 
-        public virtual void Init()
+        public void AddComponent(IComponent component)
         {
-            if (Controller != null)
-            {
-                Controller.Init();
-            }
+            component.Init(this);
+            Components.Add(component);
         }
 
         public virtual void Update()
         {
-            if (Controller != null)
+            foreach (var component in Components)
             {
-                Controller.Update(Transform);
+                if (component != null)
+                {
+					component.Update();
+                }
             }
         }
 
