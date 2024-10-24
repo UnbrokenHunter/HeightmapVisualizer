@@ -20,6 +20,15 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         internal Vertex[] Points { get; }
 
+        internal Vector3 Normal { get; }
+        private Vector3 CalculateNormal()
+        {
+			var edge1 = Points[1].Position - Points[0].Position;
+			var edge2 = Points[2].Position - Points[0].Position;
+
+            return Vector3.Normalize(Vector3.Cross(edge1, edge2));
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Tri"/> class with the given mesh and three vertex positions.
         /// Automatically constructs the three edges that form the triangle. This constructor ensures that any identical
@@ -78,6 +87,8 @@ namespace HeightmapVisualizer.Primitives
 				vector3s.Add(Edges[1].Vertices[0]);
 
 			Points = vector3s.ToArray();
+
+            this.Normal = CalculateNormal();
 		}
 
 		/// <summary>
