@@ -99,8 +99,7 @@ namespace HeightmapVisualizer.Shapes
             // Create the two triangular faces of the plane
             return new Face[]
             {
-                new Face(new[] { v1, v2, v3 }), // First triangle (front-right)
-                new Face(new[] { v1, v3, v4 })  // Second triangle (back-left)
+                new Face(new[] { v1, v2, v3, v4 }, name: "Plane"), // First triangle (front-right)
             };
         }
     }

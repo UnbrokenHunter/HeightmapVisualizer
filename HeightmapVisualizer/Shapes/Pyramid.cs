@@ -82,11 +82,11 @@ namespace HeightmapVisualizer.Shapes
 
             return new Face[]
             {
-                new Face(new[] { v1, v2, vApex }), // Front face
-                new Face(new[] { v2, v3, vApex }), // Right face
-                new Face(new[] { v3, v4, vApex }), // Back face
-                new Face(new[] { v4, v1, vApex }), // Left face
-                new Face(new[] { v1, v2, v3, v4 }) // Base face (quad)
+                new Face(new[] { v1, v2, vApex }, name: "Front"), // Front face
+                new Face(new[] { v2, v3, vApex }, name: "Right"), // Right face
+                new Face(new[] { v3, v4, vApex }, name: "Back"), // Back face
+                new Face(new[] { v4, v1, vApex }, name: "Left"), // Left face
+                new Face(new[] { v1, v2, v3, v4 }, name: "Base") // Base face (quad) 
             };
         }
     }
