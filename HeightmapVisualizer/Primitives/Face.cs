@@ -18,15 +18,19 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         private readonly Color? color;
 
+        private readonly string? name;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Face"/> class with the specified points.
         /// </summary>
         /// <param name="points">An array of <see cref="Vector3"/> points that define the face.</param>
         /// <param name="color">The color to draw this face as. If left blank, will default to the color of the mesh</param>
-        public Face(Vector3[] points, Color? color = null)
+        /// <param name="name">The name of this face, which can be searched for, in order to make changes to the mesh later.</param>
+        public Face(Vector3[] points, Color? color = null, string? name = null)
         {               
             this.color = color;
             this.points = points;
+            this.name = name;
         }
 
         /// <summary>
@@ -45,6 +49,7 @@ namespace HeightmapVisualizer.Primitives
             // such as ear clipping or Delaunay triangulation, would be required in the future.
 
             Color colorToUse = color ?? defaultColor;
+            string nameToUse = name ?? string.Empty;
 
             List<Tri> tris = new();
 
@@ -53,14 +58,14 @@ namespace HeightmapVisualizer.Primitives
             // Mesh is a Line
             if (n == 2)
             {
-                tris.Add(new Tri(mesh, colorToUse, points[0], points[0], points[1]));
+                tris.Add(new Tri(mesh, colorToUse, points[0], points[0], points[1], nameToUse));
             }
             else
             {
                 // Mesh is not a line
                 for (int i = 1; i < n - 1; i++)
                 {
-                    tris.Add(new Tri(mesh, colorToUse, points[0], points[i], points[i + 1]));
+                    tris.Add(new Tri(mesh, colorToUse, points[0], points[i], points[i + 1], nameToUse));
                 }
             }
 

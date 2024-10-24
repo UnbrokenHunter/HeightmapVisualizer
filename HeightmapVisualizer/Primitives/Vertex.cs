@@ -4,12 +4,12 @@ using HeightmapVisualizer.Utilities;
 
 namespace HeightmapVisualizer.Primitives
 {
-    /// <summary>
-    /// Represents a vertex in 3D space as part of a mesh.
-    /// Stores a local position and provides a method to compute its global position.
-    /// Also tracks the edges this vertex is part of.
-    /// </summary>
-    internal sealed class Vertex : Primitive, IEquatable<Vertex>
+	/// <summary>
+	/// Represents a vertex in 3D space as part of a mesh.
+	/// Stores a local position and provides a method to compute its global position.
+	/// Also tracks the edges this vertex is part of.
+	/// </summary>
+	public sealed class Vertex : Primitive, IEquatable<Vertex>
     {
         /// <summary>
         /// A list of edges this vertex is a part of.
@@ -19,7 +19,7 @@ namespace HeightmapVisualizer.Primitives
         /// <summary>
         /// The local position of the vertex in the mesh's local coordinate space.
         /// </summary>
-        public readonly Vector3 LocalPosition;
+        public Vector3 LocalPosition;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Vertex"/> class with a given mesh and local position.

@@ -29,6 +29,8 @@ namespace HeightmapVisualizer.Primitives
             return Vector3.Normalize(Vector3.Cross(edge1, edge2));
 		}
 
+		internal string Name { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Tri"/> class with the given mesh and three vertex positions.
         /// Automatically constructs the three edges that form the triangle. This constructor ensures that any identical
@@ -40,7 +42,7 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="p1">The first vertex position of the triangle.</param>
         /// <param name="p2">The second vertex position of the triangle.</param>
         /// <param name="p3">The third vertex position of the triangle.</param>
-        public Tri(Mesh mesh, Color color, Vector3 p1, Vector3 p2, Vector3 p3) : base(mesh, color)
+        public Tri(Mesh mesh, Color color, Vector3 p1, Vector3 p2, Vector3 p3, string name) : base(mesh, color)
         {
 
             Edges = new Edge[3];
@@ -88,6 +90,7 @@ namespace HeightmapVisualizer.Primitives
 
 			Points = vector3s.ToArray();
 
+            this.Name = name;
             this.Normal = CalculateNormal();
 		}
 
