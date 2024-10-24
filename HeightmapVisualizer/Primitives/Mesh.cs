@@ -125,5 +125,23 @@ namespace HeightmapVisualizer.Primitives
             }
             return this;
         }
+
+		/// <summary>
+		/// This method can be used to search a mesh for a given name, and will return an array of all of the Verts that have the name.
+		/// </summary>
+		/// <param name="name">The name to search for</param>
+		/// <returns>An array of all of the Vertexes that have that name</returns>
+		public Vertex[] GetVertexsByName(string name)
+        {
+            List<Vertex> vertices = new List<Vertex>();
+            foreach (Tri tri in Tris.FindAll(tri => tri.Name == name))
+            {
+                foreach(Vertex v in tri.Points)
+                {
+                    if (!vertices.Contains(v)) vertices.Add(v);
+                }
+            }
+            return vertices.ToArray();
+        }
     }
 }

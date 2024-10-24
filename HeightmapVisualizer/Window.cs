@@ -68,7 +68,16 @@ namespace HeightmapVisualizer
 
             Action<Gameobject> move = delegate (Gameobject g)
             {
-                g.Transform.Move(Vector3.Forward / 100);
+                if (g.GetType() == typeof(Mesh))
+                {
+                    var names = ((Mesh)g).GetVertexsByName("Front");
+
+					foreach (Vertex t in names)
+                    {
+                        t.LocalPosition += (Vector3.Forward/1000 * -1);
+                    }
+                }
+                //g.Transform.Move(Vector3.Forward / 100);
             };
 
             cube.AddComponent(new ScriptableComponent(null, move));
@@ -76,7 +85,7 @@ namespace HeightmapVisualizer
 
 			Gameobject line = Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10));
 
-            var objects = new Gameobject[] { line, cube, cube2, floorPlane, wallPlane, camera };
+            var objects = new Gameobject[] { line, cube, cube2, wallPlane, camera };
             objects = objects.Concat(hm).ToArray();
 
 
