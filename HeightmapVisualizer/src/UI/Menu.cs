@@ -2,17 +2,17 @@
 using HeightmapVisualizer.src.Utilities;
 using System.Numerics;
 
-namespace HeightmapVisualizer.src
+namespace HeightmapVisualizer.src.UI
 {
     internal class Menu
     {
-        private UI.Button PositionText;
-        private UI.Button EulerRotationText;
+        private Button PositionText;
+        private Button EulerRotationText;
 
         public Menu()
         {
-            PositionText = new UI.Button("Position", new Vector2(0, 0), new Vector2(400, 60));
-            EulerRotationText = new UI.Button("Euler Angles", new Vector2(0, 60), new Vector2(400, 60));
+            PositionText = new Button("Position", new Vector2(0, 0), new Vector2(400, 60));
+            EulerRotationText = new Button("Euler Angles", new Vector2(0, 60), new Vector2(400, 60));
         }
 
         public void Update(Camera cam)
