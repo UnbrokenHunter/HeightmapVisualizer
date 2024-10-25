@@ -1,5 +1,6 @@
 ﻿using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Units;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Shapes
 {
@@ -18,7 +19,7 @@ namespace HeightmapVisualizer.Shapes
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
         public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
-            var faces = CreateCuboidFaces(size.x, size.y, size.z, true);
+            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, true);
             var mesh = new Mesh(faces, color, mode);
             mesh.Transform.Position = position;
             mesh.Transform.Rotation = rotation;
@@ -47,7 +48,7 @@ namespace HeightmapVisualizer.Shapes
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
         public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
-            var faces = CreateCuboidFaces(size.x, size.y, size.z, false);
+            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, false);
             var mesh = new Mesh(faces, color, mode);
             mesh.Transform.Position = position;
             mesh.Transform.Rotation = rotation;

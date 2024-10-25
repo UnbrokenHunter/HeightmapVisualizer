@@ -2,6 +2,8 @@
 using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.UI;
 using HeightmapVisualizer.Units;
+using HeightmapVisualizer.Utilities;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Components
 {
@@ -41,22 +43,22 @@ namespace HeightmapVisualizer.Components
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    KeyInput.z = 1;
+                    KeyInput.Z = 1;
                     break;
                 case Keys.A:
-                    KeyInput.x = -1;
+                    KeyInput.X = -1;
                     break;
                 case Keys.S:
-                    KeyInput.z = -1;
+                    KeyInput.Z = -1;
                     break;
                 case Keys.D:
-                    KeyInput.x = 1;
+                    KeyInput.X = 1;
                     break;
                 case Keys.Q:
-                    KeyInput.y = 1;
+                    KeyInput.Y = 1;
                     break;
                 case Keys.E:
-                    KeyInput.y = -1;
+                    KeyInput.Y = -1;
                     break;
                 case Keys.Escape:
                     Console.WriteLine("Escape key pressed! Exiting...");
@@ -71,22 +73,22 @@ namespace HeightmapVisualizer.Components
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    KeyInput.z = 0;
+                    KeyInput.Z = 0;
                     break;
                 case Keys.A:
-                    KeyInput.x = 0;
+                    KeyInput.X = 0;
                     break;
                 case Keys.S:
-                    KeyInput.z = 0;
+                    KeyInput.Z = 0;
                     break;
                 case Keys.D:
-                    KeyInput.x = 0;
+                    KeyInput.X = 0;
                     break;
                 case Keys.Q:
-                    KeyInput.y = 0;
+                    KeyInput.Y = 0;
                     break;
                 case Keys.E:
-                    KeyInput.y = 0;
+                    KeyInput.Y = 0;
                     break;
             }
         }
@@ -111,18 +113,18 @@ namespace HeightmapVisualizer.Components
                 angle *= sensitivity;
 
 
-                var yaw = Quaternion.CreateFromAxisAngle(Vector3.Up, angle.x); // Yaw
-                var pitch = Quaternion.CreateFromAxisAngle(Vector3.Right, -angle.y); // Pitch
+                var yaw = Quaternion.CreateFromAxisAngle(Vector3.UnitY, angle.X * 0.01745329f); // Yaw (0.01745329f is pi/180)
+                var pitch = Quaternion.CreateFromAxisAngle(Vector3.UnitX, -angle.Y * 0.01745329f); // Pitch
 
                 // Apply Rotation
                 var quaternionRotation = Quaternion.Normalize(objectTransform.Rotation * (pitch * yaw));
 
                 // Convert to Euler to remove Roll
-                var eulerRotation = Quaternion.ToPitchYawRoll(quaternionRotation);
-                eulerRotation.z = 0;
+                var eulerRotation = quaternionRotation.ToYawPitchRoll();
+                eulerRotation.Z = 0;
 
                 // Convert Back
-                var rotation = Quaternion.CreateFromPitchYawRoll(eulerRotation);
+                var rotation = eulerRotation.CreateQuaternionFromYawPitchRoll();
 
                 objectTransform.Rotation = rotation;
             }

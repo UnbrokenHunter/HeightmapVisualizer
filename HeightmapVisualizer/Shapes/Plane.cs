@@ -1,5 +1,6 @@
 ﻿using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Units;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Shapes
 {
@@ -19,7 +20,7 @@ namespace HeightmapVisualizer.Shapes
         public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector2 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
             // Create the faces of the plane based on size, using the position as the center
-            var faces = CreatePlaneFaces(size.x, size.y, true);
+            var faces = CreatePlaneFaces(size.X, size.Y, true);
 
             // Create the mesh with the faces
             var mesh = new Mesh(faces, color, mode);
@@ -54,7 +55,7 @@ namespace HeightmapVisualizer.Shapes
         public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector2 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
             // Create the faces of the plane based on size, using the position as one of the corners
-            var faces = CreatePlaneFaces(size.x, size.y, false);
+            var faces = CreatePlaneFaces(size.X, size.Y, false);
 
             // Create the mesh with the faces
             var mesh = new Mesh(faces, color, mode);

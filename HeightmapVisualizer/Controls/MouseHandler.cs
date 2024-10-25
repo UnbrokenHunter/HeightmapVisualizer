@@ -1,5 +1,6 @@
 ﻿
 using HeightmapVisualizer.Units;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Controls
 {
@@ -31,7 +32,7 @@ namespace HeightmapVisualizer.Controls
 
             Vector2 trend = ComputeAverageDirection(LastMousePositions);
             g.DrawLine(new Pen(Color.DarkBlue), MousePosition,
-                new Point((int)(MousePosition.X + trend.x), (int)(MousePosition.Y + trend.y)));
+                new Point((int)(MousePosition.X + trend.X), (int)(MousePosition.Y + trend.Y)));
         }
 
         public static void Update()
@@ -100,7 +101,7 @@ namespace HeightmapVisualizer.Controls
             }
 
             if (Dragging)
-                DragOffset = DragStart.ToVector2() - MousePosition.ToVector2();
+                DragOffset = new Vector2(DragStart.X - DragStart.X, DragStart.Y - DragStart.Y);
             else
                 DragOffset = new Vector2();
 

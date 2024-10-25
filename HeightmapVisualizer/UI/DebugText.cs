@@ -1,6 +1,7 @@
 ﻿
 using HeightmapVisualizer.Units;
 using HeightmapVisualizer.Utilities;
+using System.Numerics;
 
 namespace HeightmapVisualizer.UI
 {
@@ -27,7 +28,7 @@ namespace HeightmapVisualizer.UI
 
 			foreach (DebugText b in texts)
 			{
-				g.DrawString(b.text, font, brush, b.position1.x, b.position1.y);
+				g.DrawString(b.text, font, brush, b.position1.X, b.position1.Y);
 			}
 			texts.Clear();
 		}

@@ -1,6 +1,7 @@
 ﻿using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Shapes;
 using HeightmapVisualizer.Units;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Scene
 {
@@ -12,7 +13,7 @@ namespace HeightmapVisualizer.Scene
         public float NearClippingPlane { get; private set; }
         public float FarClippingPlane { get; private set; }
 
-        public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.x / 2)));
+        public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.X / 2)));
 
         public Camera(Transform transform,
             Rectangle space,
@@ -34,26 +35,26 @@ namespace HeightmapVisualizer.Scene
         /// 
         /// </summary>
         /// <param name="point"></param>
-        /// <returns>A Tuple with the vector, and whether or not it is on screen.</returns>
+        /// <returns>A Tuple with the vector, and whether or not it is on screen.</returns> // LOOK INTO HOW VERECTOR3 IS IMPLEMENTED. IS IT DEFAWULT TO NULL? 
 		public Tuple<Vector2, bool> ProjectPoint(Vector3 point)  
         {
             // Translate point relative to camera position
             Vector3 translatedPoint = point - Transform.Position;
 
             // Rotate point based on camera's orientation (yaw and pitch)
-            Vector3 rotatedPoint = Quaternion.Rotate(translatedPoint, Transform.Rotation);
+            Vector3 rotatedPoint = Transform.Rotate(translatedPoint, Transform.Rotation);
 
 
-            Vector2 pointIn2D = new Vector2(rotatedPoint.x, rotatedPoint.y);
+            Vector2 pointIn2D = new Vector2(rotatedPoint.X, rotatedPoint.Y);
 
-            float zClamped = Math.Max(rotatedPoint.z, NearClippingPlane); // Ensure depth is positive
+            float zClamped = Math.Max(rotatedPoint.Z, NearClippingPlane); // Ensure depth is positive
 
             // Perform perspective projection
             Vector2 projected = (pointIn2D * FocalLength) / zClamped + Window.Instance.ScreenCenter;
 
             // Point Not On Screen
-            if (projected.x > Window.Instance.ScreenSize.x || projected.x < 0 ||
-                projected.y > Window.Instance.ScreenSize.y || projected.y < 0)
+            if (projected.X > Window.Instance.ScreenSize.X || projected.X < 0 ||
+                projected.Y > Window.Instance.ScreenSize.Y || projected.Y < 0)
             {
                 return new Tuple<Vector2, bool>(projected, false);
             }

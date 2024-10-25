@@ -1,5 +1,6 @@
 ﻿using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Units;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Shapes
 {
@@ -18,7 +19,7 @@ namespace HeightmapVisualizer.Shapes
         /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
         public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
-            var faces = CreatePyramidFaces(size.x, size.z, size.y, true);
+            var faces = CreatePyramidFaces(size.X, size.Z, size.Y, true);
             var mesh = new Mesh(faces, color, mode);
             mesh.Transform.Position = position;
             mesh.Transform.Rotation = rotation;
@@ -47,7 +48,7 @@ namespace HeightmapVisualizer.Shapes
         /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
         public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, DrawingMode mode = DrawingMode.None)
         {
-            var faces = CreatePyramidFaces(size.x, size.z, size.y, false);
+            var faces = CreatePyramidFaces(size.X, size.Z, size.Y, false);
             var mesh = new Mesh(faces, color, mode);
             mesh.Transform.Position = position;
             mesh.Transform.Rotation = rotation;

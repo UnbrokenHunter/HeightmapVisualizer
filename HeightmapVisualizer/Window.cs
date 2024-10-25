@@ -4,7 +4,9 @@ using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Shapes;
-using HeightmapVisualizer.Units;
+using System.Numerics;
+using HeightmapVisualizer.Utilities;
+using Plane = HeightmapVisualizer.Shapes.Plane;
 
 namespace HeightmapVisualizer
 {
@@ -63,22 +65,23 @@ namespace HeightmapVisualizer
             Gameobject cube2 = Cuboid.CreateCentered(new Vector3(-5, 2, 0), new Vector3(1, 2, 1), Color.HotPink, Primitives.DrawingMode.Points);
             Gameobject floorPlane = Plane.CreateCentered(new Vector3(0, 5, 0), new Vector2(10, 10), Color.LightBlue, Primitives.DrawingMode.Faces);
             Gameobject wallPlane = Plane.CreateCentered(new Vector3(0, -5, 0),
-                Quaternion.CreateFromPitchYawRoll(new Vector3((float)Math.PI / 2, 0, 0)),
+                new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll(),
                 new Vector2(10, 10));
 
-            Action<Gameobject> move = delegate (Gameobject g)
+
+            static void move(Gameobject g)
             {
                 if (g.GetType() == typeof(Mesh))
                 {
                     var names = ((Mesh)g).GetVertexsByName("Front");
 
-					foreach (Vertex t in names)
+                    foreach (Vertex t in names)
                     {
-                        t.LocalPosition += (Vector3.Forward/1000 * -1);
+                        t.LocalPosition += (Vector3.UnitZ / 1000 * -1);
                     }
                 }
                 //g.Transform.Move(Vector3.Forward / 100);
-            };
+            }
 
             cube.AddComponent(new ScriptableComponent(null, move));
 
@@ -91,7 +94,7 @@ namespace HeightmapVisualizer
 
 			return new Scene.Scene(camera, objects);
         }
-
+         
         private void Gameloop()
         {
             while (true)

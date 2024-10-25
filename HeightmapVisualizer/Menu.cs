@@ -1,5 +1,7 @@
 ﻿using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Units;
+using HeightmapVisualizer.Utilities;
+using System.Numerics;
 
 namespace HeightmapVisualizer
 {
@@ -17,7 +19,7 @@ namespace HeightmapVisualizer
         public void Update(Camera cam)
         {
             PositionText.SetText($"Position:{cam.Transform.Position}");
-            EulerRotationText.SetText($"Euler Angles:{Quaternion.ToPitchYawRoll(cam.Transform.Rotation)}");
+            EulerRotationText.SetText($"Euler Angles:{cam.Transform.Rotation.ToYawPitchRoll()}");
         }
     }
 }

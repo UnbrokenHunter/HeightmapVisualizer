@@ -2,6 +2,7 @@
 using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Units;
 using HeightmapVisualizer.Utilities;
+using System.Numerics;
 
 namespace HeightmapVisualizer.UI
 {
@@ -37,14 +38,14 @@ namespace HeightmapVisualizer.UI
 
             foreach (Button b in buttons)
             {
-                var rect = new Rectangle((int)b.position1.x, (int)b.position1.y, (int)b.size.x, (int)b.size.y);
+                var rect = new Rectangle((int)b.position1.X, (int)b.position1.Y, (int)b.size.X, (int)b.size.Y);
 
                 g.DrawRectangle(pen, rect);
 
 				if (b.clip)
 					g.SetClip(rect);
                 
-                g.DrawString(b.text, font, brush, b.position1.x, b.position1.y);
+                g.DrawString(b.text, font, brush, b.position1.X, b.position1.Y);
 				
                 if (b.clip)
                     g.ResetClip();
@@ -67,8 +68,8 @@ namespace HeightmapVisualizer.UI
 
         private bool MouseInBounds(Point p)
         {
-            return position1.x <= p.X && size.x >= p.X &&
-                position1.y <= p.Y && size.y >= p.Y;
+            return position1.X <= p.X && size.X >= p.X &&
+                position1.Y <= p.Y && size.Y >= p.Y;
         }
 
         public void SetText(string text)

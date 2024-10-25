@@ -1,6 +1,7 @@
 ﻿using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Units;
 using HeightmapVisualizer.Utilities;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Primitives
 {
@@ -79,15 +80,15 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="cam">The camera used for projection.</param>
         public override void Draw(Graphics g, Camera cam)
         {
-			if (LocalPosition == null)
-				return;
+			//if (LocalPosition == null)
+			//	return;
 
 			var p = cam.ProjectPoint(Position);
 
             if (p.Item2)
             {
                 int size = 6;
-                var rect = new Rectangle((int)(p.Item1.x - size / 2), (int)(p.Item1.y - size / 2), size, size);
+                var rect = new Rectangle((int)(p.Item1.X - size / 2), (int)(p.Item1.Y - size / 2), size, size);
 
 			    g.FillPie(ColorLookup.FindOrGetBrush(color), rect, 0f, 360f);
             }

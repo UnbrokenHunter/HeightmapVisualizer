@@ -1,6 +1,7 @@
 ﻿using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.Units;
 using HeightmapVisualizer.Utilities;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Primitives
 {
@@ -108,7 +109,7 @@ namespace HeightmapVisualizer.Primitives
 			var p2 = cam.ProjectPoint(Points[1].Position);
 			var p3 = cam.ProjectPoint(Points[2].Position);
 
-            PointF pF(Vector2 v) => new PointF(v.x, v.y);
+            PointF pF(Vector2 v) => new PointF(v.X, v.Y);
 
             
             // Atleast one point on screen
