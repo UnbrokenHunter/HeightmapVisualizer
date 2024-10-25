@@ -1,4 +1,4 @@
-﻿using HeightmapVisualizer.Shapes;
+﻿using HeightmapVisualizer.src.Shapes;
 using HeightmapVisualizer.Units;
 
 namespace UnitTests
