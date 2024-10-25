@@ -7,6 +7,7 @@ using System.Numerics;
 using Plane = HeightmapVisualizer.src.Shapes.Plane;
 using HeightmapVisualizer.src.Utilities;
 using HeightmapVisualizer.src.Shapes;
+using HeightmapVisualizer.src.UI;
 
 namespace HeightmapVisualizer.src
 {
