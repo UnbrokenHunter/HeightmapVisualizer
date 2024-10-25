@@ -93,11 +93,22 @@ namespace HeightmapVisualizer.src
             objects = objects.Concat(hm).ToArray();
 
 
+			static void updatePos(UIElement g)
+            {
+                ((Button)g).SetText(Instance.Scene.Camera.Gameobject.Transform.Position.ToString());
+            }
+
+			static void updateAng(UIElement g)
+			{
+				((Button)g).SetText(Instance.Scene.Camera.Gameobject.Transform.Rotation.ToString());
+			}
+
+
 			// CREATE MENU
 			UIElement[] ui = new List<UIElement>
 			{
-				new Button(new Vector2(0, 0), new Vector2(400, 60), "Position", id: "pos"),
-				new Button(new Vector2(0, 60), new Vector2(400, 60), "Euler Angles", id: "ang")
+				new Button(new Vector2(0, 0), new Vector2(400, 60), "Position", id: "pos", update: updatePos),
+				new Button(new Vector2(0, 60), new Vector2(400, 60), "Euler Angles", id: "ang", update: updateAng)
 			}.ToArray();
 
 			return new Scene.Scene(objects, ui);

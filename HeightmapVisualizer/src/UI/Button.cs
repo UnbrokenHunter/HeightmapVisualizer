@@ -11,7 +11,7 @@ namespace HeightmapVisualizer.src.UI
         private bool clip;
 
         // Constructor for the Button class
-        public Button(Vector2 position, Vector2 size, string text, Action<Button>? onClick = null, bool clips = true, string id = "") : base(position, size, id)
+        public Button(Vector2 position, Vector2 size, string text, Action<Button>? onClick = null, bool clips = true, string id = "", Action<UIElement>? update = null) : base(position, size, id, update: update)
         {
             this.text = text;
             this.onClick = onClick;
@@ -26,14 +26,14 @@ namespace HeightmapVisualizer.src.UI
             Font font = new Font("Arial", 13f);
             Brush brush = ColorLookup.FindOrGetBrush(Color.Black);
 
-            var rect = new Rectangle((int)position1.X, (int)position1.Y, (int)size.X, (int)size.Y);
+            var rect = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
 
             g.DrawRectangle(pen, rect);
 
             if (clip)
                 g.SetClip(rect);
 
-            g.DrawString(text, font, brush, position1.X, position1.Y);
+            g.DrawString(text, font, brush, position.X, position.Y);
 
             if (clip)
                 g.ResetClip();
@@ -55,8 +55,8 @@ namespace HeightmapVisualizer.src.UI
 
         private bool MouseInBounds(Point p)
         {
-            return position1.X <= p.X && size.X >= p.X &&
-                position1.Y <= p.Y && size.Y >= p.Y;
+            return position.X <= p.X && size.X >= p.X &&
+                position.Y <= p.Y && size.Y >= p.Y;
         }
 
         public void SetText(string text)

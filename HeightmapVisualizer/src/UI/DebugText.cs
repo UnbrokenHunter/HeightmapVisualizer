@@ -8,7 +8,7 @@ namespace HeightmapVisualizer.src.UI
 
 		public string text;
 
-		public DebugText(Vector2 position, Vector2 size, string text, string id = "") : base(position, size, id)
+		public DebugText(Vector2 position, Vector2 size, string text, string id = "", Action<UIElement>? update = null) : base(position, size, id, update: update)
         {
             this.text = text;
         }
@@ -18,7 +18,7 @@ namespace HeightmapVisualizer.src.UI
             Font font = new Font("Arial", 13f);
             Brush brush = ColorLookup.FindOrGetBrush(Color.Black);
 
-            g.DrawString(text, font, brush, position1.X, position1.Y);
+            g.DrawString(text, font, brush, position.X, position.Y);
         }
     }
 }

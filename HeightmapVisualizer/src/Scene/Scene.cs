@@ -93,6 +93,7 @@ namespace HeightmapVisualizer.Scene
         {
             foreach (var ui in UIElements)
             {
+                ui.Update();
                 ui.Draw(g);
             }
         }
