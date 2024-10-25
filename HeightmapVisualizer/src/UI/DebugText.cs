@@ -3,32 +3,22 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.UI
 {
-    class DebugText
-    {
-        private static List<DebugText> texts = new List<DebugText>();
+	class DebugText : UIElement
+	{
 
-        public string text;
-        public Vector2 position1;
+		public string text;
 
-        // Constructor for the Button class
-        public DebugText(string text, Vector2 position)
+		public DebugText(Vector2 position, Vector2 size, string text, string id = "") : base(position, size, id)
         {
-            texts.Add(this);
-
             this.text = text;
-            position1 = position;
         }
 
-        public static void Draw(Graphics g)
+        public override void Draw(Graphics g)
         {
             Font font = new Font("Arial", 13f);
             Brush brush = ColorLookup.FindOrGetBrush(Color.Black);
 
-            foreach (DebugText b in texts)
-            {
-                g.DrawString(b.text, font, brush, b.position1.X, b.position1.Y);
-            }
-            texts.Clear();
+            g.DrawString(text, font, brush, position1.X, position1.Y);
         }
     }
 }

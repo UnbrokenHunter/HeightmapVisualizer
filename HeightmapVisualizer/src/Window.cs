@@ -9,6 +9,7 @@ using HeightmapVisualizer.src.Utilities;
 using HeightmapVisualizer.src.Shapes;
 using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Components;
+using Button = HeightmapVisualizer.src.UI.Button;
 
 namespace HeightmapVisualizer.src
 {
@@ -20,8 +21,6 @@ namespace HeightmapVisualizer.src
 
         public Vector2 ScreenSize => new Vector2(Width, Height);
         public Vector2 ScreenCenter => ScreenSize / 2;
-
-        private Menu menu = new();
 
         public Window()
         {
@@ -76,17 +75,16 @@ namespace HeightmapVisualizer.src
             {
                 if (g.GetType() == typeof(Mesh))
                 {
-                    var names = ((Mesh)g).GetVertexsByName("Front");
+                    var names = ((Mesh)g).GetVertexsByName("Left");
 
                     foreach (Vertex t in names)
                     {
                         t.LocalPosition += Vector3.UnitZ / 1000 * -1;
                     }
                 }
-                //g.Transform.Move(Vector3.Forward / 100);
-            }
+			}
 
-            cube.AddComponent(new ScriptableComponent(null, move));
+            hm.ToList().ForEach(h => h.AddComponent(new ScriptableComponent(null, move)));
 
 
             Gameobject line = Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10));
@@ -95,7 +93,14 @@ namespace HeightmapVisualizer.src
             objects = objects.Concat(hm).ToArray();
 
 
-            return new Scene.Scene(objects);
+			// CREATE MENU
+			UIElement[] ui = new List<UIElement>
+			{
+				new Button(new Vector2(0, 0), new Vector2(400, 60), "Position", id: "pos"),
+				new Button(new Vector2(0, 60), new Vector2(400, 60), "Euler Angles", id: "ang")
+			}.ToArray();
+
+			return new Scene.Scene(objects, ui);
         }
 
         private void Gameloop()
@@ -104,8 +109,6 @@ namespace HeightmapVisualizer.src
             {
                 Thread.Sleep(10);
                 MouseHandler.Update();
-
-                menu.Update(Scene.Camera);
 
                 Invalidate(); // Calls the OnPaint Method
             }
@@ -118,9 +121,6 @@ namespace HeightmapVisualizer.src
 
             Scene.Update(e.Graphics);
             MouseHandler.Debug(e.Graphics);
-
-            UI.Button.Draw(e.Graphics);
-
         }
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
