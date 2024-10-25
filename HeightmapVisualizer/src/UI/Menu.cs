@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.Scene;
+using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Utilities;
 using System.Numerics;
 
@@ -15,10 +16,13 @@ namespace HeightmapVisualizer.src.UI
             EulerRotationText = new Button("Euler Angles", new Vector2(0, 60), new Vector2(400, 60));
         }
 
-        public void Update(Camera cam)
+        public void Update(CameraComponent cam)
         {
-            PositionText.SetText($"Position:{cam.Transform.Position}");
-            EulerRotationText.SetText($"Euler Angles:{cam.Transform.Rotation.ToYawPitchRoll()}");
+            if (cam == null) return;
+            if (cam.Gameobject == null) return;
+
+            PositionText.SetText($"Position:{cam.Gameobject.Transform.Position}");
+            EulerRotationText.SetText($"Euler Angles:{cam.Gameobject.Transform.Rotation.ToYawPitchRoll()}");
         }
     }
 }

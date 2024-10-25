@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.Scene;
+using HeightmapVisualizer.src.Components;
 using System.Numerics;
 
 namespace HeightmapVisualizer.Primitives
@@ -60,7 +61,7 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         /// <param name="g">The graphics context used to render the mesh.</param>
         /// <param name="cam">The camera used to project the mesh for rendering.</param>
-        public void Render(Graphics g, Camera cam)
+        public void Render(Graphics g, CameraComponent cam)
         {
 
             if (mode == DrawingMode.Points)

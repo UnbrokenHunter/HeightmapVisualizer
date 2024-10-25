@@ -4,7 +4,7 @@ using HeightmapVisualizer.src.Utilities;
 
 namespace HeightmapVisualizer.Scene
 {
-    public abstract class Gameobject
+    public class Gameobject
     {
         internal Transform Transform { get; set; }
         internal List<IComponent> Components { get; private set; }

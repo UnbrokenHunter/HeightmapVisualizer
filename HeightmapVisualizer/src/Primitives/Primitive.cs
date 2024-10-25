@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.Scene;
+using HeightmapVisualizer.src.Components;
 
 namespace HeightmapVisualizer.Primitives
 {
@@ -33,7 +34,7 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         /// <param name="g">The graphics context used for drawing.</param>
         /// <param name="cam">The camera used for projecting the primitive into view space.</param>
-        public abstract void Draw(Graphics g, Camera cam);
+        public abstract void Draw(Graphics g, CameraComponent cam);
 
         /// <summary>
         /// Returns the drawing color of the primitive

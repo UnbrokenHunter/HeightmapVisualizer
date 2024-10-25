@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.Scene;
+using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Utilities;
 using System.Numerics;
 
@@ -60,7 +61,7 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         /// <param name="g">The graphics context used for drawing.</param>
         /// <param name="cam">The camera used for projection.</param>
-        public override void Draw(Graphics g, Camera cam)
+        public override void Draw(Graphics g, CameraComponent cam)
         {
             if (Vertices[0] == null || Vertices[1] == null)
                 return;

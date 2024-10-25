@@ -8,6 +8,7 @@ using Plane = HeightmapVisualizer.src.Shapes.Plane;
 using HeightmapVisualizer.src.Utilities;
 using HeightmapVisualizer.src.Shapes;
 using HeightmapVisualizer.src.UI;
+using HeightmapVisualizer.src.Components;
 
 namespace HeightmapVisualizer.src
 {
@@ -46,8 +47,9 @@ namespace HeightmapVisualizer.src
 
         private Scene.Scene CreateScene()
         {
-            Camera camera = new Camera(new Transform(), Bounds);
+            Gameobject camera = new Gameobject();
             camera.AddComponent(new ControllerComponent());
+            camera.AddComponent(new CameraComponent(Bounds));
 
             var values = new float[4, 4];
             //Random random = new Random();
@@ -93,7 +95,7 @@ namespace HeightmapVisualizer.src
             objects = objects.Concat(hm).ToArray();
 
 
-            return new Scene.Scene(camera, objects);
+            return new Scene.Scene(objects);
         }
 
         private void Gameloop()
