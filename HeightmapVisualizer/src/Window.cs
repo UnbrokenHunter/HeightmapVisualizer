@@ -1,0 +1,126 @@
+﻿
+using HeightmapVisualizer.Components;
+using HeightmapVisualizer.Controls;
+using HeightmapVisualizer.Primitives;
+using HeightmapVisualizer.Scene;
+using System.Numerics;
+using Plane = HeightmapVisualizer.src.Shapes.Plane;
+using HeightmapVisualizer.src.Utilities;
+using HeightmapVisualizer.src.Shapes;
+
+namespace HeightmapVisualizer.src
+{
+    internal class Window : Form
+    {
+        public Scene.Scene Scene;
+
+        public static Window Instance;
+
+        public Vector2 ScreenSize => new Vector2(Width, Height);
+        public Vector2 ScreenCenter => ScreenSize / 2;
+
+        private Menu menu = new();
+
+        public Window()
+        {
+            if (Instance != null)
+                throw new Exception("Two Windows have been created");
+            else
+                Instance = this;
+
+            AllocConsole();
+
+            // Set up form properties
+            Text = "Projections";
+            Width = 16 * 200;
+            Height = 9 * 200;
+
+            DoubleBuffered = true;
+
+            Scene = CreateScene();
+
+            Thread t1 = new Thread(Gameloop);
+            t1.Start();
+        }
+
+        private Scene.Scene CreateScene()
+        {
+            Camera camera = new Camera(new Transform(), Bounds);
+            camera.AddComponent(new ControllerComponent());
+
+            var values = new float[4, 4];
+            //Random random = new Random();
+            for (int i = 0; i < values.GetLength(0); i++)
+            {
+                for (int j = 0; j < values.GetLength(1); j++)
+                {
+                    values[i, j] = i * j; // (float) random.NextDouble() * 255;
+                }
+            }
+
+            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1, mode: DrawingMode.Faces);
+            Gameobject[] hm = MeshUtility.Convert2DArrayTo1DArray(heightmap);
+
+            Gameobject cube = Cuboid.CreateCorners(new Vector3(-1, -1, -1), new Vector3(1, 1, 1)).SetColor(Color.Green);
+            Gameobject cube2 = Cuboid.CreateCentered(new Vector3(-5, 2, 0), new Vector3(1, 2, 1), Color.HotPink, DrawingMode.Points);
+            Gameobject floorPlane = Plane.CreateCentered(new Vector3(0, 5, 0), new Vector2(10, 10), Color.LightBlue, DrawingMode.Faces);
+            Gameobject wallPlane = Plane.CreateCentered(new Vector3(0, -5, 0),
+                new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll(),
+                new Vector2(10, 10));
+
+
+            static void move(Gameobject g)
+            {
+                if (g.GetType() == typeof(Mesh))
+                {
+                    var names = ((Mesh)g).GetVertexsByName("Front");
+
+                    foreach (Vertex t in names)
+                    {
+                        t.LocalPosition += Vector3.UnitZ / 1000 * -1;
+                    }
+                }
+                //g.Transform.Move(Vector3.Forward / 100);
+            }
+
+            cube.AddComponent(new ScriptableComponent(null, move));
+
+
+            Gameobject line = Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10));
+
+            var objects = new Gameobject[] { line, cube, cube2, wallPlane, camera };
+            objects = objects.Concat(hm).ToArray();
+
+
+            return new Scene.Scene(camera, objects);
+        }
+
+        private void Gameloop()
+        {
+            while (true)
+            {
+                Thread.Sleep(10);
+                MouseHandler.Update();
+
+                menu.Update(Scene.Camera);
+
+                Invalidate(); // Calls the OnPaint Method
+            }
+        }
+
+        // Override the OnPaint method to perform custom drawing
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            Scene.Update(e.Graphics);
+            MouseHandler.Debug(e.Graphics);
+
+            UI.Button.Draw(e.Graphics);
+
+        }
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        private static extern bool AllocConsole();
+    }
+}
