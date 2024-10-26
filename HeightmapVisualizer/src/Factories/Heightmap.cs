@@ -5,12 +5,12 @@ namespace HeightmapVisualizer.src.Shapes
 {
     public static class Heightmap
     {
-        public static Mesh[,] CreateCentered(Vector3 position, float[,] values, float boxSize, Color? color = null, DrawingMode mode = DrawingMode.None)
+        public static Mesh[,] CreateCentered(Vector3 position, float[,] values, float boxSize, Color? color = null, bool drawWireframe = false)
         {
-            return CreateCorners(position / 2, values, boxSize, color, mode);
+            return CreateCorners(position / 2, values, boxSize, color, drawWireframe);
         }
 
-        public static Mesh[,] CreateCorners(Vector3 position, float[,] values, float boxSize, Color? color = null, DrawingMode mode = DrawingMode.None)
+        public static Mesh[,] CreateCorners(Vector3 position, float[,] values, float boxSize, Color? color = null, bool drawWireframe = false)
         {
             Mesh[,] map3D = new Mesh[values.GetLength(0), values.GetLength(1)];
 
@@ -19,7 +19,7 @@ namespace HeightmapVisualizer.src.Shapes
                 for (int j = 0; j < values.GetLength(1); j++)
                 {
                     var boxPos = new Vector3(i * boxSize * boxSize, 0, j * boxSize * boxSize) + position;
-                    map3D[i, j] = Cuboid.CreateCorners(boxPos, new Vector3(boxSize, -values[i, j], boxSize), color, mode);
+                    map3D[i, j] = Cuboid.CreateCorners(boxPos, new Vector3(boxSize, -values[i, j], boxSize), color, drawWireframe);
                 }
             }
             return map3D;

@@ -15,13 +15,13 @@ namespace HeightmapVisualizer.src.Shapes
         /// <param name="end">The ending point of the line.</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the line between the two points.</returns>
-        public static Mesh CreateCorners(Vector3 start, Vector3 end, Color? color = null, DrawingMode mode = DrawingMode.None)
+        public static Mesh CreateCorners(Vector3 start, Vector3 end, Color? color = null, bool drawWireframe = false)
         {
             // Create the edge representing the line between the start and end points
             var faces = new Face[] { new Face(new[] { start, end }) };
 
             // Create the mesh with the faces (edges)
-            var mesh = new Mesh(faces, color, mode);
+            var mesh = new Mesh(faces, color, drawWireframe);
 
             return mesh;
         }
@@ -34,7 +34,7 @@ namespace HeightmapVisualizer.src.Shapes
         /// <param name="length">The length of the line.</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the ray-like line.</returns>
-        public static Mesh CreateRay(Vector3 position, Vector3 direction, float length, Color? color = null, DrawingMode mode = DrawingMode.None)
+        public static Mesh CreateRay(Vector3 position, Vector3 direction, float length, Color? color = null, bool drawWireframe = false)
         {
             // Normalize the direction vector to ensure correct scaling
             Vector3 normalizedDirection = Vector3.Normalize(direction);
@@ -46,7 +46,7 @@ namespace HeightmapVisualizer.src.Shapes
             var faces = new Face[] { new Face(new[] { position, endPoint }) };
 
             // Create the mesh with the faces (edges)
-            var mesh = new Mesh(faces, color, mode);
+            var mesh = new Mesh(faces, color, drawWireframe);
 
             return mesh;
         }

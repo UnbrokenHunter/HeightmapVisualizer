@@ -60,15 +60,15 @@ namespace HeightmapVisualizer.src
                 }
             }
 
-            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1, mode: DrawingMode.Faces);
+            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1);
             Gameobject[] hm = MeshUtility.Convert2DArrayTo1DArray(heightmap);
 
             Gameobject cube = Cuboid.CreateCorners(new Vector3(-1, -1, -1), new Vector3(1, 1, 1)).SetColor(Color.Green);
-            Gameobject cube2 = Cuboid.CreateCentered(new Vector3(-5, 2, 0), new Vector3(1, 2, 1), Color.HotPink, DrawingMode.Points);
-            Gameobject floorPlane = Plane.CreateCentered(new Vector3(0, 5, 0), new Vector2(10, 10), Color.LightBlue, DrawingMode.Faces);
+            Gameobject cube2 = Cuboid.CreateCentered(new Vector3(-5, 2, 0), new Vector3(1, 2, 1), Color.HotPink, true);
+            Gameobject floorPlane = Plane.CreateCentered(new Vector3(0, 5, 0), new Vector2(10, 10), Color.LightBlue, true);
             Gameobject wallPlane = Plane.CreateCentered(new Vector3(0, -5, 0),
                 new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll(),
-                new Vector2(10, 10));
+                new Vector2(10, 10), drawWireframe: true);
 
 
             static void move(Gameobject g)

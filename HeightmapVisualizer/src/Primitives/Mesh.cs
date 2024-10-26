@@ -29,7 +29,7 @@ namespace HeightmapVisualizer.Primitives
         /// <summary>
         /// How the mesh will be displayed
         /// </summary>
-        internal DrawingMode mode;
+        internal bool drawWireframe = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Mesh"/> class with the provided faces.
@@ -44,13 +44,12 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="faces">An array of faces (IFace) used to construct the mesh.</param>
         /// <param name="color">The default color of this mesh. If a face does not have an override, then that face will default to this color.</param>
         /// <param name="mode">How the mesh will be drawn to the screen. It will default to lines</param>
-        public Mesh(Face[] faces, Color? color = null, DrawingMode mode = DrawingMode.None)
+        public Mesh(Face[] faces, Color? color = null, bool drawWireframe = false)
         {
             // You cannot set black as a default value for some reason
             Color defaultColor = color ?? Color.Black;
 
-            // Set the way that the points are drawn, defaults to lines
-            this.mode = mode == DrawingMode.None ? DrawingMode.Lines : mode;
+            this.drawWireframe = drawWireframe;
 
 			// Triangulate the faces and store the resulting triangles
 			Tris = faces.SelectMany(e => e.Triangulate(this, defaultColor)).ToList();
@@ -64,16 +63,7 @@ namespace HeightmapVisualizer.Primitives
         public void Render(Graphics g, CameraComponent cam)
         {
 
-            if (mode == DrawingMode.Points)
-            {
-                // Draw all the edges in the mesh
-                foreach (Vertex vertex in vertexDict.Values)
-                {
-                    vertex.Draw(g, cam);
-                }
-            }
-
-            else if (mode == DrawingMode.Lines)
+            if (drawWireframe)
             {
                 // Draw all the edges in the mesh
                 foreach (Edge edge in edgeDict.Values)
@@ -82,7 +72,7 @@ namespace HeightmapVisualizer.Primitives
                 }
             }
 
-            else if (mode == DrawingMode.Faces)
+            else
             {
                 // Draw all the edges in the mesh
                 foreach (Tri tris in Tris)
@@ -90,8 +80,6 @@ namespace HeightmapVisualizer.Primitives
                     tris.Draw(g, cam);
                 }
             }
-            else
-                throw new Exception("Drawing mode incorrectly set or set to None");
 		}
 
 		/// <summary>
