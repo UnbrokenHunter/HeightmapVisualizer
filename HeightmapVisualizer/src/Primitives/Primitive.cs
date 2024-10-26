@@ -1,5 +1,6 @@
 ﻿using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Primitives;
 
 namespace HeightmapVisualizer.Primitives
 {

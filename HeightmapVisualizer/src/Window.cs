@@ -10,6 +10,7 @@ using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Components;
 using Plane = HeightmapVisualizer.src.Shapes.Plane;
 using Button = HeightmapVisualizer.src.UI.Button;
+using HeightmapVisualizer.src.Primitives;
 
 namespace HeightmapVisualizer.src
 {

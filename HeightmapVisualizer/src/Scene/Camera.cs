@@ -1,14 +1,14 @@
 ﻿using HeightmapVisualizer.Primitives;
-using HeightmapVisualizer.src;
+using HeightmapVisualizer.Scene;
+using HeightmapVisualizer.src.Primitives;
 using HeightmapVisualizer.src.Shapes;
 using HeightmapVisualizer.src.Utilities;
-using System.Numerics;
 
-namespace HeightmapVisualizer.Scene
+namespace HeightmapVisualizer.src.Scene
 {
     public class Camera : Gameobject
     {
-		public override Mesh? GetRenderable()
+        public override Mesh? GetRenderable()
         {
             var debug = false;
             if (debug)

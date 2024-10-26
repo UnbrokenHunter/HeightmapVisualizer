@@ -1,8 +1,9 @@
-﻿using HeightmapVisualizer.Scene;
+﻿using HeightmapVisualizer.Primitives;
+using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.src.Components;
 using System.Numerics;
 
-namespace HeightmapVisualizer.Primitives
+namespace HeightmapVisualizer.src.Primitives
 {
     /// <summary>
     /// Represents a mesh consisting of multiple triangular faces.
@@ -51,8 +52,8 @@ namespace HeightmapVisualizer.Primitives
 
             this.drawWireframe = drawWireframe;
 
-			// Triangulate the faces and store the resulting triangles
-			Tris = faces.SelectMany(e => e.Triangulate(this, defaultColor)).ToList();
+            // Triangulate the faces and store the resulting triangles
+            Tris = faces.SelectMany(e => e.Triangulate(this, defaultColor)).ToList();
         }
 
         /// <summary>
@@ -80,15 +81,15 @@ namespace HeightmapVisualizer.Primitives
                     tris.Draw(g, cam);
                 }
             }
-		}
+        }
 
-		/// <summary>
-		/// Overrides the Gameobject Method "GetRenderable()" to return itself. By doing this, it allows
-		/// other gameobjects to instead have references to Meshs, rather than itself being a mesh. This 
-		/// could be useful for example, to allow having multiple meshes controlled by one object.
-		/// </summary>
-		/// <returns>This object</returns>
-		public override Mesh? GetRenderable()
+        /// <summary>
+        /// Overrides the Gameobject Method "GetRenderable()" to return itself. By doing this, it allows
+        /// other gameobjects to instead have references to Meshs, rather than itself being a mesh. This 
+        /// could be useful for example, to allow having multiple meshes controlled by one object.
+        /// </summary>
+        /// <returns>This object</returns>
+        public override Mesh? GetRenderable()
         {
             return this;
         }
@@ -115,17 +116,17 @@ namespace HeightmapVisualizer.Primitives
             return this;
         }
 
-		/// <summary>
-		/// This method can be used to search a mesh for a given name, and will return an array of all of the Verts that have the name.
-		/// </summary>
-		/// <param name="name">The name to search for</param>
-		/// <returns>An array of all of the Vertexes that have that name</returns>
-		public Vertex[] GetVertexsByName(string name)
+        /// <summary>
+        /// This method can be used to search a mesh for a given name, and will return an array of all of the Verts that have the name.
+        /// </summary>
+        /// <param name="name">The name to search for</param>
+        /// <returns>An array of all of the Vertexes that have that name</returns>
+        public Vertex[] GetVertexsByName(string name)
         {
             List<Vertex> vertices = new List<Vertex>();
             foreach (Tri tri in Tris.FindAll(tri => tri.Name == name))
             {
-                foreach(Vertex v in tri.Points)
+                foreach (Vertex v in tri.Points)
                 {
                     if (!vertices.Contains(v)) vertices.Add(v);
                 }

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using HeightmapVisualizer.src.Primitives;
+using System.Numerics;
 
 namespace HeightmapVisualizer.Primitives
 {
