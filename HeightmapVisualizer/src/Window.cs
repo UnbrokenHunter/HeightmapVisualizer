@@ -1,6 +1,5 @@
 ﻿
 using System.Numerics;
-using System.Diagnostics;
 using HeightmapVisualizer.Components;
 using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Primitives;
@@ -11,7 +10,6 @@ using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Components;
 using Plane = HeightmapVisualizer.src.Shapes.Plane;
 using Button = HeightmapVisualizer.src.UI.Button;
-using Timer = System.Windows.Forms.Timer;
 
 namespace HeightmapVisualizer.src
 {
@@ -19,16 +17,7 @@ namespace HeightmapVisualizer.src
     {
         public Scene.Scene Scene;
 
-        public static Window Instance;
-
-        private Timer timer;
-        private Stopwatch stopwatch;
-        private double previousTime;
-        private int frameCount = 0;
-        private double fpsTimer = 0.0;
-        private double displayedFPS = 0.0;
-        public const double FPS = 60;
-        public double deltaTime = 0;
+        public static Window? Instance;
 
         public Vector2 ScreenSize => new Vector2(Width, Height);
         public Vector2 ScreenCenter => ScreenSize / 2;
@@ -49,18 +38,9 @@ namespace HeightmapVisualizer.src
 
             DoubleBuffered = true;
 
-            timer = new Timer();
-            timer.Interval = 16; // ~60 FPS
-            timer.Tick += StartGameloop;
-
-            stopwatch = new Stopwatch();
-            stopwatch.Start();
-            previousTime = stopwatch.Elapsed.TotalSeconds;
-
-            timer.Start();
-
-
             Scene = CreateScene();
+
+            new Gameloop(Render, UpdateScene, 60d).Start();
         }
 
         private Scene.Scene CreateScene()
@@ -133,44 +113,18 @@ namespace HeightmapVisualizer.src
 			return new Scene.Scene(objects, ui);
         }
 
-        private void StartGameloop(object sender, EventArgs e)
+        void UpdateScene()
         {
-            // Calculate delta time
-            double currentTime = stopwatch.Elapsed.TotalSeconds;
-            double deltaTime = currentTime - previousTime;
-            previousTime = currentTime;
-
-            // Update game logic
-            UpdateGameLogic();
-
-            // Calculate FPS over a second
-            fpsTimer += deltaTime;
-            frameCount++;
-            if (fpsTimer >= 1.0)
-            {
-                displayedFPS = frameCount / fpsTimer;
-                Console.WriteLine($"Actual Displayed FPS: {displayedFPS:F2}");
-
-                // Reset counters for the next second
-                fpsTimer -= 1.0;
-                frameCount = 0;
-            }
-
-            // Render the current frame by invalidating the form to trigger OnPaint
-            Render();
-
-            void UpdateGameLogic()
-            {
-                Scene.Update();
-                MouseHandler.Update();
-            }
-
-
-            void Render()
-            {
-                Invalidate(); // Calls the OnPaint Method
-            }
+            Scene.Update();
+            MouseHandler.Update();
         }
+
+
+        void Render()
+        {
+            Invalidate(); // Calls the OnPaint Method
+        }
+
 
         // Override the OnPaint method to perform custom drawing
         protected override void OnPaint(PaintEventArgs e)
