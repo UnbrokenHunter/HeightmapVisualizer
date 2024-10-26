@@ -1,7 +1,6 @@
-﻿using HeightmapVisualizer.src.Primitives;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace HeightmapVisualizer.Primitives
+namespace HeightmapVisualizer.src.Primitives
 {
     /// <summary>
     /// Represents a face (polygon) in 3D space, defined by an array of vertices.
@@ -28,7 +27,7 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="color">The color to draw this face as. If left blank, will default to the color of the mesh</param>
         /// <param name="name">The name of this face, which can be searched for, in order to make changes to the mesh later.</param>
         public Face(Vector3[] points, Color? color = null, string? name = null)
-        {               
+        {
             this.color = color;
             this.points = points;
             this.name = name;

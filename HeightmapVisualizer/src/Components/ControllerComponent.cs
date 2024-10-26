@@ -1,10 +1,9 @@
-﻿using HeightmapVisualizer.Controls;
-using HeightmapVisualizer.Scene;
-using HeightmapVisualizer.src;
+﻿using HeightmapVisualizer.src.Controls;
+using HeightmapVisualizer.src.Scene;
 using HeightmapVisualizer.src.Utilities;
 using System.Numerics;
 
-namespace HeightmapVisualizer.Components
+namespace HeightmapVisualizer.src.Components
 {
     internal class ControllerComponent : IComponent
     {

@@ -1,15 +1,14 @@
-﻿using HeightmapVisualizer.src;
-using HeightmapVisualizer.src.Components;
+﻿using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Primitives;
 using HeightmapVisualizer.src.UI;
 using System.Numerics;
 
-namespace HeightmapVisualizer.Scene
+namespace HeightmapVisualizer.src.Scene
 {
     public class Scene
     {
         public CameraComponent Camera { get; set; }
-		public Gameobject[] Gameobjects { get; set; }
+        public Gameobject[] Gameobjects { get; set; }
         public UIElement[] UIElements { get; set; }
 
         public Scene(Gameobject[] gameobjects, UIElement[] ui)
@@ -34,7 +33,7 @@ namespace HeightmapVisualizer.Scene
                 var cameraComponent = new CameraComponent(Window.Instance.Bounds);
 
                 // Add Component to Object
-				cameraObject.AddComponent(cameraComponent);
+                cameraObject.AddComponent(cameraComponent);
 
                 // Add new Camera to gameobjects in scene
                 var g = gameobjects.ToList();
@@ -48,10 +47,10 @@ namespace HeightmapVisualizer.Scene
             // Select the first camera found
             var camera = cams[0];
 
-            this.Camera = camera;
-            this.Gameobjects = gameobjects;
-            this.UIElements = ui;
-		}
+            Camera = camera;
+            Gameobjects = gameobjects;
+            UIElements = ui;
+        }
 
         public void Update()
         {
@@ -88,7 +87,7 @@ namespace HeightmapVisualizer.Scene
             }
 
             // Draw the furthest first, and draw nearer ones on top
-            renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => e.Item2.Render(g, Camera)); 
+            renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => e.Item2.Render(g, Camera));
         }
 
         private void RenderUI(Graphics g)

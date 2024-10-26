@@ -1,6 +1,4 @@
-﻿using HeightmapVisualizer.Scene;
-using Microsoft.VisualBasic;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace HeightmapVisualizer.src.UI
 {

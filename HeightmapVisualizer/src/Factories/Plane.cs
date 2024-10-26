@@ -1,8 +1,7 @@
-﻿using HeightmapVisualizer.Primitives;
-using HeightmapVisualizer.src.Primitives;
+﻿using HeightmapVisualizer.src.Primitives;
 using System.Numerics;
 
-namespace HeightmapVisualizer.src.Shapes
+namespace HeightmapVisualizer.src.Factories
 {
     /// <summary>
     /// Factory class for creating a plane shape.

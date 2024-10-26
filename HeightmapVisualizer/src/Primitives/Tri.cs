@@ -1,10 +1,8 @@
-﻿using HeightmapVisualizer.Scene;
-using HeightmapVisualizer.src.Components;
-using HeightmapVisualizer.src.Primitives;
+﻿using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Utilities;
 using System.Numerics;
 
-namespace HeightmapVisualizer.Primitives
+namespace HeightmapVisualizer.src.Primitives
 {
     /// <summary>
     /// Represents a triangle (Tri) in 3D space as part of a mesh.
@@ -24,7 +22,7 @@ namespace HeightmapVisualizer.Primitives
 
         internal Vector3 Normal => Vector3.Normalize(Vector3.Cross(Points[1].Position - Points[0].Position, Points[2].Position - Points[0].Position));
 
-		internal string Name { get; }
+        internal string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tri"/> class with the given mesh and three vertex positions.
@@ -72,62 +70,62 @@ namespace HeightmapVisualizer.Primitives
             Edges[1] = GetOrCreateEdge(p2, p3);
             Edges[2] = GetOrCreateEdge(p3, p1);
 
-			List<Vertex> vector3s = new List<Vertex>
-			{
-				Edges[0].Vertices[0],
-				Edges[0].Vertices[1]
-			};
+            List<Vertex> vector3s = new List<Vertex>
+            {
+                Edges[0].Vertices[0],
+                Edges[0].Vertices[1]
+            };
 
-			if (vector3s.Contains(Edges[1].Vertices[0]))
+            if (vector3s.Contains(Edges[1].Vertices[0]))
                 vector3s.Add(Edges[1].Vertices[1]);
             else
-				vector3s.Add(Edges[1].Vertices[0]);
+                vector3s.Add(Edges[1].Vertices[0]);
 
-			Points = vector3s.ToArray();
+            Points = vector3s.ToArray();
 
-            this.Name = name;
-		}
+            Name = name;
+        }
 
-		/// <summary>
-		/// Draws the triangle by rendering each of its edges.
-		/// </summary>
-		/// <param name="g">The graphics context used for drawing.</param>
-		/// <param name="cam">The camera used for projection.</param>
-		public override void Draw(Graphics g, CameraComponent cam)
+        /// <summary>
+        /// Draws the triangle by rendering each of its edges.
+        /// </summary>
+        /// <param name="g">The graphics context used for drawing.</param>
+        /// <param name="cam">The camera used for projection.</param>
+        public override void Draw(Graphics g, CameraComponent cam)
         {
-			if (Points[0] == null || Points[1] == null || Points[2] == null)
-				return;
+            if (Points[0] == null || Points[1] == null || Points[2] == null)
+                return;
 
-			var p1 = cam.ProjectPoint(Points[0].Position);
-			var p2 = cam.ProjectPoint(Points[1].Position);
-			var p3 = cam.ProjectPoint(Points[2].Position);
+            var p1 = cam.ProjectPoint(Points[0].Position);
+            var p2 = cam.ProjectPoint(Points[1].Position);
+            var p3 = cam.ProjectPoint(Points[2].Position);
 
             PointF pF(Vector2 v) => new PointF(v.X, v.Y);
 
-            
+
             // Atleast one point on screen
             if (p1.Item2 || p2.Item2 || p3.Item2)
             {
-				var p = new PointF[] { pF(p1.Item1), pF(p2.Item1), pF(p3.Item1) };
-				g.FillPolygon(ColorLookup.FindOrGetBrush(color), p);
+                var p = new PointF[] { pF(p1.Item1), pF(p2.Item1), pF(p3.Item1) };
+                g.FillPolygon(ColorLookup.FindOrGetBrush(color), p);
 
-				Edges[0].Draw(g, cam);
-				Edges[1].Draw(g, cam);
-				Edges[2].Draw(g, cam);
+                Edges[0].Draw(g, cam);
+                Edges[1].Draw(g, cam);
+                Edges[2].Draw(g, cam);
 
-			}
+            }
 
-		}
+        }
 
-		#region Overriding Equality
+        #region Overriding Equality
 
-		/// <summary>
-		/// Determines whether the specified <see cref="Tri"/> is equal to the current <see cref="Tri"/>.
-		/// Two triangles are considered equal if they have the same edges, in the same order.
-		/// </summary>
-		/// <param name="other">The triangle to compare with the current triangle.</param>
-		/// <returns>true if the specified triangle is equal to the current triangle; otherwise, false.</returns>
-		public bool Equals(Tri? other)
+        /// <summary>
+        /// Determines whether the specified <see cref="Tri"/> is equal to the current <see cref="Tri"/>.
+        /// Two triangles are considered equal if they have the same edges, in the same order.
+        /// </summary>
+        /// <param name="other">The triangle to compare with the current triangle.</param>
+        /// <returns>true if the specified triangle is equal to the current triangle; otherwise, false.</returns>
+        public bool Equals(Tri? other)
         {
             if (other == null)
                 return false;

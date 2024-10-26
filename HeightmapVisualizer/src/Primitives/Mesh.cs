@@ -1,6 +1,5 @@
-﻿using HeightmapVisualizer.Primitives;
-using HeightmapVisualizer.Scene;
-using HeightmapVisualizer.src.Components;
+﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Scene;
 using System.Numerics;
 
 namespace HeightmapVisualizer.src.Primitives

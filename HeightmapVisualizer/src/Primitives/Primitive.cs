@@ -1,8 +1,6 @@
-﻿using HeightmapVisualizer.Scene;
-using HeightmapVisualizer.src.Components;
-using HeightmapVisualizer.src.Primitives;
+﻿using HeightmapVisualizer.src.Components;
 
-namespace HeightmapVisualizer.Primitives
+namespace HeightmapVisualizer.src.Primitives
 {
     /// <summary>
     /// Represents the base class for all geometric primitives in a mesh.

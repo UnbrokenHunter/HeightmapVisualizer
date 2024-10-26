@@ -1,10 +1,8 @@
-﻿using HeightmapVisualizer.Scene;
-using HeightmapVisualizer.src.Components;
-using HeightmapVisualizer.src.Primitives;
+﻿using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Utilities;
 using System.Numerics;
 
-namespace HeightmapVisualizer.Primitives
+namespace HeightmapVisualizer.src.Primitives
 {
     /// <summary>
     /// Represents an edge in 3D space, defined by two vertices.
@@ -91,14 +89,14 @@ namespace HeightmapVisualizer.Primitives
             if (other == null)
                 return false;
 
-            var val = (Vertices[0].Equals(other.Vertices[0]) && Vertices[1].Equals(other.Vertices[1])) ||
-                   (Vertices[0].Equals(other.Vertices[1]) && Vertices[1].Equals(other.Vertices[0]));
+            var val = Vertices[0].Equals(other.Vertices[0]) && Vertices[1].Equals(other.Vertices[1]) ||
+                   Vertices[0].Equals(other.Vertices[1]) && Vertices[1].Equals(other.Vertices[0]);
 
             Console.WriteLine($"V1: {Vertices[0]} V2: {Vertices[1]}\nO1: {other.Vertices[0]} O2: {other.Vertices[1]}\n{val}");
 
             // Edges are equal if they share the same vertices, regardless of the order
-            return (Vertices[0].Equals(other.Vertices[0]) && Vertices[1].Equals(other.Vertices[1])) ||
-                   (Vertices[0].Equals(other.Vertices[1]) && Vertices[1].Equals(other.Vertices[0]));
+            return Vertices[0].Equals(other.Vertices[0]) && Vertices[1].Equals(other.Vertices[1]) ||
+                   Vertices[0].Equals(other.Vertices[1]) && Vertices[1].Equals(other.Vertices[0]);
         }
 
         /// <summary>

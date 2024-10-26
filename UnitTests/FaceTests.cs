@@ -1,4 +1,4 @@
-﻿using HeightmapVisualizer.Primitives;
+﻿using HeightmapVisualizer.src.Primitives;
 using HeightmapVisualizer.Units;
 using System.Drawing;
 

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HeightmapVisualizer.Scene;
+﻿using HeightmapVisualizer.src.Scene;
 
-namespace HeightmapVisualizer.Components
+namespace HeightmapVisualizer.src.Components
 {
     public interface IComponent
     {

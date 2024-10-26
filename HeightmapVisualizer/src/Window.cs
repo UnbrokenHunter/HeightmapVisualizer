@@ -1,16 +1,14 @@
 ﻿
 using System.Numerics;
-using HeightmapVisualizer.Components;
-using HeightmapVisualizer.Controls;
-using HeightmapVisualizer.Primitives;
-using HeightmapVisualizer.Scene;
 using HeightmapVisualizer.src.Utilities;
-using HeightmapVisualizer.src.Shapes;
 using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Components;
-using Plane = HeightmapVisualizer.src.Shapes.Plane;
+using Plane = HeightmapVisualizer.src.Factories.Plane;
 using Button = HeightmapVisualizer.src.UI.Button;
 using HeightmapVisualizer.src.Primitives;
+using HeightmapVisualizer.src.Scene;
+using HeightmapVisualizer.src.Factories;
+using HeightmapVisualizer.src.Controls;
 
 namespace HeightmapVisualizer.src
 {
@@ -116,7 +114,7 @@ namespace HeightmapVisualizer.src
                 new Button(new Vector2(0, 120), new Vector2(400, 60), "FPS", id: "fps", update: updateFPS),
             }.ToArray();
 
-			return new Scene.Scene(objects, ui);
+			return new src.Scene.Scene(objects, ui);
         }
 
         void UpdateScene()

@@ -1,8 +1,8 @@
-﻿using HeightmapVisualizer.Components;
+﻿using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Primitives;
 using HeightmapVisualizer.src.Utilities;
 
-namespace HeightmapVisualizer.Scene
+namespace HeightmapVisualizer.src.Scene
 {
     public class Gameobject
     {
@@ -28,7 +28,7 @@ namespace HeightmapVisualizer.Scene
             {
                 if (component != null)
                 {
-					component.Update();
+                    component.Update();
                 }
             }
         }

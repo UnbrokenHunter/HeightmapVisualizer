@@ -1,10 +1,8 @@
-﻿using HeightmapVisualizer.Scene;
-using HeightmapVisualizer.src.Components;
-using HeightmapVisualizer.src.Primitives;
+﻿using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Utilities;
 using System.Numerics;
 
-namespace HeightmapVisualizer.Primitives
+namespace HeightmapVisualizer.src.Primitives
 {
     /// <summary>
     /// Represents a vertex in 3D space as part of a mesh.
@@ -30,7 +28,7 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="position">The local position of the vertex in 3D space.</param>
         public Vertex(Mesh mesh, Color color, Vector3 position) : base(mesh, color)
         {
-            this.LocalPosition = position;
+            LocalPosition = position;
         }
 
         /// <summary>
@@ -81,25 +79,25 @@ namespace HeightmapVisualizer.Primitives
         /// <param name="cam">The camera used for projection.</param>
         public override void Draw(Graphics g, CameraComponent cam)
         {
-			//if (LocalPosition == null)
-			//	return;
+            //if (LocalPosition == null)
+            //	return;
 
-			var p = cam.ProjectPoint(Position);
+            var p = cam.ProjectPoint(Position);
 
             if (p.Item2)
             {
                 int size = 6;
                 var rect = new Rectangle((int)(p.Item1.X - size / 2), (int)(p.Item1.Y - size / 2), size, size);
 
-			    g.FillPie(ColorLookup.FindOrGetBrush(color), rect, 0f, 360f);
+                g.FillPie(ColorLookup.FindOrGetBrush(color), rect, 0f, 360f);
             }
-		}
+        }
 
-		/// <summary>
-		/// Returns a string that represents the current vertex.
-		/// </summary>
-		/// <returns>A string that represents the current vertex's position.</returns>
-		public override string ToString()
+        /// <summary>
+        /// Returns a string that represents the current vertex.
+        /// </summary>
+        /// <returns>A string that represents the current vertex's position.</returns>
+        public override string ToString()
         {
             return $"Vertex: {Position}";
         }
