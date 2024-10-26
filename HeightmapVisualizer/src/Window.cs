@@ -1,15 +1,17 @@
 ﻿
+using System.Numerics;
+using System.Diagnostics;
 using HeightmapVisualizer.Components;
 using HeightmapVisualizer.Controls;
 using HeightmapVisualizer.Primitives;
 using HeightmapVisualizer.Scene;
-using System.Numerics;
-using Plane = HeightmapVisualizer.src.Shapes.Plane;
 using HeightmapVisualizer.src.Utilities;
 using HeightmapVisualizer.src.Shapes;
 using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Components;
+using Plane = HeightmapVisualizer.src.Shapes.Plane;
 using Button = HeightmapVisualizer.src.UI.Button;
+using Timer = System.Windows.Forms.Timer;
 
 namespace HeightmapVisualizer.src
 {
@@ -18,6 +20,15 @@ namespace HeightmapVisualizer.src
         public Scene.Scene Scene;
 
         public static Window Instance;
+
+        private Timer timer;
+        private Stopwatch stopwatch;
+        private double previousTime;
+        private int frameCount = 0;
+        private double fpsTimer = 0.0;
+        private double displayedFPS = 0.0;
+        public const double FPS = 60;
+        public double deltaTime = 0;
 
         public Vector2 ScreenSize => new Vector2(Width, Height);
         public Vector2 ScreenCenter => ScreenSize / 2;
@@ -38,10 +49,18 @@ namespace HeightmapVisualizer.src
 
             DoubleBuffered = true;
 
-            Scene = CreateScene();
+            timer = new Timer();
+            timer.Interval = 16; // ~60 FPS
+            timer.Tick += StartGameloop;
 
-            Thread t1 = new Thread(Gameloop);
-            t1.Start();
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
+            previousTime = stopwatch.Elapsed.TotalSeconds;
+
+            timer.Start();
+
+
+            Scene = CreateScene();
         }
 
         private Scene.Scene CreateScene()
@@ -50,7 +69,7 @@ namespace HeightmapVisualizer.src
             camera.AddComponent(new ControllerComponent());
             camera.AddComponent(new CameraComponent(Bounds));
 
-            var values = new float[4, 4];
+            var values = new float[40, 4];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
@@ -114,13 +133,41 @@ namespace HeightmapVisualizer.src
 			return new Scene.Scene(objects, ui);
         }
 
-        private void Gameloop()
+        private void StartGameloop(object sender, EventArgs e)
         {
-            while (true)
-            {
-                Thread.Sleep(10);
-                MouseHandler.Update();
+            // Calculate delta time
+            double currentTime = stopwatch.Elapsed.TotalSeconds;
+            double deltaTime = currentTime - previousTime;
+            previousTime = currentTime;
 
+            // Update game logic
+            UpdateGameLogic();
+
+            // Calculate FPS over a second
+            fpsTimer += deltaTime;
+            frameCount++;
+            if (fpsTimer >= 1.0)
+            {
+                displayedFPS = frameCount / fpsTimer;
+                Console.WriteLine($"Actual Displayed FPS: {displayedFPS:F2}");
+
+                // Reset counters for the next second
+                fpsTimer -= 1.0;
+                frameCount = 0;
+            }
+
+            // Render the current frame by invalidating the form to trigger OnPaint
+            Render();
+
+            void UpdateGameLogic()
+            {
+                Scene.Update();
+                MouseHandler.Update();
+            }
+
+
+            void Render()
+            {
                 Invalidate(); // Calls the OnPaint Method
             }
         }
@@ -130,7 +177,7 @@ namespace HeightmapVisualizer.src
         {
             base.OnPaint(e);
 
-            Scene.Update(e.Graphics);
+            Scene.Render(e.Graphics);
             MouseHandler.Debug(e.Graphics);
         }
 

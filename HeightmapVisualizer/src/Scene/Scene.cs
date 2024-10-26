@@ -54,10 +54,13 @@ namespace HeightmapVisualizer.Scene
             this.UIElements = ui;
 		}
 
-        public void Update(Graphics g)
+        public void Update()
         {
             UpdateGameobjects();
+        }
 
+        public void Render(Graphics g)
+        {
             RenderCamera(g);
 
             RenderUI(g);
