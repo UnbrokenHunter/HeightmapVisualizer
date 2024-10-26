@@ -21,14 +21,7 @@ namespace HeightmapVisualizer.Primitives
         /// </summary>
         internal Vertex[] Points { get; }
 
-        internal Vector3 Normal { get; }
-        private Vector3 CalculateNormal()
-        {
-			var edge1 = Points[1].Position - Points[0].Position;
-			var edge2 = Points[2].Position - Points[0].Position;
-
-            return Vector3.Normalize(Vector3.Cross(edge1, edge2));
-		}
+        internal Vector3 Normal => Vector3.Normalize(Vector3.Cross(Points[1].Position - Points[0].Position, Points[2].Position - Points[0].Position));
 
 		internal string Name { get; }
 
@@ -92,7 +85,6 @@ namespace HeightmapVisualizer.Primitives
 			Points = vector3s.ToArray();
 
             this.Name = name;
-            this.Normal = CalculateNormal();
 		}
 
 		/// <summary>
