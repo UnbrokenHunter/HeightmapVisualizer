@@ -69,7 +69,7 @@ namespace HeightmapVisualizer.src
             if (fpsTimer >= fpsSamplePeriod)
             {
                 FPS = frameCount / fpsTimer;
-                Console.WriteLine($"Actual Displayed FPS: {FPS:F2}");
+                //Console.WriteLine($"Actual Displayed FPS: {FPS:F2}");
 
                 // Reset counters for the next second
                 fpsTimer -= fpsSamplePeriod;

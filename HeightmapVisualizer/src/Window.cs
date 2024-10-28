@@ -58,11 +58,11 @@ namespace HeightmapVisualizer.src
                 }
             }
 
-            Gameobject[,] heightmap = Heightmap.CreateCorners(values, 1, Vector3.One, Quaternion.CreateFromYawPitchRoll(1, 1, 1));
+            Gameobject[,] heightmap = Heightmap.CreateCorners(values, 1, Vector3.One);
             Gameobject[] hm = Heightmap.Convert2DArrayTo1DArray(heightmap);
 
             Gameobject cube = new Gameobject(new Vector3(-1, -1, -1))
-                .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green));
+                .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green).SetWireframe(true));
             Gameobject cube2 = new Gameobject(new Vector3(-5, 2, 0))
                 .AddComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1)));
             Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
@@ -81,27 +81,30 @@ namespace HeightmapVisualizer.src
                 );
 
 
-   //         static void move(Gameobject g)
-   //         {
-   //             if (g.GetType() == typeof(Mesh))
-   //             {
-   //                 var names = ((Mesh)g).GetVertexsByName("Left");
+            static void move(Gameobject g)
+            {
+                if (g.Components.Find(c => c.GetType() == typeof(MeshComponent)) is MeshComponent m)
+                {
+                    var names = m.GetFacesByName("Left");
 
-   //                 foreach (Vertex t in names)
-   //                 {
-   //                     t.LocalPosition += Vector3.UnitZ / 1000 * -1;
-   //                 }
-   //             }
-			//}
+                    var points = names[0].Points;
+                    for (int i = 0; i < points.Length; i++)
+                    {
+                        points[i] += new Vector3(-0.001f, 0, 0);
+                    }
 
-   //         hm.ToList().ForEach(h => h.AddComponent(new ScriptableComponent(null, move)));
+                    names[0].SetPoints(points);
+                }
+            }
+
+            cube.AddComponent(new ScriptableComponent(null, move));
 
 
             Gameobject line = new Gameobject()
                 .AddComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10)));
 
-            var objects = new Gameobject[] { cube, cube2, floorPlane, camera };
-            objects = objects.Concat(hm).ToArray();
+            var objects = new Gameobject[] { cube, camera };
+            //objects = objects.Concat(hm).ToArray();
 
 
 			static void updatePos(UIElement g)
