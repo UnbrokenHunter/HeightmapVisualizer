@@ -1,5 +1,8 @@
-﻿using HeightmapVisualizer.src.Primitives;
+﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Primitives;
+using System.Drawing;
 using System.Numerics;
+using static HeightmapVisualizer.src.Components.MeshComponent;
 
 namespace HeightmapVisualizer.src.Factories
 {
@@ -7,23 +10,7 @@ namespace HeightmapVisualizer.src.Factories
     /// Factory class for creating a cuboid shape.
     /// </summary>
     public static class Cuboid
-    {
-        /// <summary>
-        /// Creates a cuboid mesh with the specified position, rotation, and size, where the position is treated as the center of the cuboid.
-        /// </summary>
-        /// <param name="position">The center position of the cuboid in the scene.</param>
-        /// <param name="rotation">The rotation of the cuboid (as a quaternion).</param>
-        /// <param name="size">The size of the cuboid (width, height, depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, bool drawWireframe = false)
-        {
-            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, true);
-            var mesh = new Mesh(faces, color, drawWireframe);
-            mesh.Transform.Position = position;
-            mesh.Transform.Rotation = rotation;
-            return mesh;
-        }
+    {  
 
         /// <summary>
         /// Creates a cuboid mesh with the specified position and size, defaulting to no rotation (Quaternion.Identity), where the position is treated as the center of the cuboid.
@@ -32,25 +19,10 @@ namespace HeightmapVisualizer.src.Factories
         /// <param name="size">The size of the cuboid (width, height, depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static Mesh CreateCentered(Vector3 position, Vector3 size, Color? color = null, bool drawWireframe = false)
+        public static MeshComponent CreateCentered(Vector3 size)
         {
-            return CreateCentered(position, Quaternion.Identity, size, color, drawWireframe);
-        }
-
-        /// <summary>
-        /// Creates a cuboid mesh with the specified position, rotation, and size, where the position is treated as one corner of the cuboid.
-        /// </summary>
-        /// <param name="position">The corner position of the cuboid in the scene.</param>
-        /// <param name="rotation">The rotation of the cuboid (as a quaternion).</param>
-        /// <param name="size">The size of the cuboid (width, height, depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, bool drawWireframe = false)
-        {
-            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, false);
-            var mesh = new Mesh(faces, color, drawWireframe);
-            mesh.Transform.Position = position;
-            mesh.Transform.Rotation = rotation;
+            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, true);
+            var mesh = new MeshComponent(faces);
             return mesh;
         }
 
@@ -61,9 +33,11 @@ namespace HeightmapVisualizer.src.Factories
         /// <param name="size">The size of the cuboid (width, height, depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static Mesh CreateCorners(Vector3 position, Vector3 size, Color? color = null, bool drawWireframe = false)
+        public static MeshComponent CreateCorners(Vector3 size)
         {
-            return CreateCorners(position, Quaternion.Identity, size, color, drawWireframe);
+            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, false);
+            var mesh = new MeshComponent(faces);
+            return mesh;
         }
 
         /// <summary>

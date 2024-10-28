@@ -74,15 +74,20 @@ namespace HeightmapVisualizer.src.Scene
 
         private void RenderCamera(Graphics g)
         {
-            List<Tuple<float, Mesh>> renderOrder = new();
+            if (Camera.Gameobject == null)
+                return;
+            var camera = Camera.Gameobject;
 
-            foreach (var gameobject in Gameobjects)
+            List<Tuple<float, MeshComponent>> renderOrder = new();
+            Gameobject[] hasMesh = Gameobjects.Where(e => e.Components.Any(c => c is MeshComponent)).ToArray();
+
+            foreach (var gameobject in hasMesh) 
             {
-                var renderable = gameobject.GetRenderable();
-                if (renderable != null)
+
+                if (gameobject.Components.FirstOrDefault(c => c is MeshComponent) is MeshComponent meshComponent)
                 {
-                    var distance = Vector3.Distance(Camera.Gameobject.Transform.Position, renderable.Transform.Position);
-                    renderOrder.Add(new Tuple<float, Mesh>(distance, renderable));
+                    var distance = Vector3.Distance(camera.Transform.Position, gameobject.Transform.Position);
+                    renderOrder.Add(new Tuple<float, MeshComponent>(distance, meshComponent));
                 }
             }
 

@@ -1,5 +1,7 @@
-﻿using HeightmapVisualizer.src.Primitives;
+﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Primitives;
 using System.Numerics;
+using static HeightmapVisualizer.src.Components.MeshComponent;
 
 namespace HeightmapVisualizer.src.Factories
 {
@@ -11,59 +13,25 @@ namespace HeightmapVisualizer.src.Factories
         /// <summary>
         /// Creates a pyramid mesh with the specified position, rotation, and size, where the position is treated as the center of the pyramid.
         /// </summary>
-        /// <param name="position">The center position of the pyramid in the scene.</param>
-        /// <param name="rotation">The rotation of the pyramid (as a quaternion).</param>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
-        public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, bool drawWireframe = false)
+        /// <returns>A <see cref="MeshComponent"/> object representing the pyramid.</returns>
+        public static MeshComponent CreateCentered(Vector3 size)
         {
             var faces = CreatePyramidFaces(size.X, size.Z, size.Y, true);
-            var mesh = new Mesh(faces, color, drawWireframe);
-            mesh.Transform.Position = position;
-            mesh.Transform.Rotation = rotation;
+            var mesh = new MeshComponent(faces);
             return mesh;
-        }
-
-        /// <summary>
-        /// Creates a pyramid mesh with the specified position and size, defaulting to no rotation (Quaternion.Identity), where the position is treated as the center of the pyramid.
-        /// </summary>
-        /// <param name="position">The center position of the pyramid in the scene.</param>
-        /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
-        public static Mesh CreateCentered(Vector3 position, Vector3 size, Color? color = null, bool drawWireframe = false)
-        {
-            return CreateCentered(position, Quaternion.Identity, size, color, drawWireframe);
         }
 
         /// <summary>
         /// Creates a pyramid mesh with the specified position, rotation, and size, where the position is treated as one corner of the pyramid.
         /// </summary>
-        /// <param name="position">The corner position of the pyramid in the scene.</param>
-        /// <param name="rotation">The rotation of the pyramid (as a quaternion).</param>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
-        public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, bool drawWireframe = false)
+        /// <returns>A <see cref="MeshComponent"/> object representing the pyramid.</returns>
+        public static MeshComponent CreateCorners(Vector3 size)
         {
             var faces = CreatePyramidFaces(size.X, size.Z, size.Y, false);
-            var mesh = new Mesh(faces, color, drawWireframe);
-            mesh.Transform.Position = position;
-            mesh.Transform.Rotation = rotation;
+            var mesh = new MeshComponent(faces);
             return mesh;
-        }
-
-        /// <summary>
-        /// Creates a pyramid mesh with the specified position and size, defaulting to no rotation (Quaternion.Identity), where the position is treated as one corner of the pyramid.
-        /// </summary>
-        /// <param name="position">The corner position of the pyramid in the scene.</param>
-        /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the pyramid.</returns>
-        public static Mesh CreateCorners(Vector3 position, Vector3 size, Color? color = null, bool drawWireframe = false)
-        {
-            return CreateCorners(position, Quaternion.Identity, size, color, drawWireframe);
         }
 
         /// <summary>

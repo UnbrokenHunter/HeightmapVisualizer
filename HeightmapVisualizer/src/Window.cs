@@ -44,9 +44,9 @@ namespace HeightmapVisualizer.src
 
         private Scene.Scene CreateScene()
         {
-            Gameobject camera = new Gameobject();
-            camera.AddComponent(new ControllerComponent());
-            camera.AddComponent(new CameraComponent(Bounds));
+            Gameobject camera = new Gameobject()
+                .AddComponent(new ControllerComponent())
+                .AddComponent(new CameraComponent(Bounds));
 
             var values = new float[40, 4];
             //Random random = new Random();
@@ -58,37 +58,50 @@ namespace HeightmapVisualizer.src
                 }
             }
 
-            Mesh[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1);
-            Gameobject[] hm = MeshUtility.Convert2DArrayTo1DArray(heightmap);
+            //Gameobject[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1);
+            //Gameobject[] hm = MeshUtility.Convert2DArrayTo1DArray(heightmap);
 
-            Gameobject cube = Cuboid.CreateCorners(new Vector3(-1, -1, -1), new Vector3(1, 1, 1)).SetColor(Color.Green);
-            Gameobject cube2 = Cuboid.CreateCentered(new Vector3(-5, 2, 0), new Vector3(1, 2, 1), Color.HotPink, true);
-            Gameobject floorPlane = Plane.CreateCentered(new Vector3(0, 5, 0), new Vector2(10, 10), Color.LightBlue, true);
-            Gameobject wallPlane = Plane.CreateCentered(new Vector3(0, -5, 0),
-                new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll(),
-                new Vector2(10, 10), drawWireframe: true);
+            Gameobject cube = new Gameobject(new Vector3(-1, -1, -1))
+                .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green));
+            Gameobject cube2 = new Gameobject(new Vector3(-5, 2, 0))
+                .AddComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1)));
+            Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
+                .AddComponent(Plane.CreateCentered(new Vector2(10, 10)));
+            Gameobject wallPlane = new Gameobject(new Vector3(0, -5, 0), new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll()) 
+                .AddComponent(Plane.CreateCentered(new Vector2(10, 10))
+                );
 
+            var points = new Vector3[3] { new Vector3(1, 0, 1), new Vector3(0, 1, 0), new Vector3(-1, 0, 0) } ;
 
-            static void move(Gameobject g)
-            {
-                if (g.GetType() == typeof(Mesh))
-                {
-                    var names = ((Mesh)g).GetVertexsByName("Left");
-
-                    foreach (Vertex t in names)
-                    {
-                        t.LocalPosition += Vector3.UnitZ / 1000 * -1;
-                    }
-                }
-			}
-
-            hm.ToList().ForEach(h => h.AddComponent(new ScriptableComponent(null, move)));
+            Gameobject tri = new Gameobject()
+                .AddComponent(
+                    new MeshComponent(
+                        new MeshComponent.Face[1] { new MeshComponent.Face(points) }, isWireframe: true
+                    )
+                );
 
 
-            Gameobject line = Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10));
+   //         static void move(Gameobject g)
+   //         {
+   //             if (g.GetType() == typeof(Mesh))
+   //             {
+   //                 var names = ((Mesh)g).GetVertexsByName("Left");
 
-            var objects = new Gameobject[] { line, cube, cube2, wallPlane, camera };
-            objects = objects.Concat(hm).ToArray();
+   //                 foreach (Vertex t in names)
+   //                 {
+   //                     t.LocalPosition += Vector3.UnitZ / 1000 * -1;
+   //                 }
+   //             }
+			//}
+
+   //         hm.ToList().ForEach(h => h.AddComponent(new ScriptableComponent(null, move)));
+
+
+            Gameobject line = new Gameobject()
+                .AddComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10)));
+
+            var objects = new Gameobject[] { cube, camera };
+            //objects = objects.Concat(hm).ToArray();
 
 
 			static void updatePos(UIElement g)

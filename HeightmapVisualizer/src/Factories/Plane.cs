@@ -1,5 +1,7 @@
-﻿using HeightmapVisualizer.src.Primitives;
+﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Primitives;
 using System.Numerics;
+using static HeightmapVisualizer.src.Components.MeshComponent;
 
 namespace HeightmapVisualizer.src.Factories
 {
@@ -9,59 +11,17 @@ namespace HeightmapVisualizer.src.Factories
     public static class Plane
     {
         /// <summary>
-        /// Creates a plane mesh with the specified position, rotation, and size, where the position is treated as the center of the plane.
+        /// Creates a plane mesh with the specified position and size, defaulting to no rotation (Quaternion.Identity), where the position is treated as the center of the plane.
         /// </summary>
-        /// <param name="position">The center position of the plane in the scene.</param>
-        /// <param name="rotation">The rotation of the plane (as a quaternion).</param>
         /// <param name="size">The size of the plane (width and depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the plane.</returns>
-        public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector2 size, Color? color = null, bool drawWireframe = false)
+        /// <returns>A <see cref="MeshComponent"/> object representing the plane.</returns>
+        public static MeshComponent CreateCentered(Vector2 size)
         {
             // Create the faces of the plane based on size, using the position as the center
             var faces = CreatePlaneFaces(size.X, size.Y, true);
 
             // Create the mesh with the faces
-            var mesh = new Mesh(faces, color, drawWireframe);
-
-            // Apply the position and rotation to the mesh's transform
-            mesh.Transform.Position = position;
-            mesh.Transform.Rotation = rotation;
-
-            return mesh;
-        }
-
-        /// <summary>
-        /// Creates a plane mesh with the specified position and size, defaulting to no rotation (Quaternion.Identity), where the position is treated as the center of the plane.
-        /// </summary>
-        /// <param name="position">The center position of the plane in the scene.</param>
-        /// <param name="size">The size of the plane (width and depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the plane.</returns>
-        public static Mesh CreateCentered(Vector3 position, Vector2 size, Color? color = null, bool drawWireframe = false)
-        {
-            return CreateCentered(position, Quaternion.Identity, size, color, drawWireframe);
-        }
-
-        /// <summary>
-        /// Creates a plane mesh with the specified position, rotation, and size, where the position is treated as one corner of the plane.
-        /// </summary>
-        /// <param name="position">The corner position of the plane in the scene.</param>
-        /// <param name="rotation">The rotation of the plane (as a quaternion).</param>
-        /// <param name="size">The size of the plane (width and depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the plane.</returns>
-        public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector2 size, Color? color = null, bool drawWireframe = false)
-        {
-            // Create the faces of the plane based on size, using the position as one of the corners
-            var faces = CreatePlaneFaces(size.X, size.Y, false);
-
-            // Create the mesh with the faces
-            var mesh = new Mesh(faces, color, drawWireframe);
-
-            // Apply the position and rotation to the mesh's transform
-            mesh.Transform.Position = position;
-            mesh.Transform.Rotation = rotation;
+            var mesh = new MeshComponent(faces);
 
             return mesh;
         }
@@ -69,13 +29,17 @@ namespace HeightmapVisualizer.src.Factories
         /// <summary>
         /// Creates a plane mesh with the specified position and size, defaulting to no rotation (Quaternion.Identity), where the position is treated as one corner of the plane.
         /// </summary>
-        /// <param name="position">The corner position of the plane in the scene.</param>
         /// <param name="size">The size of the plane (width and depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the plane.</returns>
-        public static Mesh CreateCorners(Vector3 position, Vector2 size, Color? color = null, bool drawWireframe = false)
+        /// <returns>A <see cref="MeshComponent"/> object representing the plane.</returns>
+        public static MeshComponent CreateCorners(Vector2 size)
         {
-            return CreateCorners(position, Quaternion.Identity, size, color, drawWireframe);
+            // Create the faces of the plane based on size, using the position as one of the corners
+            var faces = CreatePlaneFaces(size.X, size.Y, false);
+
+            // Create the mesh with the faces
+            var mesh = new MeshComponent(faces);
+
+            return mesh;
         }
 
         /// <summary>

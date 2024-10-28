@@ -1,6 +1,6 @@
 ﻿using HeightmapVisualizer.src.Components;
-using HeightmapVisualizer.src.Primitives;
 using HeightmapVisualizer.src.Utilities;
+using System.Numerics;
 
 namespace HeightmapVisualizer.src.Scene
 {
@@ -16,10 +16,15 @@ namespace HeightmapVisualizer.src.Scene
             Components = new List<IComponent>();
         }
 
-        public void AddComponent(IComponent component)
+        internal Gameobject(Vector3 position) : this(new Transform(position, Quaternion.Identity)) { }
+        internal Gameobject(Vector3 position, Vector3 rotation) : this(new Transform(position, rotation.CreateQuaternionFromYawPitchRoll())) { }
+        internal Gameobject(Vector3 position, Quaternion rotation) : this(new Transform(position, rotation)) { }
+
+        public Gameobject AddComponent(IComponent component)
         {
             component.Init(this);
             Components.Add(component);
+            return this;
         }
 
         public virtual void Update()
@@ -32,7 +37,5 @@ namespace HeightmapVisualizer.src.Scene
                 }
             }
         }
-
-        public virtual Mesh? GetRenderable() { return null; }
     }
 }
