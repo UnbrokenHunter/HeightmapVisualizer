@@ -19,9 +19,10 @@ namespace HeightmapVisualizer.src.Factories
         /// <param name="size">The size of the cuboid (width, height, depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static MeshComponent CreateCentered(Vector3 size)
+        public static MeshComponent CreateCentered(Vector3 size, Vector3? position = null)
         {
-            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, true);
+            var offset = position ?? Vector3.Zero;
+            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, true, offset);
             var mesh = new MeshComponent(faces);
             return mesh;
         }
@@ -31,11 +32,11 @@ namespace HeightmapVisualizer.src.Factories
         /// </summary>
         /// <param name="position">The corner position of the cuboid in the scene.</param>
         /// <param name="size">The size of the cuboid (width, height, depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static MeshComponent CreateCorners(Vector3 size)
+        public static MeshComponent CreateCorners(Vector3 size, Vector3? position = null)
         {
-            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, false);
+            var offset = position ?? Vector3.Zero;
+            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, false, offset);
             var mesh = new MeshComponent(faces);
             return mesh;
         }
@@ -43,20 +44,20 @@ namespace HeightmapVisualizer.src.Factories
         /// <summary>
         /// Helper method that creates the six faces of the cuboid, with an option to center the vertices or not.
         /// </summary>
-        private static Face[] CreateCuboidFaces(float width, float height, float depth, bool centered)
+        private static Face[] CreateCuboidFaces(float width, float height, float depth, bool centered, Vector3 offset)
         {
             var halfWidth = centered ? width / 2 : 0;
             var halfHeight = centered ? height / 2 : 0;
             var halfDepth = centered ? depth / 2 : 0;
 
-            Vector3 v1 = new Vector3(-halfWidth, -halfHeight, -halfDepth);
-            Vector3 v2 = new Vector3(width - halfWidth, -halfHeight, -halfDepth);
-            Vector3 v3 = new Vector3(width - halfWidth, height - halfHeight, -halfDepth);
-            Vector3 v4 = new Vector3(-halfWidth, height - halfHeight, -halfDepth);
-            Vector3 v5 = new Vector3(-halfWidth, -halfHeight, depth - halfDepth);
-            Vector3 v6 = new Vector3(width - halfWidth, -halfHeight, depth - halfDepth);
-            Vector3 v7 = new Vector3(width - halfWidth, height - halfHeight, depth - halfDepth);
-            Vector3 v8 = new Vector3(-halfWidth, height - halfHeight, depth - halfDepth);
+            Vector3 v1 = new Vector3(-halfWidth, -halfHeight, -halfDepth) + offset;
+            Vector3 v2 = new Vector3(width - halfWidth, -halfHeight, -halfDepth) + offset;
+            Vector3 v3 = new Vector3(width - halfWidth, height - halfHeight, -halfDepth) + offset;
+            Vector3 v4 = new Vector3(-halfWidth, height - halfHeight, -halfDepth) + offset;
+            Vector3 v5 = new Vector3(-halfWidth, -halfHeight, depth - halfDepth) + offset;
+            Vector3 v6 = new Vector3(width - halfWidth, -halfHeight, depth - halfDepth) + offset;
+            Vector3 v7 = new Vector3(width - halfWidth, height - halfHeight, depth - halfDepth) + offset;
+            Vector3 v8 = new Vector3(-halfWidth, height - halfHeight, depth - halfDepth) + offset;
 
             return new Face[]
             {

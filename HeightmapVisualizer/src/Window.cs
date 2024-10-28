@@ -48,7 +48,7 @@ namespace HeightmapVisualizer.src
                 .AddComponent(new ControllerComponent())
                 .AddComponent(new CameraComponent(Bounds));
 
-            var values = new float[40, 4];
+            var values = new float[4, 4];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
@@ -58,17 +58,17 @@ namespace HeightmapVisualizer.src
                 }
             }
 
-            //Gameobject[,] heightmap = Heightmap.CreateCorners(new Vector3(0, 0, 20), values, 1);
-            //Gameobject[] hm = MeshUtility.Convert2DArrayTo1DArray(heightmap);
+            Gameobject[,] heightmap = Heightmap.CreateCorners(values, 1, Vector3.One, Quaternion.CreateFromYawPitchRoll(1, 1, 1));
+            Gameobject[] hm = Heightmap.Convert2DArrayTo1DArray(heightmap);
 
             Gameobject cube = new Gameobject(new Vector3(-1, -1, -1))
                 .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green));
             Gameobject cube2 = new Gameobject(new Vector3(-5, 2, 0))
                 .AddComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1)));
             Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
-                .AddComponent(Plane.CreateCentered(new Vector2(10, 10)));
+                .AddComponent(Plane.CreateCentered(new Vector2(10, 10)).SetWireframe(true));
             Gameobject wallPlane = new Gameobject(new Vector3(0, -5, 0), new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll()) 
-                .AddComponent(Plane.CreateCentered(new Vector2(10, 10))
+                .AddComponent(Plane.CreateCentered(new Vector2(10, 10)).SetWireframe(true)
                 );
 
             var points = new Vector3[3] { new Vector3(1, 0, 1), new Vector3(0, 1, 0), new Vector3(-1, 0, 0) } ;
@@ -100,8 +100,8 @@ namespace HeightmapVisualizer.src
             Gameobject line = new Gameobject()
                 .AddComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10)));
 
-            var objects = new Gameobject[] { cube, camera };
-            //objects = objects.Concat(hm).ToArray();
+            var objects = new Gameobject[] { cube, cube2, floorPlane, camera };
+            objects = objects.Concat(hm).ToArray();
 
 
 			static void updatePos(UIElement g)

@@ -15,9 +15,10 @@ namespace HeightmapVisualizer.src.Factories
         /// </summary>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
         /// <returns>A <see cref="MeshComponent"/> object representing the pyramid.</returns>
-        public static MeshComponent CreateCentered(Vector3 size)
+        public static MeshComponent CreateCentered(Vector3 size, Vector3? position = null)
         {
-            var faces = CreatePyramidFaces(size.X, size.Z, size.Y, true);
+            var offset = position ?? Vector3.Zero;
+            var faces = CreatePyramidFaces(size.X, size.Z, size.Y, true, offset);
             var mesh = new MeshComponent(faces);
             return mesh;
         }
@@ -27,9 +28,10 @@ namespace HeightmapVisualizer.src.Factories
         /// </summary>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
         /// <returns>A <see cref="MeshComponent"/> object representing the pyramid.</returns>
-        public static MeshComponent CreateCorners(Vector3 size)
+        public static MeshComponent CreateCorners(Vector3 size, Vector3? position = null)
         {
-            var faces = CreatePyramidFaces(size.X, size.Z, size.Y, false);
+            var offset = position ?? Vector3.Zero;
+            var faces = CreatePyramidFaces(size.X, size.Z, size.Y, false, offset);
             var mesh = new MeshComponent(faces);
             return mesh;
         }
@@ -37,16 +39,16 @@ namespace HeightmapVisualizer.src.Factories
         /// <summary>
         /// Helper method that creates the faces of the pyramid, with an option to center the vertices or not.
         /// </summary>
-        private static Face[] CreatePyramidFaces(float baseWidth, float baseDepth, float height, bool centered)
+        private static Face[] CreatePyramidFaces(float baseWidth, float baseDepth, float height, bool centered, Vector3 offset)
         {
             var halfWidth = centered ? baseWidth / 2 : 0;
             var halfDepth = centered ? baseDepth / 2 : 0;
 
-            Vector3 v1 = new Vector3(-halfWidth, 0, -halfDepth);  // Base front left
-            Vector3 v2 = new Vector3(baseWidth - halfWidth, 0, -halfDepth);   // Base front right
-            Vector3 v3 = new Vector3(baseWidth - halfWidth, 0, baseDepth - halfDepth);    // Base back right
-            Vector3 v4 = new Vector3(-halfWidth, 0, baseDepth - halfDepth);   // Base back left
-            Vector3 vApex = new Vector3(0 - halfWidth, height, 0 - halfDepth);  // Apex of the pyramid
+            Vector3 v1 = new Vector3(-halfWidth, 0, -halfDepth) + offset;  // Base front left
+            Vector3 v2 = new Vector3(baseWidth - halfWidth, 0, -halfDepth) + offset;   // Base front right
+            Vector3 v3 = new Vector3(baseWidth - halfWidth, 0, baseDepth - halfDepth) + offset;    // Base back right
+            Vector3 v4 = new Vector3(-halfWidth, 0, baseDepth - halfDepth) + offset;   // Base back left
+            Vector3 vApex = new Vector3(0 - halfWidth, height, 0 - halfDepth) + offset;  // Apex of the pyramid
 
             return new Face[]
             {

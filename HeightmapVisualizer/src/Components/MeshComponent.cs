@@ -1,8 +1,6 @@
 ﻿using HeightmapVisualizer.src.Scene;
 using HeightmapVisualizer.src.Utilities;
-using System.Drawing;
 using System.Numerics;
-using System.Reflection;
 
 namespace HeightmapVisualizer.src.Components
 {
