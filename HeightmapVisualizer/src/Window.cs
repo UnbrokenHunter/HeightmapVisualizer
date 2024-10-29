@@ -106,28 +106,12 @@ namespace HeightmapVisualizer.src
             var objects = new Gameobject[] { cube, camera };
             //objects = objects.Concat(hm).ToArray();
 
-
-			static void updatePos(UIElement g)
-            {
-                ((Button)g).SetText(Instance.Scene.Camera.Gameobject.Transform.Position.ToString());
-            }
-
-			static void updateAng(UIElement g)
-			{
-				((Button)g).SetText(Instance.Scene.Camera.Gameobject.Transform.Rotation.ToString());
-			}
-
-            static void updateFPS(UIElement g)
-            {
-                ((Button)g).SetText("FPS: " + Gameloop.Instance.FPS);
-            }
-
             // CREATE MENU
             UIElement[] ui = new List<UIElement>
 			{
-                new Button(new Vector2(0, 0), new Vector2(400, 60), "Position", id: "pos", update: updatePos),
-                new Button(new Vector2(0, 60), new Vector2(400, 60), "Euler Angles", id: "ang", update: updateAng),
-                new Button(new Vector2(0, 120), new Vector2(400, 60), "FPS", id: "fps", update: updateFPS),
+                new Button(new Vector2(0, 0), new Vector2(800, 60), "Position", id: "pos", update: (UIElement g) => ((Button)g).SetText(Instance.Scene.Camera.Gameobject.Transform.Position.ToString())),
+                new Button(new Vector2(0, 60), new Vector2(800, 60), "Euler Angles", id: "ang", update: (UIElement g) => ((Button)g).SetText(Instance.Scene.Camera.Gameobject.Transform.Rotation.ToString())),
+                new Button(new Vector2(0, 120), new Vector2(400, 60), "FPS", id: "fps", update: (UIElement g) => ((Button)g).SetText("FPS: " + Gameloop.Instance.FPS)),
             }.ToArray();
 
 			return new src.Scene.Scene(objects, ui);
