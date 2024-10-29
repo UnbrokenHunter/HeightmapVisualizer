@@ -12,10 +12,11 @@ namespace HeightmapVisualizer.src.Components
 			float aspect = 16f / 9f, 
 			float fov = 90f,
 			float nearClippingPlane = 0.0001f,
-			float farClippingPlane = 100000f) : 
-			base(space, aspect, fov, nearClippingPlane, farClippingPlane) { }
+			float farClippingPlane = 100000f,
+			int priority = 10) : 
+			base(space, aspect, fov, nearClippingPlane, farClippingPlane, priority) { }
 
-		public override Tuple<Vector2, bool> ProjectPoint(Vector3 point)
+		public override Tuple<Vector2, bool>? ProjectPoint(Vector3 point)
 		{
 			if (Gameobject == null) return null;
 

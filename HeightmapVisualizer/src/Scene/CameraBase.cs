@@ -11,19 +11,22 @@ namespace HeightmapVisualizer.src.Scene
         public Vector2 Fov { get; private set; }
         public float NearClippingPlane { get; private set; }
         public float FarClippingPlane { get; private set; }
+        public int Priority { get; private set; }
         public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.X / 2)));
 
         public CameraBase(Rectangle space,
             float aspect = 16f / 9f,
             float fov = 90f,
             float nearClippingPlane = 0.0001f,
-            float farClippingPlane = 100000f)
+            float farClippingPlane = 100000f,
+            int priorityy = 10)
         {
             this.Space = space;
             this.Aspect = aspect;
             this.Fov = new Vector2(fov, fov / aspect);
             this.NearClippingPlane = nearClippingPlane;
             this.FarClippingPlane = farClippingPlane;
+            this.Priority = priorityy;
         }
 
 
@@ -32,7 +35,7 @@ namespace HeightmapVisualizer.src.Scene
         /// </summary>
         /// <param name="point"></param>
         /// <returns>A Tuple with the vector, and whether or not it is on screen.</returns>
-        public abstract Tuple<Vector2, bool> ProjectPoint(Vector3 point);
+        public abstract Tuple<Vector2, bool>? ProjectPoint(Vector3 point);
 
         }
     }
