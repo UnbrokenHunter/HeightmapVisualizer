@@ -102,7 +102,7 @@ namespace HeightmapVisualizer.src.Components
                 var cam = window.Scene.Camera;
 
                 var relativeMouseOffset = MouseHandler.MouseTrend;
-                var anglePerPixel = cam.Fov / window.ScreenSize;
+                var anglePerPixel = cam.Item2.Fov / window.ScreenSize;
 
 
                 var angle = relativeMouseOffset * anglePerPixel;

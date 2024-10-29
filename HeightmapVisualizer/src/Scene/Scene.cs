@@ -7,19 +7,20 @@ namespace HeightmapVisualizer.src.Scene
 {
     public class Scene
     {
-        public CameraComponent Camera { get; set; }
+        public (Gameobject, CameraBase) Camera { get; set; }
         public Gameobject[] Gameobjects { get; set; }
         public UIElement[] UIElements { get; set; }
 
         public Scene(Gameobject[] gameobjects, UIElement[] ui)
         {
             // Find all Cameras
-            List<CameraComponent> cams = new List<CameraComponent>();
-            foreach (var objs in gameobjects)
+            List<(Gameobject, CameraBase)> cams = new();
+            foreach (var gameobj in gameobjects)
             {
-                foreach (var component in objs.Components)
+                foreach (var component in gameobj.Components)
                 {
-                    if (component is CameraComponent) cams.Add((CameraComponent)component);
+                    if (component is CameraBase @base) 
+                        cams.Add((gameobj, @base));
                 }
             }
 
@@ -29,8 +30,8 @@ namespace HeightmapVisualizer.src.Scene
                 // Create object
                 var cameraObject = new Gameobject();
 
-                // Create Camera Component
-                var cameraComponent = new CameraComponent(Window.Instance.Bounds);
+                // Create Perspective Camera Component
+                var cameraComponent = new PerspectiveCameraComponent(Window.Instance.Bounds);
 
                 // Add Component to Object
                 cameraObject.AddComponent(cameraComponent);
@@ -41,7 +42,7 @@ namespace HeightmapVisualizer.src.Scene
                 gameobjects = g.ToArray();
 
                 // Add Camera to Cameras List
-                cams.Add(cameraComponent);
+                cams.Add((cameraObject, cameraComponent));
             }
 
             // Select the first camera found
@@ -74,9 +75,8 @@ namespace HeightmapVisualizer.src.Scene
 
         private void RenderCamera(Graphics g)
         {
-            if (Camera.Gameobject == null)
+            if (Camera.Item1 == null || Camera.Item2 == null)
                 return;
-            var camera = Camera.Gameobject;
 
             List<Tuple<float, MeshComponent>> renderOrder = new();
             Gameobject[] hasMesh = Gameobjects.Where(e => e.Components.Any(c => c is MeshComponent)).ToArray();
@@ -86,13 +86,13 @@ namespace HeightmapVisualizer.src.Scene
 
                 if (gameobject.Components.FirstOrDefault(c => c is MeshComponent) is MeshComponent meshComponent)
                 {
-                    var distance = Vector3.Distance(camera.Transform.Position, gameobject.Transform.Position);
+                    var distance = Vector3.Distance(Camera.Item1.Transform.Position, gameobject.Transform.Position);
                     renderOrder.Add(new Tuple<float, MeshComponent>(distance, meshComponent));
                 }
             }
 
             // Draw the furthest first, and draw nearer ones on top
-            renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => e.Item2.Render(g, Camera));
+            renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => e.Item2.Render(g, Camera.Item2));
         }
 
         private void RenderUI(Graphics g)

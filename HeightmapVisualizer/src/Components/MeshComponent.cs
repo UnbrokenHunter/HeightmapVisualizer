@@ -29,7 +29,7 @@ namespace HeightmapVisualizer.src.Components
             faces.ToList().ForEach(e => Faces.Add(e.Points, e));
         }
 
-        public void Render(Graphics g, CameraComponent cam)
+        public void Render(Graphics g, CameraBase cam)
         {
             if (gameobject == null)
                 return;

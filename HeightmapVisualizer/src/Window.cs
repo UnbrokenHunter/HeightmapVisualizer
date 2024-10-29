@@ -46,7 +46,7 @@ namespace HeightmapVisualizer.src
         {
             Gameobject camera = new Gameobject()
                 .AddComponent(new ControllerComponent())
-                .AddComponent(new CameraComponent(Bounds));
+                .AddComponent(new PerspectiveCameraComponent(Bounds));
 
             var values = new float[4, 4];
             //Random random = new Random();
@@ -109,8 +109,8 @@ namespace HeightmapVisualizer.src
             // CREATE MENU
             UIElement[] ui = new List<UIElement>
 			{
-                new Button(new Vector2(0, 0), new Vector2(800, 60), "Position", id: "pos", update: (UIElement g) => ((Button)g).SetText(Instance.Scene.Camera.Gameobject.Transform.Position.ToString())),
-                new Button(new Vector2(0, 60), new Vector2(800, 60), "Euler Angles", id: "ang", update: (UIElement g) => ((Button)g).SetText(Instance.Scene.Camera.Gameobject.Transform.Rotation.ToString())),
+                new Button(new Vector2(0, 0), new Vector2(800, 60), "Position", id: "pos", update: (UIElement g) => ((Button)g).SetText(Instance.Scene.Camera.Item1.Transform.Position.ToString())),
+                new Button(new Vector2(0, 60), new Vector2(800, 60), "Euler Angles", id: "ang", update: (UIElement g) => ((Button)g).SetText(Instance.Scene.Camera.Item1.Transform.Rotation.ToString())),
                 new Button(new Vector2(0, 120), new Vector2(400, 60), "FPS", id: "fps", update: (UIElement g) => ((Button)g).SetText("FPS: " + Gameloop.Instance.FPS)),
             }.ToArray();
 

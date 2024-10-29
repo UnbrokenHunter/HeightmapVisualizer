@@ -4,36 +4,18 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components
 {
-    public class CameraComponent : IComponent
+    public class PerspectiveCameraComponent : CameraBase, IComponent
 	{
 		public Gameobject? Gameobject { get; set; }
-		public Rectangle Space { get; private set; } // Screen Space
-		public float Aspect { get; private set; }
-		public Vector2 Fov { get; private set; }
-		public float NearClippingPlane { get; private set; }
-		public float FarClippingPlane { get; private set; }
-		public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.X / 2)));
 
-		public CameraComponent(Rectangle space,
+		public PerspectiveCameraComponent(Rectangle space,
 			float aspect = 16f / 9f, 
 			float fov = 90f,
 			float nearClippingPlane = 0.0001f,
-			float farClippingPlane = 100000f)
-		{
-			this.Space = space;
-			this.Aspect = aspect;
-			this.Fov = new Vector2(fov, fov / aspect);
-			this.NearClippingPlane = nearClippingPlane;
-			this.FarClippingPlane = farClippingPlane;
-		}
+			float farClippingPlane = 100000f) : 
+			base(space, aspect, fov, nearClippingPlane, farClippingPlane) { }
 
-		// Project a 3D point to 2D screen space with perspective
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="point"></param>
-		/// <returns>A Tuple with the vector, and whether or not it is on screen.</returns> // LOOK INTO HOW VERECTOR3 IS IMPLEMENTED. IS IT DEFAWULT TO NULL? 
-		public Tuple<Vector2, bool> ProjectPoint(Vector3 point)
+		public override Tuple<Vector2, bool> ProjectPoint(Vector3 point)
 		{
 			if (Gameobject == null) return null;
 
