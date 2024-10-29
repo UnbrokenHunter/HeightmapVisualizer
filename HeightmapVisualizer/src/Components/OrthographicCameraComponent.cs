@@ -4,10 +4,8 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components
 {
-    public class OrthographicCameraComponent : CameraBase, IComponent
+    public class OrthographicCameraComponent : CameraBase
 	{
-		public Gameobject? Gameobject { get; set; }
-
 		public OrthographicCameraComponent(Rectangle space,
 			float aspect = 16f / 9f, 
 			float fov = 90f,
@@ -42,15 +40,6 @@ namespace HeightmapVisualizer.src.Components
 			}
 
 			return new Tuple<Vector2, bool>(projected, true);
-		}
-
-		public void Init(Gameobject gameobject)
-		{
-			this.Gameobject = gameobject;
-		}
-
-		public void Update()
-		{
 		}
 	}
 }

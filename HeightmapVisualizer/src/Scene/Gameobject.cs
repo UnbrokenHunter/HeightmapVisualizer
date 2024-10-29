@@ -29,7 +29,15 @@ namespace HeightmapVisualizer.src.Scene
 
         public int TryGetComponents<T>(out IComponent[] result)
         {
-            result = Components.FindAll(comp => comp.GetType() == typeof(T)).ToArray();
+            List<IComponent> res = new List<IComponent>();
+			foreach (var component in Components)
+			{
+				if (component is T) // Checks if component is of type T or derives from T
+				{
+					res.Add(component);
+				}
+			}
+			result = res.ToArray();
             return result.Length;
         }
 

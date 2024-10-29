@@ -4,9 +4,11 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Scene
 {
-    public abstract class CameraBase
+    public abstract class CameraBase : IComponent
     {
-        public Rectangle Space { get; private set; } // Screen Space
+		public Gameobject? Gameobject { get; set; }
+
+		public Rectangle Space { get; private set; } // Screen Space
         public float Aspect { get; private set; }
         public Vector2 Fov { get; private set; }
         public float NearClippingPlane { get; private set; }
@@ -19,14 +21,14 @@ namespace HeightmapVisualizer.src.Scene
             float fov = 90f,
             float nearClippingPlane = 0.0001f,
             float farClippingPlane = 100000f,
-            int priorityy = 10)
+            int priority = 10)
         {
             this.Space = space;
             this.Aspect = aspect;
             this.Fov = new Vector2(fov, fov / aspect);
             this.NearClippingPlane = nearClippingPlane;
             this.FarClippingPlane = farClippingPlane;
-            this.Priority = priorityy;
+            this.Priority = priority;
         }
 
 
@@ -37,8 +39,22 @@ namespace HeightmapVisualizer.src.Scene
         /// <returns>A Tuple with the vector, and whether or not it is on screen.</returns>
         public abstract Tuple<Vector2, bool>? ProjectPoint(Vector3 point);
 
+        public void SetPriority(int priority)
+        {
+            this.Priority = priority;
+            Window.Instance.Scene.UpdateSelectedCamera();
         }
-    }
+
+		public void Init(Gameobject gameobject)
+		{
+			this.Gameobject = gameobject;
+		}
+
+		public void Update()
+		{
+		}
+	}
+}
 
 
 //public override Mesh? GetRenderable()

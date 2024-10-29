@@ -12,48 +12,8 @@ namespace HeightmapVisualizer.src.Scene
 
         public Scene(Gameobject[] gameobjects, UIElement[] ui)
         {
-            // Find all Cameras
-            List<(Gameobject, CameraBase)> cams = new();
-            foreach (var gameobj in gameobjects)
-            {
-                foreach (var component in gameobj.Components)
-                {
-                    if (component is CameraBase @base) 
-                        cams.Add((gameobj, @base));
-                }
-            }
-
-            // If no cameras are present, add a default one
-            if (cams.Count > 0)
-            {
-                // Create object
-                var cameraObject = new Gameobject();
-
-                // Create Perspective Camera Component
-                var cameraComponent = new PerspectiveCameraComponent(Window.Instance.Bounds);
-
-                // Add Component to Object
-                cameraObject.AddComponent(cameraComponent);
-
-                // Add new Camera to gameobjects in scene
-                var g = gameobjects.ToList();
-                g.Add(cameraObject);
-                gameobjects = g.ToArray();
-
-                // Add Camera to Cameras List
-                cams.Add((cameraObject, cameraComponent));
-            }
-
-            // Select the first camera found
-            var camera = cams[0];
-            foreach (var cam in  cams)
-            {
-                if (cam.Item2.Priority > camera.Item2.Priority) 
-                    camera = cam;
-            }
-
-            Camera = camera;
             Gameobjects = gameobjects;
+            UpdateSelectedCamera();
             UIElements = ui;
         }
 
@@ -77,7 +37,49 @@ namespace HeightmapVisualizer.src.Scene
             }
         }
 
-        private void RenderCamera(Graphics g)
+        public void UpdateSelectedCamera()
+        {
+			// Find all Cameras
+			List<(Gameobject, CameraBase)> cams = new();
+			foreach (var gameobj in Gameobjects)
+			{
+                if (gameobj.TryGetComponents<CameraBase>(out IComponent[] cam) > 0)
+				    cams.Add((gameobj, (CameraBase)cam[0]));
+			}
+
+			// If no cameras are present, add a default one
+			if (cams.Count <= 0)
+			{
+				// Create object
+				var cameraObject = new Gameobject();
+
+				// Create Perspective Camera Component
+				var cameraComponent = new PerspectiveCameraComponent(Window.Instance.Bounds);
+
+				// Add Component to Object
+				cameraObject.AddComponent(cameraComponent);
+
+				// Add new Camera to gameobjects in scene
+				var g = Gameobjects.ToList();
+				g.Add(cameraObject);
+				Gameobjects = g.ToArray();
+
+				// Add Camera to Cameras List
+				cams.Add((cameraObject, cameraComponent));
+			}
+
+			// Select the first camera found
+			var camera = cams[0];
+			foreach (var cam in cams)
+			{
+				if (cam.Item2.Priority > camera.Item2.Priority)
+					camera = cam;
+			}
+
+			Camera = camera;
+		}
+
+		private void RenderCamera(Graphics g)
         {
             if (Camera.Item1 == null || Camera.Item2 == null)
                 return;

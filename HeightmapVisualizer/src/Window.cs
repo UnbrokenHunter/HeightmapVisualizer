@@ -46,9 +46,12 @@ namespace HeightmapVisualizer.src
         {
             Gameobject camera = new Gameobject()
                 .AddComponent(new ControllerComponent())
-                .AddComponent(new PerspectiveCameraComponent(Bounds));
+                .AddComponent(new PerspectiveCameraComponent(Bounds, priority: 0));
 
-            var values = new float[4, 4];
+			Gameobject camera2 = new Gameobject()
+                .AddComponent(new PerspectiveCameraComponent(Bounds, priority: 1));
+
+			var values = new float[4, 4];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
@@ -103,16 +106,34 @@ namespace HeightmapVisualizer.src
             Gameobject line = new Gameobject()
                 .AddComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10)));
 
-            var objects = new Gameobject[] { cube, camera };
+            var objects = new Gameobject[] { cube, camera, camera2 };
             //objects = objects.Concat(hm).ToArray();
+
+            static void cam(Button button)
+            {
+				foreach (Gameobject game in Instance.Scene.Gameobjects)
+                {
+                    if (game.TryGetComponents<PerspectiveCameraComponent>(out IComponent[] res) != 0) 
+                    {
+                        foreach(PerspectiveCameraComponent perspectiveCamera in res)
+                        {
+                            Console.WriteLine(perspectiveCamera + " prio " + perspectiveCamera.Priority);
+                            perspectiveCamera.SetPriority((perspectiveCamera.Priority + 1) % 2);
+                        }
+                    }
+                }
+
+			}
 
             // CREATE MENU
             UIElement[] ui = new List<UIElement>
 			{
                 new Button(new Vector2(0, 0), new Vector2(800, 60), "Position", id: "pos", update: (UIElement g) => ((Button)g).SetText(Instance.Scene.Camera.Item1.Transform.Position.ToString())),
                 new Button(new Vector2(0, 60), new Vector2(800, 60), "Euler Angles", id: "ang", update: (UIElement g) => ((Button)g).SetText(Instance.Scene.Camera.Item1.Transform.Rotation.ToString())),
-                new Button(new Vector2(0, 120), new Vector2(400, 60), "FPS", id: "fps", update: (UIElement g) => ((Button)g).SetText("FPS: " + Gameloop.Instance.FPS)),
-            }.ToArray();
+				new Button(new Vector2(0, 120), new Vector2(400, 60), "FPS", id: "fps", update: (UIElement g) => ((Button)g).SetText("FPS: " + Gameloop.Instance.FPS)),
+				new Button(new Vector2(0, 180), new Vector2(400, 60), "Camera", id: "cam", onClick: cam),
+				new Button(new Vector2(0, 240), new Vector2(400, 60), "Gameobjs", id: "objs", update: (UIElement g) => ((Button)g).SetText("Object Count: " + Instance.Scene.Gameobjects.Length)),
+			}.ToArray();
 
 			return new src.Scene.Scene(objects, ui);
         }
