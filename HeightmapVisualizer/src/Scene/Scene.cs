@@ -1,5 +1,4 @@
 ﻿using HeightmapVisualizer.src.Components;
-using HeightmapVisualizer.src.Primitives;
 using HeightmapVisualizer.src.UI;
 using System.Numerics;
 
@@ -47,6 +46,11 @@ namespace HeightmapVisualizer.src.Scene
 
             // Select the first camera found
             var camera = cams[0];
+            foreach (var cam in  cams)
+            {
+                if (cam.Item2.Priority > camera.Item2.Priority) 
+                    camera = cam;
+            }
 
             Camera = camera;
             Gameobjects = gameobjects;
