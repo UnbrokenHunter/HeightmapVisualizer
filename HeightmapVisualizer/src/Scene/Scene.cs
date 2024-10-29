@@ -113,15 +113,13 @@ namespace HeightmapVisualizer.src.Scene
 			    var p2 = Camera.Item2.ProjectPoint(part.Item2, bounds);
 			    var p3 = Camera.Item2.ProjectPoint(part.Item3, bounds);
 
-			    static PointF toPointF(Vector2 v) => new(v.X, v.Y);
-
                 // Atleast one point on screen
                 if (p1.Item2 || p2.Item2 || p3.Item2)
                 {
                     var p = new PointF[] {
-                        toPointF(p1.Item1),
-                        toPointF(p2.Item1),
-                        toPointF(p3.Item1)
+                        p1.Item1,
+                        p2.Item1,
+                        p3.Item1
                 };
 
 
