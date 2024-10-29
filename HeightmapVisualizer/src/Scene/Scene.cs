@@ -87,13 +87,17 @@ namespace HeightmapVisualizer.src.Scene
                 return;
 
             List<Tuple<float, MeshComponent>> renderOrder = new();
+            
+            // Get all meshes
             Gameobject[] hasMesh = Gameobjects.Where(e => e.Components.Any(c => c is MeshComponent)).ToArray();
 
             foreach (var gameobject in hasMesh)
             {
 
+                // Get the Mesh component on gameobject
                 if (gameobject.Components.FirstOrDefault(c => c is MeshComponent) is MeshComponent meshComponent)
                 {
+                    // Calculates the distance between camera and the transform's position
                     var distance = Vector3.Distance(Camera.Item1.Transform.Position, gameobject.Transform.Position);
                     renderOrder.Add(new Tuple<float, MeshComponent>(distance, meshComponent));
                 }
@@ -106,7 +110,6 @@ namespace HeightmapVisualizer.src.Scene
         {
             foreach (var part in mesh)
             {
-
 				var bounds = Window.Instance.Bounds;
 
 				var p1 = Camera.Item2.ProjectPoint(part.Item1, bounds);
