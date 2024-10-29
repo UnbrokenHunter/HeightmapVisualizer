@@ -1,5 +1,7 @@
 ﻿using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.UI;
+using HeightmapVisualizer.src.Utilities;
+using System;
 using System.Numerics;
 
 namespace HeightmapVisualizer.src.Scene
@@ -77,9 +79,9 @@ namespace HeightmapVisualizer.src.Scene
 			}
 
 			Camera = camera;
-		}
+        }
 
-		private void RenderCamera(Graphics g)
+        private void RenderCamera(Graphics g)
         {
             if (Camera.Item1 == null || Camera.Item2 == null)
                 return;
@@ -87,7 +89,7 @@ namespace HeightmapVisualizer.src.Scene
             List<Tuple<float, MeshComponent>> renderOrder = new();
             Gameobject[] hasMesh = Gameobjects.Where(e => e.Components.Any(c => c is MeshComponent)).ToArray();
 
-            foreach (var gameobject in hasMesh) 
+            foreach (var gameobject in hasMesh)
             {
 
                 if (gameobject.Components.FirstOrDefault(c => c is MeshComponent) is MeshComponent meshComponent)
@@ -98,10 +100,39 @@ namespace HeightmapVisualizer.src.Scene
             }
 
             // Draw the furthest first, and draw nearer ones on top
-            renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => e.Item2.Render(g, Camera.Item2));
+            renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => RenderMesh(g, e.Item2.Renderable()));
         }
+		private void RenderMesh(Graphics g, (Vector3, Vector3, Vector3, Color, bool)[] mesh) 
+        {
+            foreach (var part in mesh)
+            {
+			var p1 = Camera.Item2.ProjectPoint(part.Item1);
+			var p2 = Camera.Item2.ProjectPoint(part.Item2);
+			var p3 = Camera.Item2.ProjectPoint(part.Item3);
 
-        private void RenderUI(Graphics g)
+			static PointF toPointF(Vector2 v) => new(v.X, v.Y);
+
+                // Atleast one point on screen
+                if (p1.Item2 || p2.Item2 || p3.Item2)
+                {
+                    var p = new PointF[] {
+                        toPointF(p1.Item1),
+                        toPointF(p2.Item1),
+                        toPointF(p3.Item1)
+                };
+
+
+                    // Fill Tri
+                    if (!part.Item5)
+                        g.FillPolygon(ColorLookup.FindOrGetBrush(part.Item4), p);
+
+
+                    g.DrawPolygon(ColorLookup.FindOrGetPen(part.Item4), p);
+                }
+			}
+		}
+
+		private void RenderUI(Graphics g)
         {
             foreach (var ui in UIElements)
             {

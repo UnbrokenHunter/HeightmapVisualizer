@@ -29,38 +29,22 @@ namespace HeightmapVisualizer.src.Components
             faces.ToList().ForEach(e => Faces.Add(e.Points, e));
         }
 
-        public void Render(Graphics g, CameraBase cam)
+        public (Vector3, Vector3, Vector3, Color, bool)[] Renderable()
         {
-            if (gameobject == null)
-                return;
+            List<(Vector3, Vector3, Vector3, Color, bool)> list = new();
 
             // Draw all the edges in the mesh
             foreach (var tri in Tris)
-            { 
-                var p1 = cam.ProjectPoint(gameobject.Transform.ToLocalSpace(tri.Value.V1.LocalPosition, true));
-                var p2 = cam.ProjectPoint(gameobject.Transform.ToLocalSpace(tri.Value.V2.LocalPosition, true));
-                var p3 = cam.ProjectPoint(gameobject.Transform.ToLocalSpace(tri.Value.V3.LocalPosition, true));
-
-                static PointF toPointF(Vector2 v) => new(v.X, v.Y);
-
-                // Atleast one point on screen
-                if (p1.Item2 || p2.Item2 || p3.Item2)
-                {
-                    var p = new PointF[] { 
-                        toPointF(p1.Item1), 
-                        toPointF(p2.Item1), 
-                        toPointF(p3.Item1) 
-                    };
-
-
-                    // Fill Tri
-                    if (!IsWireframe)
-                        g.FillPolygon(ColorLookup.FindOrGetBrush(tri.Value.Face.Color ?? GetColor()), p);
-
-                    
-                    g.DrawPolygon(ColorLookup.FindOrGetPen(tri.Value.Face.Color ?? GetColor()), p);
-                }
+            {
+                list.Add((
+                    gameobject.Transform.ToLocalSpace(tri.Value.V1.LocalPosition, true),
+                    gameobject.Transform.ToLocalSpace(tri.Value.V2.LocalPosition, true),
+                    gameobject.Transform.ToLocalSpace(tri.Value.V3.LocalPosition, true),
+                    tri.Value.Face.Color ?? GetColor(),
+                    IsWireframe));
             }
+
+            return list.ToArray();
         }
 
         #region Properties
