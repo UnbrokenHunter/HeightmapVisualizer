@@ -27,6 +27,12 @@ namespace HeightmapVisualizer.src.Scene
             return this;
         }
 
+        public int TryGetComponents(IComponent component, out IComponent[] result)
+        {
+            result = Components.FindAll(comp => comp.GetType() == component.GetType()).ToArray();
+            return result.Length;
+        }
+
         public virtual void Update()
         {
             foreach (var component in Components)
