@@ -1,16 +1,10 @@
-﻿using HeightmapVisualizer.Components;
-using HeightmapVisualizer.Scene;
+﻿using HeightmapVisualizer.src.Scene;
 using HeightmapVisualizer.src.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HeightmapVisualizer.src.Components
 {
-	public class CameraComponent : IComponent
+    public class CameraComponent : IComponent
 	{
 		public Gameobject? Gameobject { get; set; }
 		public Rectangle Space { get; private set; } // Screen Space

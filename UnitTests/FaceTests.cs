@@ -1,6 +1,6 @@
-﻿using HeightmapVisualizer.Primitives;
-using HeightmapVisualizer.Units;
-using System.Drawing;
+﻿using HeightmapVisualizer.src.Components;
+using System.Numerics;
+using static HeightmapVisualizer.src.Components.MeshComponent;
 
 namespace UnitTests
 {
@@ -18,13 +18,13 @@ namespace UnitTests
                 new Vector3(0, 1, 0)
             };
             var face = new Face(points);
-            var mesh = new Mesh(new Face[] { face });
+            var mesh = new MeshComponent(new Face[] { face });
 
             // Act
-            var tris = face.Triangulate(mesh, Color.Black);
+            face.Triangulate(mesh);
 
             // Assert
-            Assert.Equal(2, tris.Length); // Quad should produce 2 triangles
+            Assert.Equal(2, mesh.Tris.Count); // Quad should produce 2 triangles
         }
 
         [Fact]
@@ -38,13 +38,13 @@ namespace UnitTests
                 new Vector3(1, 1, 0),
             };
             var face = new Face(points);
-            var mesh = new Mesh(new Face[] { face });
+            var mesh = new MeshComponent(new Face[] { face });
 
             // Act
-            var tris = face.Triangulate(mesh, Color.Black);
+            face.Triangulate(mesh);
 
             // Assert
-            Assert.Single(tris); // Quad should produce 2 triangles
+            Assert.Single(mesh.Tris); // Quad should produce 1 triangles
         }
 
         [Fact]
@@ -60,13 +60,13 @@ namespace UnitTests
             new Vector3(0, 1, 0)
             };
             var face = new Face(points);
-            var mesh = new Mesh(new Face[] { face });
+            var mesh = new MeshComponent(new Face[] { face });
 
             // Act
-            var tris = face.Triangulate(mesh, Color.Black);
+            face.Triangulate(mesh);
 
             // Assert
-            Assert.Equal(3, tris.Length); // Pentagon should produce 3 triangles
+            Assert.Equal(3, mesh.Tris.Count); // Pentagon should produce 3 triangles
         }
 
     }

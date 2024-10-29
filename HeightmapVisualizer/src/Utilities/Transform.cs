@@ -24,18 +24,9 @@ namespace HeightmapVisualizer.src.Utilities
             return $"{GetHashCode()},\n\tPosition: {Position},\n\tRotation: {Rotation},\n\tForward: {Forward}";
         }
 
-        public Vector3 ToWorldSpace(Vector3 v)
-        {
-            return Right * v.X + Up * v.Y + Forward * v.Z;
+        public Vector3 ToWorldSpace(Vector3 v) => Right * v.X + Up * v.Y + Forward * v.Z;
 
-        }
-
-        // Test
-        public Vector3 ToLocalSpace(Vector3 v)
-        {
-            return Rotate(v, Rotation);
-
-        }
+        public Vector3 ToLocalSpace(Vector3 v, bool affectPosition = false) => Rotate(v, Rotation) + (affectPosition ? Position : Vector3.Zero);
 
         #region Movement
 

@@ -1,29 +1,16 @@
-﻿using HeightmapVisualizer.Primitives;
+﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Primitives;
+using System.Drawing;
 using System.Numerics;
+using static HeightmapVisualizer.src.Components.MeshComponent;
 
-namespace HeightmapVisualizer.src.Shapes
+namespace HeightmapVisualizer.src.Factories
 {
     /// <summary>
     /// Factory class for creating a cuboid shape.
     /// </summary>
     public static class Cuboid
-    {
-        /// <summary>
-        /// Creates a cuboid mesh with the specified position, rotation, and size, where the position is treated as the center of the cuboid.
-        /// </summary>
-        /// <param name="position">The center position of the cuboid in the scene.</param>
-        /// <param name="rotation">The rotation of the cuboid (as a quaternion).</param>
-        /// <param name="size">The size of the cuboid (width, height, depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static Mesh CreateCentered(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, DrawingMode mode = DrawingMode.None)
-        {
-            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, true);
-            var mesh = new Mesh(faces, color, mode);
-            mesh.Transform.Position = position;
-            mesh.Transform.Rotation = rotation;
-            return mesh;
-        }
+    {  
 
         /// <summary>
         /// Creates a cuboid mesh with the specified position and size, defaulting to no rotation (Quaternion.Identity), where the position is treated as the center of the cuboid.
@@ -32,25 +19,11 @@ namespace HeightmapVisualizer.src.Shapes
         /// <param name="size">The size of the cuboid (width, height, depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static Mesh CreateCentered(Vector3 position, Vector3 size, Color? color = null, DrawingMode mode = DrawingMode.None)
+        public static MeshComponent CreateCentered(Vector3 size, Vector3? position = null)
         {
-            return CreateCentered(position, Quaternion.Identity, size, color, mode);
-        }
-
-        /// <summary>
-        /// Creates a cuboid mesh with the specified position, rotation, and size, where the position is treated as one corner of the cuboid.
-        /// </summary>
-        /// <param name="position">The corner position of the cuboid in the scene.</param>
-        /// <param name="rotation">The rotation of the cuboid (as a quaternion).</param>
-        /// <param name="size">The size of the cuboid (width, height, depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
-        /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static Mesh CreateCorners(Vector3 position, Quaternion rotation, Vector3 size, Color? color = null, DrawingMode mode = DrawingMode.None)
-        {
-            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, false);
-            var mesh = new Mesh(faces, color, mode);
-            mesh.Transform.Position = position;
-            mesh.Transform.Rotation = rotation;
+            var offset = position ?? Vector3.Zero;
+            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, true, offset);
+            var mesh = new MeshComponent(faces);
             return mesh;
         }
 
@@ -59,30 +32,32 @@ namespace HeightmapVisualizer.src.Shapes
         /// </summary>
         /// <param name="position">The corner position of the cuboid in the scene.</param>
         /// <param name="size">The size of the cuboid (width, height, depth).</param>
-        /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static Mesh CreateCorners(Vector3 position, Vector3 size, Color? color = null, DrawingMode mode = DrawingMode.None)
+        public static MeshComponent CreateCorners(Vector3 size, Vector3? position = null)
         {
-            return CreateCorners(position, Quaternion.Identity, size, color, mode);
+            var offset = position ?? Vector3.Zero;
+            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, false, offset);
+            var mesh = new MeshComponent(faces);
+            return mesh;
         }
 
         /// <summary>
         /// Helper method that creates the six faces of the cuboid, with an option to center the vertices or not.
         /// </summary>
-        private static Face[] CreateCuboidFaces(float width, float height, float depth, bool centered)
+        private static Face[] CreateCuboidFaces(float width, float height, float depth, bool centered, Vector3 offset)
         {
             var halfWidth = centered ? width / 2 : 0;
             var halfHeight = centered ? height / 2 : 0;
             var halfDepth = centered ? depth / 2 : 0;
 
-            Vector3 v1 = new Vector3(-halfWidth, -halfHeight, -halfDepth);
-            Vector3 v2 = new Vector3(width - halfWidth, -halfHeight, -halfDepth);
-            Vector3 v3 = new Vector3(width - halfWidth, height - halfHeight, -halfDepth);
-            Vector3 v4 = new Vector3(-halfWidth, height - halfHeight, -halfDepth);
-            Vector3 v5 = new Vector3(-halfWidth, -halfHeight, depth - halfDepth);
-            Vector3 v6 = new Vector3(width - halfWidth, -halfHeight, depth - halfDepth);
-            Vector3 v7 = new Vector3(width - halfWidth, height - halfHeight, depth - halfDepth);
-            Vector3 v8 = new Vector3(-halfWidth, height - halfHeight, depth - halfDepth);
+            Vector3 v1 = new Vector3(-halfWidth, -halfHeight, -halfDepth) + offset;
+            Vector3 v2 = new Vector3(width - halfWidth, -halfHeight, -halfDepth) + offset;
+            Vector3 v3 = new Vector3(width - halfWidth, height - halfHeight, -halfDepth) + offset;
+            Vector3 v4 = new Vector3(-halfWidth, height - halfHeight, -halfDepth) + offset;
+            Vector3 v5 = new Vector3(-halfWidth, -halfHeight, depth - halfDepth) + offset;
+            Vector3 v6 = new Vector3(width - halfWidth, -halfHeight, depth - halfDepth) + offset;
+            Vector3 v7 = new Vector3(width - halfWidth, height - halfHeight, depth - halfDepth) + offset;
+            Vector3 v8 = new Vector3(-halfWidth, height - halfHeight, depth - halfDepth) + offset;
 
             return new Face[]
             {

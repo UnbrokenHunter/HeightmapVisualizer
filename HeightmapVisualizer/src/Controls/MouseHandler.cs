@@ -1,8 +1,6 @@
-﻿
-using HeightmapVisualizer.src;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace HeightmapVisualizer.Controls
+namespace HeightmapVisualizer.src.Controls
 {
     internal static class MouseHandler
     {
@@ -72,8 +70,8 @@ namespace HeightmapVisualizer.Controls
                 sumY += points[i].Y - points[i + 1].Y;
             }
 
-            sumX /= (points.Length);
-            sumY /= (points.Length);
+            sumX /= points.Length;
+            sumY /= points.Length;
 
             return new Vector2(sumX, sumY);
         }

@@ -1,4 +1,4 @@
-﻿namespace HeightmapVisualizer.Controls
+﻿namespace HeightmapVisualizer.src.Controls
 {
     internal class KeyboardHandler
     {
