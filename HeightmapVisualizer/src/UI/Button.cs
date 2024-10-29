@@ -47,16 +47,13 @@ namespace HeightmapVisualizer.src.UI
 
             Console.WriteLine("Clicked");
 
-            if (onClick != null)
-            {
-                onClick(this); // Invoke the delegate
-            }
-        }
+			onClick?.Invoke(this); // Invoke the delegate
+		}
 
         private bool MouseInBounds(Point p)
         {
-            return position.X <= p.X && size.X >= p.X &&
-                position.Y <= p.Y && size.Y >= p.Y;
+            return position.X <= p.X && position.X + size.X >= p.X &&
+                position.Y <= p.Y && position.Y + size.Y >= p.Y;
         }
 
         public void SetText(string text)

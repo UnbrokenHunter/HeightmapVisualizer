@@ -27,9 +27,9 @@ namespace HeightmapVisualizer.src.Scene
             return this;
         }
 
-        public int TryGetComponents(IComponent component, out IComponent[] result)
+        public int TryGetComponents<T>(out IComponent[] result)
         {
-            result = Components.FindAll(comp => comp.GetType() == component.GetType()).ToArray();
+            result = Components.FindAll(comp => comp.GetType() == typeof(T)).ToArray();
             return result.Length;
         }
 
