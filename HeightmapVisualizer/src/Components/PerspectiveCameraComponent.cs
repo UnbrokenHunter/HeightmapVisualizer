@@ -6,15 +6,15 @@ namespace HeightmapVisualizer.src.Components
 {
     public class PerspectiveCameraComponent : CameraBase
 	{
-		public PerspectiveCameraComponent(Rectangle space,
+		public PerspectiveCameraComponent(
 			float aspect = 16f / 9f, 
 			float fov = 90f,
 			float nearClippingPlane = 0.0001f,
 			float farClippingPlane = 100000f, 
 			int priority = 10) : 
-			base(space, aspect, fov, nearClippingPlane, farClippingPlane, priority) { }
+			base(aspect, fov, nearClippingPlane, farClippingPlane, priority) { }
 
-		public override Tuple<Vector2, bool>? ProjectPoint(Vector3 point)
+		public override Tuple<Vector2, bool>? ProjectPoint(Vector3 point, Rectangle bounds)
 		{
 			if (Gameobject == null) return null;
 
@@ -30,11 +30,11 @@ namespace HeightmapVisualizer.src.Components
 			float zClamped = Math.Max(rotatedPoint.Z, NearClippingPlane); // Ensure depth is positive
 
 			// Perform perspective projection
-			Vector2 projected = (pointIn2D * FocalLength) / zClamped + Window.Instance.ScreenCenter;
+			Vector2 projected = (pointIn2D * FocalLength) / zClamped + new Vector2(bounds.Width / 2, bounds.Height / 2);
 
 			// Point Not On Screen
-			if (projected.X > Window.Instance.ScreenSize.X || projected.X < 0 ||
-				projected.Y > Window.Instance.ScreenSize.Y || projected.Y < 0)
+			if (projected.X > bounds.Width || projected.X < 0 ||
+				projected.Y > bounds.Height || projected.Y < 0)
 			{
 				return new Tuple<Vector2, bool>(projected, false);
 			}

@@ -6,15 +6,15 @@ namespace HeightmapVisualizer.src.Components
 {
     public class OrthographicCameraComponent : CameraBase
 	{
-		public OrthographicCameraComponent(Rectangle space,
+		public OrthographicCameraComponent(
 			float aspect = 16f / 9f, 
 			float fov = 90f,
 			float nearClippingPlane = 0.0001f,
 			float farClippingPlane = 100000f,
 			int priority = 10) : 
-			base(space, aspect, fov, nearClippingPlane, farClippingPlane, priority) { }
+			base(aspect, fov, nearClippingPlane, farClippingPlane, priority) { }
 
-		public override Tuple<Vector2, bool>? ProjectPoint(Vector3 point)
+		public override Tuple<Vector2, bool>? ProjectPoint(Vector3 point, Rectangle bounds)
 		{
 			if (Gameobject == null) return null;
 

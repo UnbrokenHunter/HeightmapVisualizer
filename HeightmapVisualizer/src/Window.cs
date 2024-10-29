@@ -46,10 +46,10 @@ namespace HeightmapVisualizer.src
         {
             Gameobject camera = new Gameobject()
                 .AddComponent(new ControllerComponent())
-                .AddComponent(new PerspectiveCameraComponent(Bounds, priority: 0));
+                .AddComponent(new PerspectiveCameraComponent(priority: 0));
 
 			Gameobject camera2 = new Gameobject()
-                .AddComponent(new PerspectiveCameraComponent(Bounds, priority: 1));
+                .AddComponent(new PerspectiveCameraComponent(priority: 1));
 
 			var values = new float[4, 4];
             //Random random = new Random();

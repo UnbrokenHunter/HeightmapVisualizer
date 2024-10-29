@@ -56,7 +56,7 @@ namespace HeightmapVisualizer.src.Scene
 				var cameraObject = new Gameobject();
 
 				// Create Perspective Camera Component
-				var cameraComponent = new PerspectiveCameraComponent(Window.Instance.Bounds);
+				var cameraComponent = new PerspectiveCameraComponent();
 
 				// Add Component to Object
 				cameraObject.AddComponent(cameraComponent);
@@ -106,11 +106,14 @@ namespace HeightmapVisualizer.src.Scene
         {
             foreach (var part in mesh)
             {
-			var p1 = Camera.Item2.ProjectPoint(part.Item1);
-			var p2 = Camera.Item2.ProjectPoint(part.Item2);
-			var p3 = Camera.Item2.ProjectPoint(part.Item3);
 
-			static PointF toPointF(Vector2 v) => new(v.X, v.Y);
+				var bounds = Window.Instance.Bounds;
+
+				var p1 = Camera.Item2.ProjectPoint(part.Item1, bounds);
+			    var p2 = Camera.Item2.ProjectPoint(part.Item2, bounds);
+			    var p3 = Camera.Item2.ProjectPoint(part.Item3, bounds);
+
+			    static PointF toPointF(Vector2 v) => new(v.X, v.Y);
 
                 // Atleast one point on screen
                 if (p1.Item2 || p2.Item2 || p3.Item2)
