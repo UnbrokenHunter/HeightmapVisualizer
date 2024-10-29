@@ -22,6 +22,8 @@ namespace HeightmapVisualizer.src.Controls
         public static event OnClick? OnRightClick;
         public static event OnClick? OnMiddleClick;
 
+        private static MouseButtons lastButton = MouseButtons.None;
+
         public static void Debug(Graphics g)
         {
             g.DrawLines(new Pen(Color.Red), LastMousePositions);
@@ -107,12 +109,15 @@ namespace HeightmapVisualizer.src.Controls
 
         private static void UpdateClicking()
         {
-            if (Control.MouseButtons == MouseButtons.Left)
+            if (Control.MouseButtons == MouseButtons.Left && lastButton != MouseButtons.Left)
                 OnLeftClick?.Invoke(MousePosition);
-            if (Control.MouseButtons == MouseButtons.Right)
+            if (Control.MouseButtons == MouseButtons.Right && lastButton != MouseButtons.Right)
                 OnRightClick?.Invoke(MousePosition);
-            if (Control.MouseButtons == MouseButtons.Middle)
+            if (Control.MouseButtons == MouseButtons.Middle && lastButton != MouseButtons.Middle)
                 OnMiddleClick?.Invoke(MousePosition);
-        }
+
+            lastButton = Control.MouseButtons;
+
+		}
     }
 }
