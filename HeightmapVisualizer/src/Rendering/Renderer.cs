@@ -62,13 +62,13 @@ namespace HeightmapVisualizer.src.Rendering
 
 				if (p1.Item2 && p2.Item2 && p3.Item2)
 				{
-					bresenham(bitmap, (int)p1.Item1.X, (int)p1.Item1.Y, (int)p2.Item1.X, (int)p2.Item1.Y, part.Item4);
-					bresenham(bitmap, (int)p2.Item1.X, (int)p2.Item1.Y, (int)p3.Item1.X, (int)p3.Item1.Y, part.Item4);
-					bresenham(bitmap, (int)p3.Item1.X, (int)p3.Item1.Y, (int)p1.Item1.X, (int)p1.Item1.Y, part.Item4);
+					Bresenham(bitmap, (int)p1.Item1.X, (int)p1.Item1.Y, (int)p2.Item1.X, (int)p2.Item1.Y, part.Item4);
+					Bresenham(bitmap, (int)p2.Item1.X, (int)p2.Item1.Y, (int)p3.Item1.X, (int)p3.Item1.Y, part.Item4);
+					Bresenham(bitmap, (int)p3.Item1.X, (int)p3.Item1.Y, (int)p1.Item1.X, (int)p1.Item1.Y, part.Item4);
 				}
 			}
 		}
-		private static void bresenham(Bitmap bitmap, int x, int y, int x2, int y2, Color color)
+		private static void Bresenham(Bitmap bitmap, int x, int y, int x2, int y2, Color color)
 		{
 			int w = x2 - x;
 			int h = y2 - y;
