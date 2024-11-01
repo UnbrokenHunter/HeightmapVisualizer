@@ -9,6 +9,7 @@ namespace HeightmapVisualizer.src.Scene
 {
     public class Scene
     {
+        private Renderer renderer {  get; set; }
         public (Gameobject, CameraBase) Camera { get; set; }
         public Gameobject[] Gameobjects { get; set; }
         public UIElement[] UIElements { get; set; }
@@ -18,6 +19,7 @@ namespace HeightmapVisualizer.src.Scene
             Gameobjects = gameobjects;
             UpdateSelectedCamera();
             UIElements = ui;
+            renderer = new Renderer(Window.Instance.Width, Window.Instance.Height);
         }
 
         public void Update()
@@ -27,7 +29,7 @@ namespace HeightmapVisualizer.src.Scene
 
         public void Render(Graphics g)
         {
-            Renderer.Render(Camera, Gameobjects, g);
+            g.DrawImage(renderer.Render(Camera, Gameobjects), 0, 0);
 
             RenderUI(g);
         }
