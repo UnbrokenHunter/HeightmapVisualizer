@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Rendering;
 using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Utilities;
 using System;
@@ -26,7 +27,7 @@ namespace HeightmapVisualizer.src.Scene
 
         public void Render(Graphics g)
         {
-            RenderCamera(g);
+            Renderer.Render(Camera, Gameobjects, g);
 
             RenderUI(g);
         }
@@ -80,61 +81,6 @@ namespace HeightmapVisualizer.src.Scene
 
 			Camera = camera;
         }
-
-        private void RenderCamera(Graphics g)
-        {
-            if (Camera.Item1 == null || Camera.Item2 == null)
-                return;
-
-            List<Tuple<float, MeshComponent>> renderOrder = new();
-            
-            // Get all meshes
-            Gameobject[] hasMesh = Gameobjects.Where(e => e.Components.Any(c => c is MeshComponent)).ToArray();
-
-            foreach (var gameobject in hasMesh)
-            {
-
-                // Get the Mesh component on gameobject
-                if (gameobject.Components.FirstOrDefault(c => c is MeshComponent) is MeshComponent meshComponent)
-                {
-                    // Calculates the distance between camera and the transform's position
-                    var distance = Vector3.Distance(Camera.Item1.Transform.Position, gameobject.Transform.Position);
-                    renderOrder.Add(new Tuple<float, MeshComponent>(distance, meshComponent));
-                }
-            }
-
-            // Draw the furthest first, and draw nearer ones on top
-            renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => RenderMesh(g, e.Item2.Renderable()));
-        }
-		private void RenderMesh(Graphics g, (Vector3, Vector3, Vector3, Color, bool)[] mesh) 
-        {
-            foreach (var part in mesh)
-            {
-				var bounds = Window.Instance.Bounds;
-
-				var p1 = Camera.Item2.ProjectPoint(part.Item1, bounds);
-			    var p2 = Camera.Item2.ProjectPoint(part.Item2, bounds);
-			    var p3 = Camera.Item2.ProjectPoint(part.Item3, bounds);
-
-                // Atleast one point on screen
-                if (p1.Item2 || p2.Item2 || p3.Item2)
-                {
-                    var p = new PointF[] {
-                        p1.Item1,
-                        p2.Item1,
-                        p3.Item1
-                };
-
-
-                    // Fill Tri
-                    if (!part.Item5)
-                        g.FillPolygon(ColorLookup.FindOrGetBrush(part.Item4), p);
-
-
-                    g.DrawPolygon(ColorLookup.FindOrGetPen(part.Item4), p);
-                }
-			}
-		}
 
 		private void RenderUI(Graphics g)
         {
