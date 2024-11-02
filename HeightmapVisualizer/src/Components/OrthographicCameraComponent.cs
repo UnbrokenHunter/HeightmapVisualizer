@@ -14,7 +14,7 @@ namespace HeightmapVisualizer.src.Components
 			int priority = 10) : 
 			base(aspect, fov, nearClippingPlane, farClippingPlane, priority) { }
 
-		public override (Vector2, bool) ProjectPoint(Vector3 point, Rectangle bounds)
+		public override GraphicsPipeline.Renderer.ScreenPoint ProjectPoint(Vector3 point, Rectangle bounds)
 		{
 			// Translate point relative to camera position
 			Vector3 translatedPoint = point - Gameobject.Transform.Position;
@@ -32,10 +32,10 @@ namespace HeightmapVisualizer.src.Components
 			if (projected.X > bounds.Width || projected.X < 0 ||
 				projected.Y > bounds.Height || projected.Y < 0)
 			{
-				return (projected, false);
+				return new GraphicsPipeline.Renderer.ScreenPoint(projected, false);
 			}
 
-			return (projected, true);
+			return new GraphicsPipeline.Renderer.ScreenPoint(projected, true);
 		}
 	}
 }

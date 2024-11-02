@@ -27,7 +27,7 @@ namespace HeightmapVisualizer.src.Rendering
 		{
 			ClearBitmap();
 
-			List<(float, ((Vector2, bool), (Vector2, bool), (Vector2, bool), Color, bool)[])> renderOrder = new();
+			List<(float, GraphicsPipeline.Renderer.RenderData[])> renderOrder = new();
 
 			// Get all meshes
 			List<MeshComponent> meshes = new();
@@ -46,18 +46,20 @@ namespace HeightmapVisualizer.src.Rendering
 			renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => GraphicsPipeline.Renderer.RenderTriangle(bitmap, e.Item2));
 
 			return bitmap;
-		}
+	    }
 
-		private static ((Vector2, bool), (Vector2, bool), (Vector2, bool), Color, bool)[] ProjectPoints((Vector3, Vector3, Vector3, Color, bool)[] mesh, (Gameobject, CameraBase) camera)
+
+
+		private static GraphicsPipeline.Renderer.RenderData[] ProjectPoints((Vector3, Vector3, Vector3, Color, bool)[] mesh, (Gameobject, CameraBase) camera)
 		{
-			var points = new ((Vector2, bool), (Vector2, bool), (Vector2, bool), Color, bool)[mesh.Length];
+			var points = new GraphicsPipeline.Renderer.RenderData[mesh.Length];
 
             for (int i = 0; i < mesh.Length; i++)
 			{
                 (Vector3, Vector3, Vector3, Color, bool) part = mesh[i];
                 var bounds = Window.Instance.Bounds;
 
-				points[i] = (
+				points[i] = new GraphicsPipeline.Renderer.RenderData(
                     camera.Item2.ProjectPoint(part.Item1, bounds),
                     camera.Item2.ProjectPoint(part.Item2, bounds), 
 					camera.Item2.ProjectPoint(part.Item3, bounds),

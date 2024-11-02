@@ -35,7 +35,7 @@ namespace HeightmapVisualizer.src.Scene
         /// </summary>
         /// <param name="point"></param>
         /// <returns>A Tuple with the vector, and whether or not it is on screen.</returns>
-        public abstract (Vector2, bool) ProjectPoint(Vector3 point, Rectangle bounds);
+        public abstract GraphicsPipeline.Renderer.ScreenPoint ProjectPoint(Vector3 point, Rectangle bounds);
 
         public void SetPriority(int priority)
         {

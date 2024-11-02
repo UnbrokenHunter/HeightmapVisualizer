@@ -5,20 +5,51 @@ namespace GraphicsPipeline
 {
     public class Renderer
     {
-        public static void RenderTriangle(Bitmap bitmap, ((Vector2, bool), (Vector2, bool), (Vector2, bool), Color, bool)[] mesh)
+        // Define a struct to hold render data for type-specific optimizations
+        public struct RenderData
+        {
+            public ScreenPoint P1 { get; }
+            public ScreenPoint P2 { get; }
+            public ScreenPoint P3 { get; }
+            public Color Color { get; }
+            public bool IsWireframe { get; }
+
+            public RenderData(ScreenPoint p1, ScreenPoint p2, ScreenPoint p3, Color color, bool isWireframe)
+            {
+                P1 = p1;
+                P2 = p2;
+                P3 = p3;
+                Color = color;
+                IsWireframe = isWireframe;
+            }
+        }
+
+        public struct ScreenPoint
+        {
+            public Vector2 Vector2 { get; }
+            public bool OnScreen { get; }
+
+            public ScreenPoint(Vector2 position, bool onScreen)
+            {
+                Vector2 = position;
+                OnScreen = onScreen;
+            }
+        }
+
+        public static void RenderTriangle(Bitmap bitmap, RenderData[] mesh)
         {
             foreach (var part in mesh)
             {
-                if (part.Item1.Item2 || part.Item2.Item2 || part.Item3.Item2)
+                if (part.P1.OnScreen || part.P2.OnScreen || part.P3.OnScreen)
                 {
                     DrawTriangle();
                 }
 
                 void DrawTriangle()
                 {
-                    Bresenham(bitmap, (int)part.Item1.Item1.X, (int)part.Item1.Item1.Y, (int)part.Item2.Item1.X, (int)part.Item2.Item1.Y, part.Item4);
-                    Bresenham(bitmap, (int)part.Item2.Item1.X, (int)part.Item2.Item1.Y, (int)part.Item3.Item1.X, (int)part.Item3.Item1.Y, part.Item4);
-                    Bresenham(bitmap, (int)part.Item3.Item1.X, (int)part.Item3.Item1.Y, (int)part.Item1.Item1.X, (int)part.Item1.Item1.Y, part.Item4);
+                    Bresenham(bitmap, (int)part.P1.Vector2.X, (int)part.P1.Vector2.Y, (int)part.P2.Vector2.X, (int)part.P2.Vector2.Y, part.Color);
+                    Bresenham(bitmap, (int)part.P2.Vector2.X, (int)part.P2.Vector2.Y, (int)part.P3.Vector2.X, (int)part.P3.Vector2.Y, part.Color);
+                    Bresenham(bitmap, (int)part.P3.Vector2.X, (int)part.P3.Vector2.Y, (int)part.P1.Vector2.X, (int)part.P1.Vector2.Y, part.Color);
                 }
             }
         }
