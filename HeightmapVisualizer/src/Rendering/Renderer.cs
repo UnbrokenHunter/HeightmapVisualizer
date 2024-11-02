@@ -26,7 +26,7 @@ namespace HeightmapVisualizer.src.Rendering
 		{
 			ClearBitmap();
 
-			List<Tuple<float, MeshComponent>> renderOrder = new();
+			List<(float, ((Vector2, bool), (Vector2, bool), (Vector2, bool), Color, bool)[])> renderOrder = new();
 
 			// Get all meshes
 			List<MeshComponent> meshes = new();
@@ -35,13 +35,14 @@ namespace HeightmapVisualizer.src.Rendering
 				if (obj.TryGetComponents<MeshComponent>(out IComponent[] m) > 0)
 				{
 					// Calculates the distance between camera and the transform's position
-                    var distance = Vector3.Distance(camera.Item1.Transform.Position, obj.Transform.Position);
-                    renderOrder.Add(new Tuple<float, MeshComponent>(distance, (MeshComponent)m[0]));
+					var distance = Vector3.Distance(camera.Item1.Transform.Position, obj.Transform.Position);
+					var points = (distance, ProjectPoints(((MeshComponent)m[0]).Renderable(), camera));
+                    renderOrder.Add(points);
                 }
             }
 
 			// Draw the furthest first, and draw nearer ones on top
-			renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => RenderMesh(bitmap, ProjectPoints(e.Item2.Renderable(), camera)));
+			renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => RenderMesh(bitmap, e.Item2));
 
 			return bitmap;
 		}
