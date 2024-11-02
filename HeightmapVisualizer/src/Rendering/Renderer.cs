@@ -43,32 +43,45 @@ namespace HeightmapVisualizer.src.Rendering
 			}
 
 			// Draw the furthest first, and draw nearer ones on top
-			renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => RenderMesh(bitmap, e.Item2.Renderable(), camera));
+			renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => RenderMesh(bitmap, ProjectPoints(e.Item2.Renderable(), camera)));
 
 			return bitmap;
 		}
 
-		private static void RenderMesh(Bitmap bitmap, (Vector3, Vector3, Vector3, Color, bool)[] mesh, (Gameobject, CameraBase) camera)
+		private static ((Vector2, bool), (Vector2, bool), (Vector2, bool), Color, bool)[] ProjectPoints((Vector3, Vector3, Vector3, Color, bool)[] mesh, (Gameobject, CameraBase) camera)
+		{
+			var points = new ((Vector2, bool), (Vector2, bool), (Vector2, bool), Color, bool)[mesh.Length];
+
+            for (int i = 0; i < mesh.Length; i++)
+			{
+                (Vector3, Vector3, Vector3, Color, bool) part = mesh[i];
+                var bounds = Window.Instance.Bounds;
+
+				points[i] = (
+                    camera.Item2.ProjectPoint(part.Item1, bounds),
+                    camera.Item2.ProjectPoint(part.Item2, bounds), 
+					camera.Item2.ProjectPoint(part.Item3, bounds),
+					part.Item4,
+					part.Item5
+				);
+			}
+			return points;
+        }
+
+        private static void RenderMesh(Bitmap bitmap, ((Vector2, bool), (Vector2, bool), (Vector2, bool), Color, bool)[] mesh)
 		{
 			foreach (var part in mesh)
 			{
-				var bounds = Window.Instance.Bounds;
-
-				var p1 = camera.Item2.ProjectPoint(part.Item1, bounds);
-				var p2 = camera.Item2.ProjectPoint(part.Item2, bounds);
-				var p3 = camera.Item2.ProjectPoint(part.Item3, bounds);
-
-
-				if (p1.Item2 || p2.Item2 || p3.Item2)
+				if (part.Item1.Item2 || part.Item2.Item2 || part.Item3.Item2)
 				{
 					DrawTriangle();
 				}
 
 				void DrawTriangle()
 				{
-					Bresenham(bitmap, (int)p1.Item1.X, (int)p1.Item1.Y, (int)p2.Item1.X, (int)p2.Item1.Y, part.Item4);
-					Bresenham(bitmap, (int)p2.Item1.X, (int)p2.Item1.Y, (int)p3.Item1.X, (int)p3.Item1.Y, part.Item4);
-					Bresenham(bitmap, (int)p3.Item1.X, (int)p3.Item1.Y, (int)p1.Item1.X, (int)p1.Item1.Y, part.Item4);
+					Bresenham(bitmap, (int)part.Item1.Item1.X, (int)part.Item1.Item1.Y, (int)part.Item2.Item1.X, (int)part.Item2.Item1.Y, part.Item4);
+					Bresenham(bitmap, (int)part.Item2.Item1.X, (int)part.Item2.Item1.Y, (int)part.Item3.Item1.X, (int)part.Item3.Item1.Y, part.Item4);
+					Bresenham(bitmap, (int)part.Item3.Item1.X, (int)part.Item3.Item1.Y, (int)part.Item1.Item1.X, (int)part.Item1.Item1.Y, part.Item4);
 				}
 			}
 		}
