@@ -1,6 +1,5 @@
 ﻿using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Scene;
-using System.Drawing;
 using System.Numerics;
 
 namespace HeightmapVisualizer.src.Rendering
@@ -60,7 +59,7 @@ namespace HeightmapVisualizer.src.Rendering
 				var p3 = camera.Item2.ProjectPoint(part.Item3, bounds);
 
 
-				if (p1.Item2 && p2.Item2 && p3.Item2)
+				if (p1.Item2 || p2.Item2 || p3.Item2)
 				{
 					Bresenham(bitmap, (int)p1.Item1.X, (int)p1.Item1.Y, (int)p2.Item1.X, (int)p2.Item1.Y, part.Item4);
 					Bresenham(bitmap, (int)p2.Item1.X, (int)p2.Item1.Y, (int)p3.Item1.X, (int)p3.Item1.Y, part.Item4);
@@ -88,7 +87,10 @@ namespace HeightmapVisualizer.src.Rendering
 			int numerator = longest >> 1;
 			for (int i = 0; i <= longest; i++)
 			{
-				bitmap.SetPixel(x, y, color);
+				// Only draw it to the screen if it is on the screen
+				if (bitmap.Width > x &&  bitmap.Height > y && 0 <= x && 0 <= y)
+					bitmap.SetPixel(x, y, color);
+				
 				numerator += shortest;
 				if (!(numerator < longest))
 				{
