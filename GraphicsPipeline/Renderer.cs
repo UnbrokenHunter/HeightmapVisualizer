@@ -1,12 +1,12 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
 using System.Numerics;
 
 namespace GraphicsPipeline
 {
     public class Renderer
     {
-        // Define a struct to hold render data for type-specific optimizations
-        public struct RenderData
+        public readonly struct RenderData
         {
             public Vector2 P1 { get; }
             public Vector2 P2 { get; }
@@ -24,6 +24,7 @@ namespace GraphicsPipeline
             }
         }
 
+        [MethodTimer.Time]
         public static void RenderTriangle(Bitmap bitmap, RenderData[] mesh)
         {
             foreach (var part in mesh)
@@ -75,7 +76,7 @@ namespace GraphicsPipeline
             {
                 // Only draw it to the screen if it is on the screen
                 if (bitmap.Width > x1 && bitmap.Height > y1 && 0 <= x1 && 0 <= y1)
-                    bitmap.SetPixel(x1, y1, color);
+                    FastSetPixel(bitmap, x1, y1, color);
                 else
                     break;
 
@@ -92,6 +93,39 @@ namespace GraphicsPipeline
                     y1 += dy2;
                 }
             }
+        }
+
+        public static void FastSetPixel(Bitmap bitmap, int x, int y, Color color)
+        {
+            // Define the area to lock (in this case, the entire bitmap).
+            Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+
+            // Lock the bitmap's bits for read/write access.
+            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+            // Calculate the pixel's position in memory.
+            int bytesPerPixel = 4; // 32bppArgb = 4 bytes per pixel
+            int stride = bmpData.Stride;
+            IntPtr ptr = bmpData.Scan0;
+
+            // Calculate the byte offset for the pixel at (x, y).
+            int offset = (y * stride) + (x * bytesPerPixel);
+
+            // Convert the color to ARGB format.
+            int argb = color.ToArgb();
+
+            // Write the color data to the pixel position in memory.
+            unsafe
+            {
+                byte* pixel = (byte*)ptr + offset;
+                pixel[0] = (byte)(argb);         // Blue
+                pixel[1] = (byte)(argb >> 8);    // Green
+                pixel[2] = (byte)(argb >> 16);   // Red
+                pixel[3] = (byte)(argb >> 24);   // Alpha
+            }
+
+            // Unlock the bits to apply changes.
+            bitmap.UnlockBits(bmpData);
         }
     }
 }

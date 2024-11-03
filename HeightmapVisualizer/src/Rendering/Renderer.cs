@@ -25,31 +25,39 @@ namespace HeightmapVisualizer.src.Rendering
 
         [MethodTimer.Time]
         public Bitmap Render((Gameobject, CameraBase) camera, Gameobject[] objects)
-		{
-			ClearBitmap();
+        {
+            ClearBitmap();
 
-			List<(float, GraphicsPipeline.Renderer.RenderData[])> renderOrder = new();
+            // Preallocate renderOrder with an estimated capacity
+            List<(float, GraphicsPipeline.Renderer.RenderData[])> renderOrder = new(objects.Length);
 
-			// Get all meshes
-			List<MeshComponent> meshes = new();
-			foreach (var obj in objects)
-			{
-				if (obj.TryGetComponents<MeshComponent>(out IComponent[] m) > 0)
-				{
-					// Calculates the distance between camera and the transform's position
-					var distance = Vector3.Distance(camera.Item1.Transform.Position, obj.Transform.Position);
-					var points = (distance, ProjectPoints(((MeshComponent)m[0]).Renderable(), camera));
-                    renderOrder.Add(points);
+            // Process each object without parallelization
+            foreach (var obj in objects)
+            {
+                if (obj.TryGetComponents<MeshComponent>(out IComponent[] m) > 0)
+                {
+                    // Calculate the distance and project points in one step
+                    var meshComponent = (MeshComponent)m[0];
+                    float distance = Vector3.Distance(camera.Item1.Transform.Position, obj.Transform.Position);
+                    GraphicsPipeline.Renderer.RenderData[] projectedData = ProjectPoints(meshComponent.Renderable(), camera);
+
+                    renderOrder.Add((distance, projectedData));
                 }
             }
 
-			// Draw the furthest first, and draw nearer ones on top
-			renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => GraphicsPipeline.Renderer.RenderTriangle(bitmap, e.Item2));
+            // In-place sort for performance without creating additional lists
+            renderOrder.Sort((a, b) => b.Item1.CompareTo(a.Item1));
 
-			return bitmap;
-	    }
+            // Render each triangle in sorted order
+            foreach (var e in renderOrder)
+            {
+                GraphicsPipeline.Renderer.RenderTriangle(bitmap, e.Item2);
+            }
 
-		private static GraphicsPipeline.Renderer.RenderData[] ProjectPoints(RenderableTri[] mesh, (Gameobject, CameraBase) camera)
+            return bitmap;
+        }
+
+        private static GraphicsPipeline.Renderer.RenderData[] ProjectPoints(RenderableTri[] mesh, (Gameobject, CameraBase) camera)
 		{
 			var points = new GraphicsPipeline.Renderer.RenderData[mesh.Length];
 
