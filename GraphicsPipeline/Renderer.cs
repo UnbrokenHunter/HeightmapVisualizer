@@ -24,27 +24,31 @@ namespace GraphicsPipeline
             }
         }
 
-        [MethodTimer.Time]
+        //[MethodTimer.Time]
         public static void RenderTriangle(Bitmap bitmap, RenderData[] mesh)
         {
+            BitmapData bmpData = LockBitmap(bitmap);
+
             foreach (var part in mesh)
             {
                 DrawTriangle();
 
                 void DrawTriangle()
                 {
-                    Bresenham(bitmap, (int)part.P1.X, (int)part.P1.Y, (int)part.P2.X, (int)part.P2.Y, part.Color);
-                    Bresenham(bitmap, (int)part.P2.X, (int)part.P2.Y, (int)part.P3.X, (int)part.P3.Y, part.Color);
-                    Bresenham(bitmap, (int)part.P3.X, (int)part.P3.Y, (int)part.P1.X, (int)part.P1.Y, part.Color);
+                    Bresenham(bmpData, (int)part.P1.X, (int)part.P1.Y, (int)part.P2.X, (int)part.P2.Y, part.Color);
+                    Bresenham(bmpData, (int)part.P2.X, (int)part.P2.Y, (int)part.P3.X, (int)part.P3.Y, part.Color);
+                    Bresenham(bmpData, (int)part.P3.X, (int)part.P3.Y, (int)part.P1.X, (int)part.P1.Y, part.Color);
                 }
             }
+
+            UnlockBitmap(bitmap, bmpData);
         }
 
-        private static void Bresenham(Bitmap bitmap, int x1, int y1, int x2, int y2, Color color)
+        private static void Bresenham(BitmapData bmpData, int x1, int y1, int x2, int y2, Color color)
         {
             // Point 1 is outside of bitmap
-            if (!(x1 >= 0 && x1 < bitmap.Width
-                && y1 >= 0 && y1 < bitmap.Height))
+            if (!(x1 >= 0 && x1 < bmpData.Width
+                && y1 >= 0 && y1 < bmpData.Height))
             {
                 // Swaps starting point
                 // Will draw line starting with point on screen, until no longer on screen
@@ -75,8 +79,8 @@ namespace GraphicsPipeline
             for (int i = 0; i <= longest; i++)
             {
                 // Only draw it to the screen if it is on the screen
-                if (bitmap.Width > x1 && bitmap.Height > y1 && 0 <= x1 && 0 <= y1)
-                    FastSetPixel(bitmap, x1, y1, color);
+                if (bmpData.Width > x1 && bmpData.Height > y1 && 0 <= x1 && 0 <= y1)
+                    FastSetPixel(bmpData, x1, y1, color);
                 else
                     break;
 
@@ -95,16 +99,25 @@ namespace GraphicsPipeline
             }
         }
 
-        public static void FastSetPixel(Bitmap bitmap, int x, int y, Color color)
+        private static BitmapData LockBitmap(Bitmap bitmap)
         {
             // Define the area to lock (in this case, the entire bitmap).
             Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
 
             // Lock the bitmap's bits for read/write access.
-            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            return bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+        }
 
+        private static void UnlockBitmap(Bitmap bitmap, BitmapData bmpData)
+        {
+            // Unlock the bits to apply changes.
+            bitmap.UnlockBits(bmpData);
+        }
+
+        private static void FastSetPixel(BitmapData bmpData, int x, int y, Color color)
+        {
             // Calculate the pixel's position in memory.
-            int bytesPerPixel = 4; // 32bppArgb = 4 bytes per pixel
+            const int bytesPerPixel = 4; // 32bppArgb = 4 bytes per pixel
             int stride = bmpData.Stride;
             IntPtr ptr = bmpData.Scan0;
 
@@ -123,9 +136,6 @@ namespace GraphicsPipeline
                 pixel[2] = (byte)(argb >> 16);   // Red
                 pixel[3] = (byte)(argb >> 24);   // Alpha
             }
-
-            // Unlock the bits to apply changes.
-            bitmap.UnlockBits(bmpData);
         }
     }
 }
