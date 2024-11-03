@@ -109,19 +109,18 @@ namespace GraphicsPipeline.Rasterization
 
         private static bool IsPointOnScreen(BitmapData bmpData, int x1, int y1)
         {
-            return bmpData.Width > x1 && bmpData.Height > y1 && 0 <= x1 && 0 <= y1;
+            return x1 >= 0 && x1 < bmpData.Width && y1 >= 0 && y1 < bmpData.Height;
         }
 
         private static bool IsPointInTriangle(int x, int y, Vector2 a, Vector2 b, Vector2 c)
         {
+            // Calculate the cross-products for each edge
             float cross1 = (b.X - a.X) * (y - a.Y) - (b.Y - a.Y) * (x - a.X);
             float cross2 = (c.X - b.X) * (y - b.Y) - (c.Y - b.Y) * (x - b.X);
             float cross3 = (a.X - c.X) * (y - c.Y) - (a.Y - c.Y) * (x - c.X);
 
-            bool hasNegative = (cross1 < 0) || (cross2 < 0) || (cross3 < 0);
-            bool hasPositive = (cross1 > 0) || (cross2 > 0) || (cross3 > 0);
-
-            return !(hasNegative && hasPositive);
+            // Early-out if any two cross-products have opposite signs (not in triangle)
+            return (cross1 >= 0 && cross2 >= 0 && cross3 >= 0) || (cross1 <= 0 && cross2 <= 0 && cross3 <= 0);
         }
     }
 }
