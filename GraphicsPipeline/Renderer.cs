@@ -8,13 +8,13 @@ namespace GraphicsPipeline
         // Define a struct to hold render data for type-specific optimizations
         public struct RenderData
         {
-            public ScreenPoint P1 { get; }
-            public ScreenPoint P2 { get; }
-            public ScreenPoint P3 { get; }
+            public Vector2 P1 { get; }
+            public Vector2 P2 { get; }
+            public Vector2 P3 { get; }
             public Color Color { get; }
             public bool IsWireframe { get; }
 
-            public RenderData(ScreenPoint p1, ScreenPoint p2, ScreenPoint p3, Color color, bool isWireframe)
+            public RenderData(Vector2 p1, Vector2 p2, Vector2 p3, Color color, bool isWireframe)
             {
                 P1 = p1;
                 P2 = p2;
@@ -24,32 +24,17 @@ namespace GraphicsPipeline
             }
         }
 
-        public struct ScreenPoint
-        {
-            public Vector2 Vector2 { get; }
-            public bool OnScreen { get; }
-
-            public ScreenPoint(Vector2 position, bool onScreen)
-            {
-                Vector2 = position;
-                OnScreen = onScreen;
-            }
-        }
-
         public static void RenderTriangle(Bitmap bitmap, RenderData[] mesh)
         {
             foreach (var part in mesh)
             {
-                if (part.P1.OnScreen || part.P2.OnScreen || part.P3.OnScreen)
-                {
-                    DrawTriangle();
-                }
+                DrawTriangle();
 
                 void DrawTriangle()
                 {
-                    Bresenham(bitmap, (int)part.P1.Vector2.X, (int)part.P1.Vector2.Y, (int)part.P2.Vector2.X, (int)part.P2.Vector2.Y, part.Color);
-                    Bresenham(bitmap, (int)part.P2.Vector2.X, (int)part.P2.Vector2.Y, (int)part.P3.Vector2.X, (int)part.P3.Vector2.Y, part.Color);
-                    Bresenham(bitmap, (int)part.P3.Vector2.X, (int)part.P3.Vector2.Y, (int)part.P1.Vector2.X, (int)part.P1.Vector2.Y, part.Color);
+                    Bresenham(bitmap, (int)part.P1.X, (int)part.P1.Y, (int)part.P2.X, (int)part.P2.Y, part.Color);
+                    Bresenham(bitmap, (int)part.P2.X, (int)part.P2.Y, (int)part.P3.X, (int)part.P3.Y, part.Color);
+                    Bresenham(bitmap, (int)part.P3.X, (int)part.P3.Y, (int)part.P1.X, (int)part.P1.Y, part.Color);
                 }
             }
         }

@@ -2,6 +2,7 @@
 using HeightmapVisualizer.src.Scene;
 using System.Numerics;
 using GraphicsPipeline;
+using static HeightmapVisualizer.src.Components.MeshComponent;
 
 namespace HeightmapVisualizer.src.Rendering
 {
@@ -48,23 +49,21 @@ namespace HeightmapVisualizer.src.Rendering
 			return bitmap;
 	    }
 
-
-
-		private static GraphicsPipeline.Renderer.RenderData[] ProjectPoints((Vector3, Vector3, Vector3, Color, bool)[] mesh, (Gameobject, CameraBase) camera)
+		private static GraphicsPipeline.Renderer.RenderData[] ProjectPoints(RenderableTri[] mesh, (Gameobject, CameraBase) camera)
 		{
 			var points = new GraphicsPipeline.Renderer.RenderData[mesh.Length];
 
             for (int i = 0; i < mesh.Length; i++)
 			{
-                (Vector3, Vector3, Vector3, Color, bool) part = mesh[i];
+                RenderableTri part = mesh[i];
                 var bounds = Window.Instance.Bounds;
 
 				points[i] = new GraphicsPipeline.Renderer.RenderData(
-                    camera.Item2.ProjectPoint(part.Item1, bounds),
-                    camera.Item2.ProjectPoint(part.Item2, bounds), 
-					camera.Item2.ProjectPoint(part.Item3, bounds),
-					part.Item4,
-					part.Item5
+					camera.Item2.ProjectPoint(part.P1, bounds),
+                    camera.Item2.ProjectPoint(part.P2, bounds), 
+					camera.Item2.ProjectPoint(part.P3, bounds),
+					part.Color,
+					part.IsWireframe
 				);
 			}
 			return points;
