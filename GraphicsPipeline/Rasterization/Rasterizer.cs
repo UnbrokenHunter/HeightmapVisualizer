@@ -22,6 +22,7 @@ namespace GraphicsPipeline.Rasterization
             BitmapManipulation.UnlockBitmap(bitmap, bmpData);
         }
 
+        //[MethodTimer.Time]
         private static void FillTriangle(BitmapData bmpData, RenderData part)
         {
             if (!(IsPointOnScreen(bmpData, (int)part.P1.X, (int)part.P1.Y) ||
@@ -29,15 +30,17 @@ namespace GraphicsPipeline.Rasterization
                 IsPointOnScreen(bmpData, (int)part.P3.X, (int)part.P3.Y)))
                 return;
 
-            int startX = Math.Min((int)part.P1.X, Math.Min((int)part.P2.X, (int)part.P3.X));
-            int startY = Math.Min((int)part.P1.Y, Math.Min((int)part.P2.Y, (int)part.P3.Y));
-            int endX = Math.Max((int)part.P1.X, Math.Max((int)part.P2.X, (int)part.P3.X));
-            int endY = Math.Max((int)part.P1.Y, Math.Max((int)part.P2.Y, (int)part.P3.Y));
+            // Clamping beforehand saves ~50ms per cycle
+            int startX = Math.Clamp(Math.Min((int)part.P1.X, Math.Min((int)part.P2.X, (int)part.P3.X)), 0, bmpData.Width);
+            int startY = Math.Clamp(Math.Min((int)part.P1.Y, Math.Min((int)part.P2.Y, (int)part.P3.Y)), 0, bmpData.Height);
+            int endX = Math.Clamp(Math.Max((int)part.P1.X, Math.Max((int)part.P2.X, (int)part.P3.X)), 0, bmpData.Width);
+            int endY = Math.Clamp(Math.Max((int)part.P1.Y, Math.Max((int)part.P2.Y, (int)part.P3.Y)), 0, bmpData.Height);
+
             for (int i = startX; i < endX; i++)
             {
                 for (int j = startY; j < endY; j++)
                 {
-                    if (IsPointOnScreen(bmpData, i, j) && IsPointInTriangle(i, j, part.P1, part.P2, part.P3))
+                    if (IsPointInTriangle(i, j, part.P1, part.P2, part.P3))
                         BitmapManipulation.FastSetPixel(bmpData, i, j, part.Color);
                 }
             }
