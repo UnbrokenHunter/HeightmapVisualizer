@@ -1,6 +1,7 @@
 ﻿
 using System.Drawing.Imaging;
 using System.Drawing;
+using System.Numerics;
 
 namespace GraphicsPipeline.Rasterization
 {
@@ -9,7 +10,7 @@ namespace GraphicsPipeline.Rasterization
         //[MethodTimer.Time]
         internal static void RenderTriangle(Bitmap bitmap, RenderData[] mesh)
         {
-            BitmapData bmpData = LockBitmap(bitmap);
+            BitmapData bmpData = BitmapManipulation.LockBitmap(bitmap);
 
             foreach (var part in mesh)
             {
@@ -23,7 +24,9 @@ namespace GraphicsPipeline.Rasterization
                 }
             }
 
-            UnlockBitmap(bitmap, bmpData);
+            BitmapManipulation.UnlockBitmap(bitmap, bmpData);
+        }
+
         }
 
         private static void Bresenham(BitmapData bmpData, int x1, int y1, int x2, int y2, Color color)
@@ -62,7 +65,7 @@ namespace GraphicsPipeline.Rasterization
             {
                 // Only draw it to the screen if it is on the screen
                 if (bmpData.Width > x1 && bmpData.Height > y1 && 0 <= x1 && 0 <= y1)
-                    FastSetPixel(bmpData, x1, y1, color);
+                    BitmapManipulation.FastSetPixel(bmpData, x1, y1, color);
                 else
                     break;
 
@@ -78,45 +81,6 @@ namespace GraphicsPipeline.Rasterization
                     x1 += dx2;
                     y1 += dy2;
                 }
-            }
-        }
-
-        private static BitmapData LockBitmap(Bitmap bitmap)
-        {
-            // Define the area to lock (in this case, the entire bitmap).
-            Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-
-            // Lock the bitmap's bits for read/write access.
-            return bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-        }
-
-        private static void UnlockBitmap(Bitmap bitmap, BitmapData bmpData)
-        {
-            // Unlock the bits to apply changes.
-            bitmap.UnlockBits(bmpData);
-        }
-
-        private static void FastSetPixel(BitmapData bmpData, int x, int y, Color color)
-        {
-            // Calculate the pixel's position in memory.
-            const int bytesPerPixel = 4; // 32bppArgb = 4 bytes per pixel
-            int stride = bmpData.Stride;
-            IntPtr ptr = bmpData.Scan0;
-
-            // Calculate the byte offset for the pixel at (x, y).
-            int offset = (y * stride) + (x * bytesPerPixel);
-
-            // Convert the color to ARGB format.
-            int argb = color.ToArgb();
-
-            // Write the color data to the pixel position in memory.
-            unsafe
-            {
-                byte* pixel = (byte*)ptr + offset;
-                pixel[0] = (byte)(argb);         // Blue
-                pixel[1] = (byte)(argb >> 8);    // Green
-                pixel[2] = (byte)(argb >> 16);   // Red
-                pixel[3] = (byte)(argb >> 24);   // Alpha
             }
         }
     }
