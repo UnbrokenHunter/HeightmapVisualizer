@@ -12,12 +12,14 @@ namespace GraphicsPipeline.Rasterization
         {
             BitmapData bmpData = BitmapManipulation.LockBitmap(bitmap);
 
-            foreach (var part in mesh)
+            Parallel.For(0, mesh.Length, i =>
             {
+                var part = mesh[i];
+
                 DrawTriangle(bmpData, (int)part.P1.X, (int)part.P1.Y, (int)part.P2.X, (int)part.P2.Y, (int)part.P3.X, (int)part.P3.Y, part.Color);
 
-                FillTriangle(bmpData, part);
-            }
+                    FillTriangle(bmpData, part);
+            });
 
             BitmapManipulation.UnlockBitmap(bitmap, bmpData);
         }
