@@ -71,8 +71,8 @@ namespace HeightmapVisualizer.src
                             var pointX = points[i].X;
                             var pointZ = points[i].Z;
 
-                            var size1 = 8f;
-                            var size2 = 8f;
+                            var size1 = 4f;
+                            var size2 = 4f;
 
                             var x = posX + pointX; // X axis
                             var z = posZ + pointZ;
@@ -82,10 +82,10 @@ namespace HeightmapVisualizer.src
                             var f1 = MathF.Sin((input) / size1);
                             var f2 = MathF.Sin((input) / size2);
 
-                            var height = 30;
-                            var output = (f1 + f2) / height;
+                            var height = 0.5f;
+                            var output = (f1) / height;
 
-                            points[i] += new Vector3(0, output, 0);
+                            points[i] = new Vector3(pointX, output, pointZ);
 
                         }
                     }
@@ -95,7 +95,7 @@ namespace HeightmapVisualizer.src
 
             }
 
-            var values = new float[50, 50];
+            var values = new float[50, 5];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
