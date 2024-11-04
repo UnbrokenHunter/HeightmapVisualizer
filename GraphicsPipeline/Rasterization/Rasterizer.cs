@@ -12,15 +12,13 @@ namespace GraphicsPipeline.Rasterization
         {
             BitmapData bmpData = BitmapManipulation.LockBitmap(bitmap);
 
-            Parallel.For(0, mesh.Length, i =>
+            foreach (var part in mesh)
             {
-                var part = mesh[i];
-
                 DrawTriangle(bmpData, (int)part.P1.X, (int)part.P1.Y, (int)part.P2.X, (int)part.P2.Y, (int)part.P3.X, (int)part.P3.Y, part.Color);
 
                 if (!part.IsWireframe)
                     FillTriangle(bmpData, part);
-            });
+            }
 
             BitmapManipulation.UnlockBitmap(bitmap, bmpData);
         }
@@ -40,8 +38,7 @@ namespace GraphicsPipeline.Rasterization
             int endX = Math.Min(bmpData.Width - 1, (int)Math.Ceiling(Math.Max(part.P1.X, Math.Max(part.P2.X, part.P3.X))));
             int endY = Math.Min(bmpData.Height - 1, (int)Math.Ceiling(Math.Max(part.P1.Y, Math.Max(part.P2.Y, part.P3.Y))));
 
-            // Doing in parralel saves ~200ms per cycle
-            Parallel.For(startX, endX, i =>
+            for (int i = startX; i < endX; i++)
             {
                 for (int j = startY; j < endY; j++)
                 {
@@ -50,7 +47,7 @@ namespace GraphicsPipeline.Rasterization
                         BitmapManipulation.FastSetPixel(bmpData, i, j, part.Color);
                     }
                 }
-            });
+            }
         }
 
         private static void DrawTriangle(BitmapData bmpData, int x1, int y1, int x2, int y2, int x3, int y3, Color color)
