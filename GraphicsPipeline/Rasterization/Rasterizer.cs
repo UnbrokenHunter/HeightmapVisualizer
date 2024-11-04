@@ -31,19 +31,23 @@ namespace GraphicsPipeline.Rasterization
                 return;
 
             // Clamping beforehand saves ~50ms per cycle
-            int startX = Math.Clamp(Math.Min((int)part.P1.X, Math.Min((int)part.P2.X, (int)part.P3.X)), 0, bmpData.Width);
-            int startY = Math.Clamp(Math.Min((int)part.P1.Y, Math.Min((int)part.P2.Y, (int)part.P3.Y)), 0, bmpData.Height);
-            int endX = Math.Clamp(Math.Max((int)part.P1.X, Math.Max((int)part.P2.X, (int)part.P3.X)), 0, bmpData.Width);
-            int endY = Math.Clamp(Math.Max((int)part.P1.Y, Math.Max((int)part.P2.Y, (int)part.P3.Y)), 0, bmpData.Height);
+            // Calculate bounding box with edge equations
+            int startX = Math.Max(0, (int)Math.Floor(Math.Min(part.P1.X, Math.Min(part.P2.X, part.P3.X))));
+            int startY = Math.Max(0, (int)Math.Floor(Math.Min(part.P1.Y, Math.Min(part.P2.Y, part.P3.Y))));
+            int endX = Math.Min(bmpData.Width - 1, (int)Math.Ceiling(Math.Max(part.P1.X, Math.Max(part.P2.X, part.P3.X))));
+            int endY = Math.Min(bmpData.Height - 1, (int)Math.Ceiling(Math.Max(part.P1.Y, Math.Max(part.P2.Y, part.P3.Y))));
 
-            for (int i = startX; i < endX; i++)
+            // Doing in parralel saves ~200ms per cycle
+            Parallel.For(startX, endX, i =>
             {
                 for (int j = startY; j < endY; j++)
                 {
                     if (IsPointInTriangle(i, j, part.P1, part.P2, part.P3))
+                    {
                         BitmapManipulation.FastSetPixel(bmpData, i, j, part.Color);
+                    }
                 }
-            }
+            });
         }
 
         private static void DrawTriangle(BitmapData bmpData, int x1, int y1, int x2, int y2, int x3, int y3, Color color)
