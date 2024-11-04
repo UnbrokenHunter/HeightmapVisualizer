@@ -11,6 +11,7 @@ namespace HeightmapVisualizer.src
         public readonly double TargetFPS;
         public double FPS {  get; private set; }
         public double DeltaTime { get; private set; }
+        public double Time { get; private set; }
 
 
         private const double fpsSamplePeriod = 1.0;
@@ -56,9 +57,9 @@ namespace HeightmapVisualizer.src
         private void Loop(object? sender, EventArgs e)
         {
             // Calculate delta time
-            double currentTime = stopwatch.Elapsed.TotalSeconds;
-            DeltaTime = currentTime - previousTime;
-            previousTime = currentTime;
+            Time = stopwatch.Elapsed.TotalSeconds;
+            DeltaTime = Time - previousTime;
+            previousTime = Time;
 
             // Update game logic
             Update();
