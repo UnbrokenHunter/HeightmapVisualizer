@@ -12,13 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Drawing.Common">
-      <HintPath>..\..\..\..\..\..\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\6.0.33\ref\net6.0\System.Drawing.Common.dll</HintPath>
-    </Reference>
+    <Folder Include="Geometry\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Geometry\" />
+    <Reference Include="System.Drawing.Common">
+      <HintPath>System.Drawing.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
