@@ -23,7 +23,7 @@ namespace HeightmapVisualizer.src.Rendering
 		}
 
         [MethodTimer.Time]
-        public Bitmap Render((Gameobject, CameraBase) camera, Gameobject[] objects)
+        public Bitmap Render((Gameobject, Camera) camera, Gameobject[] objects)
         {
             ClearBitmap();
 
@@ -52,7 +52,7 @@ namespace HeightmapVisualizer.src.Rendering
             return bitmap;
         }
 
-        private static GraphicsPipeline.RenderData[] ProjectPoints(RenderableTri[] mesh, (Gameobject, CameraBase) camera)
+        private static GraphicsPipeline.RenderData[] ProjectPoints(RenderableTri[] mesh, (Gameobject, Camera) camera)
 		{
 			var points = new GraphicsPipeline.RenderData[mesh.Length];
 

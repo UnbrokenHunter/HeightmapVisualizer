@@ -10,7 +10,7 @@ namespace HeightmapVisualizer.src.Scene
     public class Scene
     {
         private Renderer renderer {  get; set; }
-        public (Gameobject, CameraBase) Camera { get; set; }
+        public (Gameobject, Camera) Camera { get; set; }
         public Gameobject[] Gameobjects { get; set; }
         public UIElement[] UIElements { get; set; }
 
@@ -45,11 +45,11 @@ namespace HeightmapVisualizer.src.Scene
         public void UpdateSelectedCamera()
         {
 			// Find all Cameras
-			List<(Gameobject, CameraBase)> cams = new();
+			List<(Gameobject, Camera)> cams = new();
 			foreach (var gameobj in Gameobjects)
 			{
-                if (gameobj.TryGetComponents<CameraBase>(out IComponent[] cam) > 0)
-				    cams.Add((gameobj, (CameraBase)cam[0]));
+                if (gameobj.TryGetComponents<Camera>(out IComponent[] cam) > 0)
+				    cams.Add((gameobj, (Camera)cam[0]));
 			}
 
 			// If no cameras are present, add a default one

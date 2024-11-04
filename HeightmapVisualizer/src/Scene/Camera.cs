@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Scene
 {
-    public abstract class CameraBase : IComponent
+    public abstract class Camera : IComponent
     {
 		public Gameobject? Gameobject { get; set; }
 
@@ -15,7 +15,7 @@ namespace HeightmapVisualizer.src.Scene
         public int Priority { get; private set; }
         public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.X / 2)));
 
-        public CameraBase(
+        public Camera(
             float aspect = 16f / 9f,
             float fov = 90f,
             float nearClippingPlane = 0.0001f,
