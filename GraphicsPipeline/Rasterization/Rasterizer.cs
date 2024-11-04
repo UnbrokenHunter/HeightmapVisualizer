@@ -18,6 +18,7 @@ namespace GraphicsPipeline.Rasterization
 
                 DrawTriangle(bmpData, (int)part.P1.X, (int)part.P1.Y, (int)part.P2.X, (int)part.P2.Y, (int)part.P3.X, (int)part.P3.Y, part.Color);
 
+                if (!part.IsWireframe)
                     FillTriangle(bmpData, part);
             });
 
