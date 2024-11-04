@@ -48,10 +48,10 @@ namespace HeightmapVisualizer.src
                 .AddComponent(new ControllerComponent())
                 .AddComponent(new PerspectiveCameraComponent(priority: 0));
 
-			Gameobject camera2 = new Gameobject()
+			Gameobject camera2 = new Gameobject(new Vector3(-0.5f, -0.5f, 1.5f))
                 .AddComponent(new PerspectiveCameraComponent(priority: 1));
 
-			var values = new float[4, 4];
+			var values = new float[7, 4];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
@@ -61,10 +61,15 @@ namespace HeightmapVisualizer.src
                 }
             }
 
-            Gameobject[,] heightmap = Heightmap.CreateCorners(values, 1, Vector3.One);
+            Gameobject[,] heightmap = Heightmap.CreateCorners(values, 1, new Vector3(1, 1, 5));
             Gameobject[] hm = Heightmap.Convert2DArrayTo1DArray(heightmap);
+            hm.ToList().ForEach(g =>
+            {
+                g.TryGetComponents<MeshComponent>(out IComponent[] m);
+                ((MeshComponent)m[0]).SetWireframe(true);
+            });
 
-            Gameobject cube = new Gameobject(new Vector3(-1, -1, -1))
+            Gameobject cube = new Gameobject(new Vector3(-1, -1, 2))
                 .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green).SetWireframe(true));
             Gameobject cube2 = new Gameobject(new Vector3(-5, 2, 0))
                 .AddComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1)));
@@ -100,14 +105,14 @@ namespace HeightmapVisualizer.src
                 }
             }
 
-            cube.AddComponent(new ScriptableComponent(null, move));
+            //cube.AddComponent(new ScriptableComponent(null, move));
 
 
             Gameobject line = new Gameobject()
                 .AddComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10)));
 
             var objects = new Gameobject[] { cube, camera, camera2 };
-            //objects = objects.Concat(hm).ToArray();
+            objects = objects.Concat(hm).ToArray();
 
             static void cam(Button button)
             {
