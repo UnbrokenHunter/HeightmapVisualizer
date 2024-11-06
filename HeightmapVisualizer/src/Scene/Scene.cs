@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Rendering;
 using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Utilities;
 using System;
@@ -8,7 +9,8 @@ namespace HeightmapVisualizer.src.Scene
 {
     public class Scene
     {
-        public (Gameobject, CameraBase) Camera { get; set; }
+        private Renderer renderer {  get; set; }
+        public (Gameobject, Camera) Camera { get; set; }
         public Gameobject[] Gameobjects { get; set; }
         public UIElement[] UIElements { get; set; }
 
@@ -17,6 +19,7 @@ namespace HeightmapVisualizer.src.Scene
             Gameobjects = gameobjects;
             UpdateSelectedCamera();
             UIElements = ui;
+            renderer = new Renderer(Window.Instance.Width, Window.Instance.Height);
         }
 
         public void Update()
@@ -26,7 +29,7 @@ namespace HeightmapVisualizer.src.Scene
 
         public void Render(Graphics g)
         {
-            RenderCamera(g);
+            g.DrawImage(renderer.Render(Camera, Gameobjects), 0, 0);
 
             RenderUI(g);
         }
@@ -42,11 +45,11 @@ namespace HeightmapVisualizer.src.Scene
         public void UpdateSelectedCamera()
         {
 			// Find all Cameras
-			List<(Gameobject, CameraBase)> cams = new();
+			List<(Gameobject, Camera)> cams = new();
 			foreach (var gameobj in Gameobjects)
 			{
-                if (gameobj.TryGetComponents<CameraBase>(out IComponent[] cam) > 0)
-				    cams.Add((gameobj, (CameraBase)cam[0]));
+                if (gameobj.TryGetComponents<Camera>(out IComponent[] cam) > 0)
+				    cams.Add((gameobj, (Camera)cam[0]));
 			}
 
 			// If no cameras are present, add a default one
@@ -80,61 +83,6 @@ namespace HeightmapVisualizer.src.Scene
 
 			Camera = camera;
         }
-
-        private void RenderCamera(Graphics g)
-        {
-            if (Camera.Item1 == null || Camera.Item2 == null)
-                return;
-
-            List<Tuple<float, MeshComponent>> renderOrder = new();
-            
-            // Get all meshes
-            Gameobject[] hasMesh = Gameobjects.Where(e => e.Components.Any(c => c is MeshComponent)).ToArray();
-
-            foreach (var gameobject in hasMesh)
-            {
-
-                // Get the Mesh component on gameobject
-                if (gameobject.Components.FirstOrDefault(c => c is MeshComponent) is MeshComponent meshComponent)
-                {
-                    // Calculates the distance between camera and the transform's position
-                    var distance = Vector3.Distance(Camera.Item1.Transform.Position, gameobject.Transform.Position);
-                    renderOrder.Add(new Tuple<float, MeshComponent>(distance, meshComponent));
-                }
-            }
-
-            // Draw the furthest first, and draw nearer ones on top
-            renderOrder.OrderBy(e => -e.Item1).ToList().ForEach(e => RenderMesh(g, e.Item2.Renderable()));
-        }
-		private void RenderMesh(Graphics g, (Vector3, Vector3, Vector3, Color, bool)[] mesh) 
-        {
-            foreach (var part in mesh)
-            {
-				var bounds = Window.Instance.Bounds;
-
-				var p1 = Camera.Item2.ProjectPoint(part.Item1, bounds);
-			    var p2 = Camera.Item2.ProjectPoint(part.Item2, bounds);
-			    var p3 = Camera.Item2.ProjectPoint(part.Item3, bounds);
-
-                // Atleast one point on screen
-                if (p1.Item2 || p2.Item2 || p3.Item2)
-                {
-                    var p = new PointF[] {
-                        p1.Item1,
-                        p2.Item1,
-                        p3.Item1
-                };
-
-
-                    // Fill Tri
-                    if (!part.Item5)
-                        g.FillPolygon(ColorLookup.FindOrGetBrush(part.Item4), p);
-
-
-                    g.DrawPolygon(ColorLookup.FindOrGetPen(part.Item4), p);
-                }
-			}
-		}
 
 		private void RenderUI(Graphics g)
         {

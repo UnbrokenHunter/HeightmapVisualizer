@@ -10,7 +10,14 @@ namespace HeightmapVisualizer.src.Components
 
         private Vector3 KeyInput = new Vector3();
 
-        private Gameobject gameobject;
+        private Gameobject? gameobject;
+
+        private float Speed { get; set; }
+
+        public ControllerComponent(float speed = 0.1f)
+        {
+            Speed = speed;
+        }
 
         public void Init(Gameobject gameobject)
         {
@@ -32,8 +39,7 @@ namespace HeightmapVisualizer.src.Components
 
         private void Move(Transform objectTransform)
         {
-            float movementSpeed = 0.1f;
-            objectTransform.Move(KeyInput * movementSpeed);
+            objectTransform.Move(KeyInput * Speed);
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)

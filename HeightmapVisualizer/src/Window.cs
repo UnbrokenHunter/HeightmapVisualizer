@@ -9,6 +9,7 @@ using HeightmapVisualizer.src.Primitives;
 using HeightmapVisualizer.src.Scene;
 using HeightmapVisualizer.src.Factories;
 using HeightmapVisualizer.src.Controls;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace HeightmapVisualizer.src
 {
@@ -44,27 +45,76 @@ namespace HeightmapVisualizer.src
 
         private Scene.Scene CreateScene()
         {
-            Gameobject camera = new Gameobject()
-                .AddComponent(new ControllerComponent())
-                .AddComponent(new PerspectiveCameraComponent(priority: 0));
+            Gameobject camera = new Gameobject(new Vector3(0, -10, -30))
+                .AddComponent(new ControllerComponent(1))
+                .AddComponent(new PerspectiveCameraComponent(priority: 2));
 
-			Gameobject camera2 = new Gameobject()
+			Gameobject camera2 = new Gameobject(new Vector3(-0.5f, -0.5f, 1.5f))
                 .AddComponent(new PerspectiveCameraComponent(priority: 1));
 
-			var values = new float[4, 4];
+            static void sine(Gameobject g)
+            {
+                if (g.Components.Find(c => c.GetType() == typeof(MeshComponent)) is MeshComponent m)
+                {
+                    var names = m.GetFacesByName("Top");
+
+                    var points = names[0].Points;
+                    for (int i = 0; i < points.Length; i++)
+                    {
+                        if (Gameloop.Instance != null)
+                        {
+                            var time = (float)Gameloop.Instance.Time;
+
+                            var posX = g.Transform.Position.X;
+                            var posZ = g.Transform.Position.Z;
+
+                            var pointX = points[i].X;
+                            var pointZ = points[i].Z;
+
+                            var size1 = 4f;
+                            var size2 = 4f;
+
+                            var x = posX + pointX; // X axis
+                            var z = posZ + pointZ;
+
+                            var input = time + x + z;
+
+                            var f1 = MathF.Sin((input) / size1);
+                            var f2 = MathF.Sin((input) / size2);
+
+                            var height = 0.5f;
+                            var output = (f1) / height;
+
+                            points[i] = new Vector3(pointX, output, pointZ);
+
+                        }
+                    }
+
+                    names[0].SetPoints(points);
+                }
+
+            }
+
+            var values = new float[50, 5];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
                 for (int j = 0; j < values.GetLength(1); j++)
                 {
-                    values[i, j] = i * j; // (float) random.NextDouble() * 255;
+                    values[i, j] = 0; // i * j; // (float) random.NextDouble() * 255;
                 }
             }
 
-            Gameobject[,] heightmap = Heightmap.CreateCorners(values, 1, Vector3.One);
+            Gameobject[,] heightmap = Heightmap.CreateCorners(values, 1, new Vector3(-values.GetLength(0) / 2, 1, -values.GetLength(1) / 2));
             Gameobject[] hm = Heightmap.Convert2DArrayTo1DArray(heightmap);
+            hm.ToList().ForEach(g =>
+            {
+                g.TryGetComponents<MeshComponent>(out IComponent[] m);
+                ((MeshComponent)m[0]).SetWireframe(true).SetColor(Color.Blue);
+                g.AddComponent(new ScriptableComponent(update: sine));
+            });
 
-            Gameobject cube = new Gameobject(new Vector3(-1, -1, -1))
+            Gameobject cube = new Gameobject(new Vector3(-1, -1, 2))
                 .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green).SetWireframe(true));
             Gameobject cube2 = new Gameobject(new Vector3(-5, 2, 0))
                 .AddComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1)));
@@ -100,14 +150,13 @@ namespace HeightmapVisualizer.src
                 }
             }
 
-            cube.AddComponent(new ScriptableComponent(null, move));
+            //cube.AddComponent(new ScriptableComponent(null, move));
 
-
-            Gameobject line = new Gameobject()
+                Gameobject line = new Gameobject()
                 .AddComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10)));
 
             var objects = new Gameobject[] { cube, camera, camera2 };
-            //objects = objects.Concat(hm).ToArray();
+            objects = objects.Concat(hm).ToArray();
 
             static void cam(Button button)
             {

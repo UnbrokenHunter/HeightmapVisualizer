@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Scene
 {
-    public abstract class CameraBase : IComponent
+    public abstract class Camera : IComponent
     {
 		public Gameobject? Gameobject { get; set; }
 
@@ -15,7 +15,7 @@ namespace HeightmapVisualizer.src.Scene
         public int Priority { get; private set; }
         public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.X / 2)));
 
-        public CameraBase(
+        public Camera(
             float aspect = 16f / 9f,
             float fov = 90f,
             float nearClippingPlane = 0.0001f,
@@ -35,7 +35,7 @@ namespace HeightmapVisualizer.src.Scene
         /// </summary>
         /// <param name="point"></param>
         /// <returns>A Tuple with the vector, and whether or not it is on screen.</returns>
-        public abstract Tuple<PointF, bool>? ProjectPoint(Vector3 point, Rectangle bounds);
+        public abstract Vector2 ProjectPoint(Vector3 point, Rectangle bounds);
 
         public void SetPriority(int priority)
         {

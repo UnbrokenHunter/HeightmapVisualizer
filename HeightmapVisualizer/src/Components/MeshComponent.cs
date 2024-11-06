@@ -29,14 +29,14 @@ namespace HeightmapVisualizer.src.Components
             faces.ToList().ForEach(e => Faces.Add(e.Points, e));
         }
 
-        public (Vector3, Vector3, Vector3, Color, bool)[] Renderable()
+        public RenderableTri[] Renderable()
         {
-            List<(Vector3, Vector3, Vector3, Color, bool)> list = new();
+            List<RenderableTri> list = new();
 
             // Draw all the edges in the mesh
             foreach (var tri in Tris)
             {
-                list.Add((
+                list.Add(new RenderableTri(
                     gameobject.Transform.ToLocalSpace(tri.Value.V1.LocalPosition, true),
                     gameobject.Transform.ToLocalSpace(tri.Value.V2.LocalPosition, true),
                     gameobject.Transform.ToLocalSpace(tri.Value.V3.LocalPosition, true),
@@ -83,6 +83,24 @@ namespace HeightmapVisualizer.src.Components
         private Dictionary<(Vector3, Vector3, Vector3), Tri> Tris = new();
         private Dictionary<(Vector3, Vector3), Edge> Edges = new();
         private Dictionary<Vector3, Vertex> Vertices = new();
+
+        public struct RenderableTri
+        {
+            public Vector3 P1;
+            public Vector3 P2;
+            public Vector3 P3;
+            public Color Color;
+            public bool IsWireframe;
+
+            public RenderableTri(Vector3 p1, Vector3 p2,  Vector3 p3, Color color, bool isWireframe)
+            {
+                this.P1 = p1;
+                this.P2 = p2;
+                this.P3 = p3;
+                this.Color = color;
+                this.IsWireframe = isWireframe;
+            }
+        }
 
         public class Face : IEquatable<Face>
         {
