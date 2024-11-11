@@ -4,17 +4,8 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components
 {
-    public class MeshComponent : IComponent
+    internal class MeshComponent : Component
     {
-        private Gameobject? gameobject { get; set; }
-
-        public void Init(Gameobject gameobject)
-        {
-            this.gameobject = gameobject;
-        }
-
-        public void Update() { }
-
         public MeshComponent(Face[] faces, Color? color = null, bool isWireframe = false)
         {
             // You cannot set black as a default value for some reason
@@ -37,9 +28,9 @@ namespace HeightmapVisualizer.src.Components
             foreach (var tri in Tris)
             {
                 list.Add(new RenderableTri(
-                    gameobject.Transform.ToLocalSpace(tri.Value.V1.LocalPosition, true),
-                    gameobject.Transform.ToLocalSpace(tri.Value.V2.LocalPosition, true),
-                    gameobject.Transform.ToLocalSpace(tri.Value.V3.LocalPosition, true),
+                    Gameobject.Transform.ToLocalSpace(tri.Value.V1.LocalPosition, true),
+                    Gameobject.Transform.ToLocalSpace(tri.Value.V2.LocalPosition, true),
+                    Gameobject.Transform.ToLocalSpace(tri.Value.V3.LocalPosition, true),
                     tri.Value.Face.Color ?? GetColor(),
                     IsWireframe));
             }

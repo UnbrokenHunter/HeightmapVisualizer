@@ -9,7 +9,7 @@ namespace HeightmapVisualizer.src.Factories
     /// <summary>
     /// Factory class for creating a cuboid shape.
     /// </summary>
-    public static class Cuboid
+    internal static class Cuboid
     {  
 
         /// <summary>

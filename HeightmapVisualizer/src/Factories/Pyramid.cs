@@ -8,7 +8,7 @@ namespace HeightmapVisualizer.src.Factories
     /// <summary>
     /// Factory class for creating a pyramid shape.
     /// </summary>
-    public static class Pyramid
+    internal static class Pyramid
     {
         /// <summary>
         /// Creates a pyramid mesh with the specified position, rotation, and size, where the position is treated as the center of the pyramid.

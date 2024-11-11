@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Factories
 {
-    public static class Heightmap
+    internal static class Heightmap
     {
         public static Gameobject[,] CreateCorners(float[,] values, float boxSize, Vector3? position = null)
         {

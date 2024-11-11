@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components
 {
-    public class PerspectiveCameraComponent : Camera
+    internal class PerspectiveCameraComponent : Camera
 	{
 		public PerspectiveCameraComponent(
 			float aspect = 16f / 9f, 

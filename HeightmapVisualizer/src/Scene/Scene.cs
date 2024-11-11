@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Scene
 {
-    public class Scene
+    internal class Scene
     {
         private Renderer renderer {  get; set; }
         public (Gameobject, Camera) Camera { get; set; }
@@ -48,7 +48,7 @@ namespace HeightmapVisualizer.src.Scene
 			List<(Gameobject, Camera)> cams = new();
 			foreach (var gameobj in Gameobjects)
 			{
-                if (gameobj.TryGetComponents<Camera>(out IComponent[] cam) > 0)
+                if (gameobj.TryGetComponents<Camera>(out Component[] cam) > 0)
 				    cams.Add((gameobj, (Camera)cam[0]));
 			}
 

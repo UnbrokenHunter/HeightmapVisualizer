@@ -5,23 +5,21 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components
 {
-    internal class ControllerComponent : IComponent
+    internal class ControllerComponent : Component
     {
 
         private Vector3 KeyInput = new Vector3();
+		private float Speed { get; set; }
 
-        private Gameobject? gameobject;
 
-        private float Speed { get; set; }
-
-        public ControllerComponent(float speed = 0.1f)
+		public ControllerComponent(float speed = 0.1f)
         {
             Speed = speed;
         }
 
-        public void Init(Gameobject gameobject)
+        public override void Init(Gameobject gameobject)
         {
-            this.gameobject = gameobject;
+            base.Init(gameobject);
 
             // Enable key preview so the form receives key events
             Window.Instance.KeyPreview = true; // TODO CHANGE ALL THIS TO BE GLOBAL INSTEAD OF PER CONTROLLER
@@ -31,10 +29,10 @@ namespace HeightmapVisualizer.src.Components
             Window.Instance.KeyUp += OnKeyUp;
         }
 
-        public void Update()
+        public override void Update()
         {
-            Pan(gameobject.Transform);
-            Move(gameobject.Transform);
+            Pan(Gameobject.Transform);
+            Move(Gameobject.Transform);
         }
 
         private void Move(Transform objectTransform)

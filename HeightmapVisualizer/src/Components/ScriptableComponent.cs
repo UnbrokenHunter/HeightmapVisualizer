@@ -2,23 +2,20 @@
 
 namespace HeightmapVisualizer.src.Components
 {
-    internal class ScriptableComponent : IComponent
+    internal class ScriptableComponent : Component
     {
-
-        internal Action<Gameobject>? ScriptableInit { get; private set; }
+		internal Action<Gameobject>? ScriptableInit { get; private set; }
         internal Action<Gameobject>? ScriptableUpdate { get; private set; }
 
-        internal Gameobject? gameobject;
-
-        public ScriptableComponent(Action<Gameobject>? init = null, Action<Gameobject>? update = null)
+		public ScriptableComponent(Action<Gameobject>? init = null, Action<Gameobject>? update = null)
         {
             ScriptableInit = init;
             ScriptableUpdate = update;
         }
 
-        public void Init(Gameobject gameobject)
+        public override void Init(Gameobject gameobject)
         {
-            this.gameobject = gameobject;
+            base.Init(gameobject);
 
             if (ScriptableInit != null)
             {
@@ -26,11 +23,11 @@ namespace HeightmapVisualizer.src.Components
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             if (ScriptableUpdate != null)
             {
-                ScriptableUpdate(gameobject);
+                ScriptableUpdate(Gameobject);
             }
         }
     }

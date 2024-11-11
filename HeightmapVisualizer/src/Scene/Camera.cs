@@ -4,11 +4,9 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Scene
 {
-    public abstract class Camera : IComponent
+    internal abstract class Camera : Component
     {
-		public Gameobject? Gameobject { get; set; }
-
-        public float Aspect { get; private set; }
+		public float Aspect { get; private set; }
         public Vector2 Fov { get; private set; }
         public float NearClippingPlane { get; private set; }
         public float FarClippingPlane { get; private set; }
@@ -43,13 +41,9 @@ namespace HeightmapVisualizer.src.Scene
             Window.Instance.Scene.UpdateSelectedCamera();
         }
 
-		public void Init(Gameobject gameobject)
+		public override void Init(Gameobject gameobject)
 		{
-			this.Gameobject = gameobject;
-		}
-
-		public void Update()
-		{
+            base.Init(gameobject);
 		}
 	}
 }

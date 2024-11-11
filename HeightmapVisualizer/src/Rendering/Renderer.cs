@@ -33,7 +33,7 @@ namespace HeightmapVisualizer.src.Rendering
             // Process each object without parallelization
             foreach (var obj in objects)
             {
-                if (obj.TryGetComponents<MeshComponent>(out IComponent[] m) > 0)
+                if (obj.TryGetComponents<MeshComponent>(out Component[] m) > 0)
                 {
                     // Calculate the distance and project points in one step
                     var meshComponent = (MeshComponent)m[0];

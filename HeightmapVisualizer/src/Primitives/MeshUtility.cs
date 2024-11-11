@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Primitives
 {
-    public static class MeshUtility
+    internal static class MeshUtility
     {
         /// <summary>
         /// Converts a 2D array of objects into a 1D array of objects

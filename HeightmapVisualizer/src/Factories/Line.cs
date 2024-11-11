@@ -8,7 +8,7 @@ namespace HeightmapVisualizer.src.Factories
     /// <summary>
     /// Factory class for creating a line.
     /// </summary>
-    public static class Line
+    internal static class Line
     {
         /// <summary>
         /// Creates a line mesh between two points in 3D space.

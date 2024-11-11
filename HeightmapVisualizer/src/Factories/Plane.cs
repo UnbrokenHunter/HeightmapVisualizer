@@ -8,7 +8,7 @@ namespace HeightmapVisualizer.src.Factories
     /// <summary>
     /// Factory class for creating a plane shape.
     /// </summary>
-    public static class Plane
+    internal static class Plane
     {
         /// <summary>
         /// Creates a plane mesh with the specified position and size, defaulting to no rotation (Quaternion.Identity), where the position is treated as the center of the plane.
