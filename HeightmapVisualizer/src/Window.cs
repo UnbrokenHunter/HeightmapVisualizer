@@ -95,7 +95,7 @@ namespace HeightmapVisualizer.src
 
             }
 
-            var values = new float[50, 5];
+            var values = new float[10, 5];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
@@ -112,12 +112,15 @@ namespace HeightmapVisualizer.src
                 g.TryGetComponents<MeshComponent>(out Component[] m);
                 ((MeshComponent)m[0]).SetWireframe(true).SetColor(Color.Blue);
                 g.AddComponent(new ScriptableComponent(update: sine));
+                g.AddComponent(new CollisionComponent().SetDebug(true));
             });
 
             Gameobject cube = new Gameobject(new Vector3(-1, -1, 2))
-                .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green).SetWireframe(true));
-            Gameobject cube2 = new Gameobject(new Vector3(-5, 2, 0))
-                .AddComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1)));
+                .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green).SetWireframe(true))
+                .AddComponent(new CollisionComponent().SetDebug(true));
+            Gameobject cube2 = new Gameobject(new Vector3(1, -1, 2))
+                .AddComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1)).SetColor(Color.Red).SetWireframe(true))
+                .AddComponent(new CollisionComponent().SetDebug(true));
             Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
                 .AddComponent(Plane.CreateCentered(new Vector2(10, 10)).SetWireframe(true));
             Gameobject wallPlane = new Gameobject(new Vector3(0, -5, 0), new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll()) 
@@ -136,27 +139,28 @@ namespace HeightmapVisualizer.src
 
             static void move(Gameobject g)
             {
-                if (g.Components.Find(c => c.GetType() == typeof(MeshComponent)) is MeshComponent m)
-                {
-                    var names = m.GetFacesByName("Left");
+                g.Transform.Position += new Vector3(0.001f, 0, 0);
+                //if (g.Components.Find(c => c.GetType() == typeof(MeshComponent)) is MeshComponent m)
+                //{
+                //    var names = m.GetFacesByName("Left");
 
-                    var points = names[0].Points;
-                    for (int i = 0; i < points.Length; i++)
-                    {
-                        points[i] += new Vector3(-0.001f, 0, 0);
-                    }
+                //    var points = names[0].Points;
+                //    for (int i = 0; i < points.Length; i++)
+                //    {
+                //        points[i] += new Vector3(-0.001f, 0, 0);
+                //    }
 
-                    names[0].SetPoints(points);
-                }
+                //    names[0].SetPoints(points);
+                //}
             }
 
-            //cube.AddComponent(new ScriptableComponent(null, move));
+            cube.AddComponent(new ScriptableComponent(null, move));
 
                 Gameobject line = new Gameobject()
                 .AddComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10)));
 
-            var objects = new Gameobject[] { cube, camera, camera2 };
-            objects = objects.Concat(hm).ToArray();
+            var objects = new Gameobject[] { cube, cube2, camera, camera2 };
+            //objects = objects.Concat(hm).ToArray();
 
             static void cam(Button button)
             {

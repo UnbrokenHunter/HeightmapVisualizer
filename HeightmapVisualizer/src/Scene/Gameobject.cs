@@ -30,6 +30,12 @@ namespace HeightmapVisualizer.src.Scene
             return this;
         }
 
+        public Gameobject RemoveComponent(Component component)
+        {
+            Components.Remove(component);
+            return this;
+        }
+
         public int TryGetComponents<T>(out Component[] result)
         {
             List<Component> res = new List<Component>();

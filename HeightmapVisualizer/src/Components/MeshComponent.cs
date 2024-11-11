@@ -53,6 +53,11 @@ namespace HeightmapVisualizer.src.Components
 
         #region Operations
 
+        public Face[] GetFaces()
+        {
+            return Faces.Values.ToArray();
+        }
+
         /// <summary>
         /// This method searches a mesh for faces with a specific name and returns an array of matching Faces.
         /// </summary>
