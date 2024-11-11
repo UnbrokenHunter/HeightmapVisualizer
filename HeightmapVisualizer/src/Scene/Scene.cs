@@ -10,7 +10,7 @@ namespace HeightmapVisualizer.src.Scene
     internal class Scene
     {
         private Renderer renderer {  get; set; }
-        public (Gameobject, Camera) Camera { get; set; }
+        public Camera Camera { get; set; }
         public Gameobject[] Gameobjects { get; set; }
         public UIElement[] UIElements { get; set; }
 
@@ -44,16 +44,11 @@ namespace HeightmapVisualizer.src.Scene
 
         public void UpdateSelectedCamera()
         {
-			// Find all Cameras
-			List<(Gameobject, Camera)> cams = new();
-			foreach (var gameobj in Gameobjects)
-			{
-                if (gameobj.TryGetComponents<Camera>(out Component[] cam) > 0)
-				    cams.Add((gameobj, (Camera)cam[0]));
-			}
+            // Find all Cameras
+            var cameras = IDManager.DeepGetObjectsByType<Camera>().Cast<Camera>().ToList();
 
 			// If no cameras are present, add a default one
-			if (cams.Count <= 0)
+			if (cameras.Count <= 0)
 			{
 				// Create object
 				var cameraObject = new Gameobject();
@@ -69,15 +64,15 @@ namespace HeightmapVisualizer.src.Scene
 				g.Add(cameraObject);
 				Gameobjects = g.ToArray();
 
-				// Add Camera to Cameras List
-				cams.Add((cameraObject, cameraComponent));
+                // Add Camera to Cameras List
+                cameras.Add(cameraComponent);
 			}
 
 			// Select the first camera found
-			var camera = cams[0];
-			foreach (var cam in cams)
+			var camera = cameras[0];
+			foreach (var cam in cameras)
 			{
-				if (cam.Item2.Priority > camera.Item2.Priority)
+				if (cam.Priority > camera.Priority)
 					camera = cam;
 			}
 

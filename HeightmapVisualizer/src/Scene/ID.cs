@@ -35,5 +35,28 @@ namespace HeightmapVisualizer.src.Scene
 			Type type = typeof(T);
 			return _objectsByType.TryGetValue(type, out var list) ? list : new List<IIdentifiable>();
 		}
-	}
+
+		/// <summary>
+		/// Returns all children types as well
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+        public static List<IIdentifiable> DeepGetObjectsByType<T>() where T : IIdentifiable
+        {
+            Type targetType = typeof(T);
+            var results = new List<IIdentifiable>();
+
+            // Iterate over all types in the dictionary
+            foreach (var kvp in _objectsByType)
+            {
+                Type type = kvp.Key;
+                if (targetType.IsAssignableFrom(type)) // Checks if `type` is `targetType` or inherits from it
+                {
+                    results.AddRange(kvp.Value); // Add all instances of this type
+                }
+            }
+
+            return results;
+        }
+    }
 }

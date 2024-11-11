@@ -23,7 +23,7 @@ namespace HeightmapVisualizer.src.Rendering
 		}
 
         [MethodTimer.Time]
-        public Bitmap Render((Gameobject, Camera) camera, Gameobject[] objects)
+        public Bitmap Render(Camera camera, Gameobject[] objects)
         {
             ClearBitmap();
 
@@ -37,7 +37,7 @@ namespace HeightmapVisualizer.src.Rendering
                 {
                     // Calculate the distance and project points in one step
                     var meshComponent = (MeshComponent)m[0];
-                    float distance = Vector3.Distance(camera.Item1.Transform.Position, obj.Transform.Position);
+                    float distance = Vector3.Distance(camera.Gameobject.Transform.Position, obj.Transform.Position);
                     GraphicsPipeline.RenderData[] projectedData = ProjectPoints(meshComponent.Renderable(), camera);
 
                     renderOrder.Add((distance, projectedData));
@@ -52,7 +52,7 @@ namespace HeightmapVisualizer.src.Rendering
             return bitmap;
         }
 
-        private static GraphicsPipeline.RenderData[] ProjectPoints(RenderableTri[] mesh, (Gameobject, Camera) camera)
+        private static GraphicsPipeline.RenderData[] ProjectPoints(RenderableTri[] mesh, Camera camera)
 		{
 			var points = new GraphicsPipeline.RenderData[mesh.Length];
 
@@ -62,9 +62,9 @@ namespace HeightmapVisualizer.src.Rendering
                 var bounds = Window.Instance.Bounds;
 
 				points[i] = new GraphicsPipeline.RenderData(
-					camera.Item2.ProjectPoint(part.P1, bounds),
-                    camera.Item2.ProjectPoint(part.P2, bounds), 
-					camera.Item2.ProjectPoint(part.P3, bounds),
+					camera.ProjectPoint(part.P1, bounds),
+                    camera.ProjectPoint(part.P2, bounds), 
+					camera.ProjectPoint(part.P3, bounds),
 					part.Color,
 					part.IsWireframe
 				);

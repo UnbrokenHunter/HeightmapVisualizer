@@ -12,7 +12,8 @@ namespace HeightmapVisualizer.src.Components
 
 		public override void Update()
 		{
-			
+			var collisions = IDManager.GetObjectsByType<CollisionComponent>();
+			Console.WriteLine(collisions.Count);
 		}
 	}
 }
