@@ -58,24 +58,7 @@ namespace HeightmapVisualizer.src.Components
             if (IsDebug != Guid.Empty)
             {
                 var debug = (MeshComponent)IDManager.GetObjectById(IsDebug);
-                var left = debug.GetFacesByName("Left")[0];
-                var right = debug.GetFacesByName("Right")[0];
-
-                var halfWidth = ColliderSize.X / 2;
-                var halfHeight = ColliderSize.Y / 2;
-                var halfDepth = ColliderSize.Z / 2;
-
-                Vector3 v1 = new Vector3(-halfWidth, -halfHeight, -halfDepth);
-                Vector3 v2 = new Vector3(ColliderSize.X - halfWidth, -halfHeight, -halfDepth);
-                Vector3 v3 = new Vector3(ColliderSize.X - halfWidth, ColliderSize.Y - halfHeight, -halfDepth);
-                Vector3 v4 = new Vector3(-halfWidth, ColliderSize.Y - halfHeight, -halfDepth);
-                Vector3 v5 = new Vector3(-halfWidth, -halfHeight, ColliderSize.Z - halfDepth);
-                Vector3 v6 = new Vector3(ColliderSize.X - halfWidth, -halfHeight, ColliderSize.Z - halfDepth);
-                Vector3 v7 = new Vector3(ColliderSize.X - halfWidth, ColliderSize.Y - halfHeight, ColliderSize.Z - halfDepth);
-                Vector3 v8 = new Vector3(-halfWidth, ColliderSize.Y - halfHeight, ColliderSize.Z - halfDepth);
-
-                left.SetPoints(new Vector3[4] { v1, v5, v8, v4 });
-                right.SetPoints(new Vector3[4] { v2, v6, v7, v3 });
+                debug.SetFaces(Cuboid.CreateCentered(ColliderSize));
             }
         }
 
