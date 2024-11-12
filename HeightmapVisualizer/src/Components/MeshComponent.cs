@@ -13,11 +13,7 @@ namespace HeightmapVisualizer.src.Components
 
             this.IsWireframe = isWireframe;
 
-            // Triangulate the faces and store the resulting triangles
-            faces.ToList().ForEach(e => e.Triangulate(this));
-
-            // Adds all the faces to a local list
-            faces.ToList().ForEach(e => Faces.Add(e.Points, e));
+            SetFaces(faces);
         }
 
         public RenderableTri[] Renderable()
@@ -53,7 +49,28 @@ namespace HeightmapVisualizer.src.Components
 
         #region Operations
 
-        public Face[] GetFaces()
+        /// <summary>
+        /// Replaces all current faces with the new faces
+        /// </summary>
+        /// <param name="faces"></param>
+        /// <returns></returns>
+        public MeshComponent SetFaces(Face[] faces)
+        {
+            this.Faces.Clear();
+            this.Tris.Clear();
+            this.Edges.Clear();
+            this.Vertices.Clear();
+
+			// Triangulate the faces and store the resulting triangles
+			faces.ToList().ForEach(e => e.Triangulate(this));
+
+			// Adds all the faces to a local list
+			faces.ToList().ForEach(e => Faces.Add(e.Points, e));
+
+            return this;
+		}
+
+		public Face[] GetFaces()
         {
             return Faces.Values.ToArray();
         }
