@@ -1,4 +1,5 @@
-﻿using HeightmapVisualizer.src.Scene;
+﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Scene;
 using System.Numerics;
 
 namespace HeightmapVisualizer.src.Factories
@@ -16,7 +17,9 @@ namespace HeightmapVisualizer.src.Factories
                 for (int j = 0; j < values.GetLength(1); j++)
                 {
                     var localBoxPos = new Vector3(i * boxSize * boxSize, 0, j * boxSize * boxSize);
-                    map3D[i, j] = new Gameobject(localBoxPos + offset).AddComponent(Cuboid.CreateCorners(new Vector3(boxSize, -values[i, j], boxSize)));
+                    map3D[i, j] = new Gameobject(localBoxPos + offset)
+                        .AddComponent(
+                            new MeshComponent(Cuboid.CreateCorners(new Vector3(boxSize, -values[i, j], boxSize))));
                 }
             }
             return map3D;

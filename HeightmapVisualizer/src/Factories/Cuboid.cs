@@ -19,12 +19,10 @@ namespace HeightmapVisualizer.src.Factories
         /// <param name="size">The size of the cuboid (width, height, depth).</param>
         /// <param name="color">The color of the object. Defaults to black</param>
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static MeshComponent CreateCentered(Vector3 size, Vector3? position = null)
+        public static Face[] CreateCentered(Vector3 size, Vector3? position = null)
         {
             var offset = position ?? Vector3.Zero;
-            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, true, offset);
-            var mesh = new MeshComponent(faces);
-            return mesh;
+            return CreateCuboidFaces(size.X, size.Y, size.Z, true, offset);
         }
 
         /// <summary>
@@ -33,12 +31,10 @@ namespace HeightmapVisualizer.src.Factories
         /// <param name="position">The corner position of the cuboid in the scene.</param>
         /// <param name="size">The size of the cuboid (width, height, depth).</param>
         /// <returns>A <see cref="Mesh"/> object representing the cuboid.</returns>
-        public static MeshComponent CreateCorners(Vector3 size, Vector3? position = null)
+        public static Face[] CreateCorners(Vector3 size, Vector3? position = null)
         {
             var offset = position ?? Vector3.Zero;
-            var faces = CreateCuboidFaces(size.X, size.Y, size.Z, false, offset);
-            var mesh = new MeshComponent(faces);
-            return mesh;
+            return CreateCuboidFaces(size.X, size.Y, size.Z, false, offset);
         }
 
         /// <summary>

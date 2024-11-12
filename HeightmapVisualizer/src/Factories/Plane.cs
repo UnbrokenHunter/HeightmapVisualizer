@@ -15,17 +15,12 @@ namespace HeightmapVisualizer.src.Factories
         /// </summary>
         /// <param name="size">The size of the plane (width and depth).</param>
         /// <returns>A <see cref="MeshComponent"/> object representing the plane.</returns>
-        public static MeshComponent CreateCentered(Vector2 size, Vector3? position = null)
+        public static Face[] CreateCentered(Vector2 size, Vector3? position = null)
         {
             var offset = position ?? Vector3.Zero;
 
             // Create the faces of the plane based on size, using the position as the center
-            var faces = CreatePlaneFaces(size.X, size.Y, true, offset);
-
-            // Create the mesh with the faces
-            var mesh = new MeshComponent(faces);
-
-            return mesh;
+            return CreatePlaneFaces(size.X, size.Y, true, offset);
         }
 
         /// <summary>
@@ -33,17 +28,12 @@ namespace HeightmapVisualizer.src.Factories
         /// </summary>
         /// <param name="size">The size of the plane (width and depth).</param>
         /// <returns>A <see cref="MeshComponent"/> object representing the plane.</returns>
-        public static MeshComponent CreateCorners(Vector2 size, Vector3? position = null)
+        public static Face[] CreateCorners(Vector2 size, Vector3? position = null)
         {
             var offset = position ?? Vector3.Zero;
 
             // Create the faces of the plane based on size, using the position as one of the corners
-            var faces = CreatePlaneFaces(size.X, size.Y, false, offset);
-
-            // Create the mesh with the faces
-            var mesh = new MeshComponent(faces);
-
-            return mesh;
+            return CreatePlaneFaces(size.X, size.Y, false, offset);
         }
 
         /// <summary>

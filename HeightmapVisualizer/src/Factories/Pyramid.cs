@@ -15,12 +15,10 @@ namespace HeightmapVisualizer.src.Factories
         /// </summary>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
         /// <returns>A <see cref="MeshComponent"/> object representing the pyramid.</returns>
-        public static MeshComponent CreateCentered(Vector3 size, Vector3? position = null)
+        public static Face[] CreateCentered(Vector3 size, Vector3? position = null)
         {
             var offset = position ?? Vector3.Zero;
-            var faces = CreatePyramidFaces(size.X, size.Z, size.Y, true, offset);
-            var mesh = new MeshComponent(faces);
-            return mesh;
+            return CreatePyramidFaces(size.X, size.Z, size.Y, true, offset);
         }
 
         /// <summary>
@@ -28,12 +26,10 @@ namespace HeightmapVisualizer.src.Factories
         /// </summary>
         /// <param name="size">The size of the pyramid (baseWidth, baseDepth, height).</param>
         /// <returns>A <see cref="MeshComponent"/> object representing the pyramid.</returns>
-        public static MeshComponent CreateCorners(Vector3 size, Vector3? position = null)
+        public static Face[] CreateCorners(Vector3 size, Vector3? position = null)
         {
             var offset = position ?? Vector3.Zero;
-            var faces = CreatePyramidFaces(size.X, size.Z, size.Y, false, offset);
-            var mesh = new MeshComponent(faces);
-            return mesh;
+            return CreatePyramidFaces(size.X, size.Z, size.Y, false, offset);
         }
 
         /// <summary>

@@ -116,15 +116,15 @@ namespace HeightmapVisualizer.src
             });
 
             Gameobject cube = new Gameobject(new Vector3(-1, -1, 2))
-                .AddComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1)).SetColor(Color.Green).SetWireframe(true))
+                .AddComponent(new MeshComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1))).SetColor(Color.Green).SetWireframe(true))
                 .AddComponent(new CollisionComponent().SetDebug(true));
             Gameobject cube2 = new Gameobject(new Vector3(1, -1, 2))
-                .AddComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1)).SetColor(Color.Red).SetWireframe(true))
+                .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1))).SetColor(Color.Red).SetWireframe(true))
                 .AddComponent(new CollisionComponent().SetDebug(true));
             Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
-                .AddComponent(Plane.CreateCentered(new Vector2(10, 10)).SetWireframe(true));
+                .AddComponent(new MeshComponent(Plane.CreateCentered(new Vector2(10, 10))).SetWireframe(true));
             Gameobject wallPlane = new Gameobject(new Vector3(0, -5, 0), new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll()) 
-                .AddComponent(Plane.CreateCentered(new Vector2(10, 10)).SetWireframe(true)
+                .AddComponent(new MeshComponent(Plane.CreateCentered(new Vector2(10, 10))).SetWireframe(true)
                 );
 
             var points = new Vector3[3] { new Vector3(1, 0, 1), new Vector3(0, 1, 0), new Vector3(-1, 0, 0) } ;
@@ -157,7 +157,7 @@ namespace HeightmapVisualizer.src
             cube.AddComponent(new ScriptableComponent(null, move));
 
                 Gameobject line = new Gameobject()
-                .AddComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10)));
+                .AddComponent(new MeshComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10))));
 
             var objects = new Gameobject[] { cube, cube2, camera, camera2 };
             //objects = objects.Concat(hm).ToArray();

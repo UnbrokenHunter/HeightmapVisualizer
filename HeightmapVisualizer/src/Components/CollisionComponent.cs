@@ -48,7 +48,7 @@ namespace HeightmapVisualizer.src.Components
 
         private void CreateDebugOutline()
         {
-            var component = Cuboid.CreateCentered(ColliderSize).SetWireframe(true).SetColor(Color.LightGreen);
+            var component = new MeshComponent(Cuboid.CreateCentered(ColliderSize)).SetWireframe(true).SetColor(Color.LightGreen);
             Gameobject.AddComponent(component);
             IsDebug = component.ID;
         }
