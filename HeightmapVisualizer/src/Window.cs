@@ -110,8 +110,8 @@ namespace HeightmapVisualizer.src
             Gameobject[] hm = Heightmap.Convert2DArrayTo1DArray(heightmap);
             hm.ToList().ForEach(g =>
             {
-                g.TryGetComponents<MeshComponent>(out Component[] m);
-                ((MeshComponent)m[0]).SetWireframe(true).SetColor(Color.Blue);
+                g.TryGetComponents(out MeshComponent[] m);
+                (m[0]).SetWireframe(true).SetColor(Color.Blue);
                 g.AddComponent(new ScriptableComponent(update: sine));
                 g.AddComponent(new BoxAABBCollisionComponent().SetDebug(true));
             });
@@ -167,7 +167,7 @@ namespace HeightmapVisualizer.src
             {
 				foreach (Gameobject game in Instance.Scene.Gameobjects)
                 {
-                    if (game.TryGetComponents<PerspectiveCameraComponent>(out Component[] res) != 0) 
+                    if (game.TryGetComponents(out PerspectiveCameraComponent[] res) != 0) 
                     {
                         foreach(PerspectiveCameraComponent perspectiveCamera in res)
                         {

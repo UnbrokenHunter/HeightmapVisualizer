@@ -34,12 +34,12 @@ namespace HeightmapVisualizer.src.Rendering
             // Process each object without parallelization
             foreach (var obj in objects)
             {
-                if (obj.TryGetComponents<MeshComponent>(out Component[] m) > 0)
+                if (obj.TryGetComponents(out MeshComponent[] m) > 0)
                 {
                     // Calculate the distance and project points in one step
                     foreach (var component in m)
                     {
-                        var meshComponent = (MeshComponent)component;
+                        var meshComponent = component;
                         float distance = Vector3.Distance(camera.Gameobject.Transform.Position, obj.Transform.Position);
                         GraphicsPipeline.RenderData[] projectedData = ProjectPoints(meshComponent.Renderable(), camera);
 
