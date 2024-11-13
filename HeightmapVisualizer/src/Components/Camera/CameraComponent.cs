@@ -1,30 +1,29 @@
-﻿
-using HeightmapVisualizer.src.Components;
+﻿using HeightmapVisualizer.src.Scene;
 using System.Numerics;
 
-namespace HeightmapVisualizer.src.Scene
+namespace HeightmapVisualizer.src.Components.Camera
 {
-    internal abstract class Camera : Component
+    internal abstract class CameraComponent : Component
     {
-		public float Aspect { get; private set; }
+        public float Aspect { get; private set; }
         public Vector2 Fov { get; private set; }
         public float NearClippingPlane { get; private set; }
         public float FarClippingPlane { get; private set; }
         public int Priority { get; private set; }
         public float FocalLength => (float)(Window.Instance.Width / (2 * Math.Tan(Fov.X / 2)));
 
-        public Camera(
+        public CameraComponent(
             float aspect = 16f / 9f,
             float fov = 90f,
             float nearClippingPlane = 0.0001f,
             float farClippingPlane = 100000f,
             int priority = 10)
         {
-            this.Aspect = aspect;
-            this.Fov = new Vector2(fov, fov / aspect);
-            this.NearClippingPlane = nearClippingPlane;
-            this.FarClippingPlane = farClippingPlane;
-            this.Priority = priority;
+            Aspect = aspect;
+            Fov = new Vector2(fov, fov / aspect);
+            NearClippingPlane = nearClippingPlane;
+            FarClippingPlane = farClippingPlane;
+            Priority = priority;
         }
 
 
@@ -37,15 +36,15 @@ namespace HeightmapVisualizer.src.Scene
 
         public void SetPriority(int priority)
         {
-            this.Priority = priority;
+            Priority = priority;
             Window.Instance.Scene.UpdateSelectedCamera();
         }
 
-		public override void Init(Gameobject gameobject)
-		{
+        public override void Init(Gameobject gameobject)
+        {
             base.Init(gameobject);
-		}
-	}
+        }
+    }
 }
 
 

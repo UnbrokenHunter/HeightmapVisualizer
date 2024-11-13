@@ -1,13 +1,12 @@
-﻿
-using HeightmapVisualizer.src.Factories;
+﻿using HeightmapVisualizer.src.Factories;
 using HeightmapVisualizer.src.Scene;
 using System.Drawing;
 using System.Numerics;
 
-namespace HeightmapVisualizer.src.Components
+namespace HeightmapVisualizer.src.Components.Collision
 {
-	internal class CollisionComponent : Component
-	{
+    internal class CollisionComponent : Component
+    {
 
         #region Properties
 
@@ -17,16 +16,16 @@ namespace HeightmapVisualizer.src.Components
         public Vector3 GetColliderSize() => ColliderSize;
         public CollisionComponent SetColliderSize(Vector3 colliderSize)
         {
-            this.ColliderSize = colliderSize;
+            ColliderSize = colliderSize;
             return this;
         }
 
         public bool GetDebug() => IsDebug;
-        public CollisionComponent SetDebug(bool isDebug) 
-		{ 
+        public CollisionComponent SetDebug(bool isDebug)
+        {
             IsDebug = isDebug;
-			return this; 
-		}
+            return this;
+        }
 
         #endregion
 
@@ -37,8 +36,8 @@ namespace HeightmapVisualizer.src.Components
 
         public CollisionComponent()
         {
-            this.ColliderSize = Vector3.One;
-            this.IsDebug = true;
+            ColliderSize = Vector3.One;
+            IsDebug = true;
         }
 
         public override void Init(Gameobject gameobject)
@@ -54,31 +53,31 @@ namespace HeightmapVisualizer.src.Components
             UpdateDebugOutlines();
 
             var collisions = IDManager.GetObjectsByType<CollisionComponent>();
-        
+
             foreach (var collision in collisions)
             {
                 if (collision.Equals(this)) continue;
 
                 if (AABBIntersect(this, collision))
-                    Console.WriteLine("Colliding" + this.GetHashCode() + " " + collision.GetHashCode());
+                    Console.WriteLine("Colliding" + GetHashCode() + " " + collision.GetHashCode());
             }
         }
 
         private static bool AABBIntersect(CollisionComponent a, CollisionComponent b)
         {
             var posA = a.Gameobject.Transform.Position;
-            var minA = posA - (a.ColliderSize / 2);
-            var maxA = posA + (a.ColliderSize / 2);
+            var minA = posA - a.ColliderSize / 2;
+            var maxA = posA + a.ColliderSize / 2;
 
             var posB = b.Gameobject.Transform.Position;
-            var minB = posB - (b.ColliderSize / 2);
-            var maxB = posB + (b.ColliderSize / 2);
+            var minB = posB - b.ColliderSize / 2;
+            var maxB = posB + b.ColliderSize / 2;
 
-            return (
+            return 
                 minA.X <= maxB.X && maxA.X >= minB.X && // X-axis overlap
                 minA.Y <= maxB.Y && maxA.Y >= minB.Y && // Y-axis overlap
                 minA.Z <= maxB.Z && maxA.Z >= minB.Z    // Z-axis overlap
-            );
+            ;
         }
     }
 }

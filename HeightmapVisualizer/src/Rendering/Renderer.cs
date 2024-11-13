@@ -1,11 +1,12 @@
 ﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Components.Camera;
 using HeightmapVisualizer.src.Scene;
 using System.Numerics;
 using static HeightmapVisualizer.src.Components.MeshComponent;
 
 namespace HeightmapVisualizer.src.Rendering
 {
-	internal class Renderer
+    internal class Renderer
 	{
 		private Bitmap bitmap { get; set; }
 
@@ -23,7 +24,7 @@ namespace HeightmapVisualizer.src.Rendering
 		}
 
         [MethodTimer.Time]
-        public Bitmap Render(Camera camera, Gameobject[] objects)
+        public Bitmap Render(CameraComponent camera, Gameobject[] objects)
         {
             ClearBitmap();
 
@@ -55,7 +56,7 @@ namespace HeightmapVisualizer.src.Rendering
             return bitmap;
         }
 
-        private static GraphicsPipeline.RenderData[] ProjectPoints(RenderableTri[] mesh, Camera camera)
+        private static GraphicsPipeline.RenderData[] ProjectPoints(RenderableTri[] mesh, CameraComponent camera)
 		{
 			var points = new GraphicsPipeline.RenderData[mesh.Length];
 
