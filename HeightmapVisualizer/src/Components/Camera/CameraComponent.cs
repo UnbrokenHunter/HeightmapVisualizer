@@ -39,11 +39,6 @@ namespace HeightmapVisualizer.src.Components.Camera
             Priority = priority;
             Window.Instance.Scene.UpdateSelectedCamera();
         }
-
-        public override void Init(Gameobject gameobject)
-        {
-            base.Init(gameobject);
-        }
     }
 }
 
