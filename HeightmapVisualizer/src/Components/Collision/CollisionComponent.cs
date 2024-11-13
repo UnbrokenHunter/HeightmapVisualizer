@@ -12,7 +12,10 @@ namespace HeightmapVisualizer.src.Components.Collision
         {
             base.Init(gameobject);
 
-            DebugMesh = new MeshComponent(Cuboid.CreateCentered(ColliderSize, ColliderSize / 2)).SetWireframe(true).SetColor(Color.LightGreen);
+            DebugMesh = new MeshComponent(Cuboid.CreateCentered(ColliderSize, ColliderSize / 2 + ColliderOffset))
+                .SetWireframe(true)
+                .SetColor(Color.LightGreen);
+
             Gameobject.AddComponent(DebugMesh);
         }
 
@@ -28,7 +31,8 @@ namespace HeightmapVisualizer.src.Components.Collision
         #region Properties
 
         public Vector3 ColliderSize { get; private protected set; }
-        public abstract CollisionComponent SetCollider(dynamic args);
+        public Vector3 ColliderOffset { get; private protected set; }
+        public abstract CollisionComponent SetCollider(dynamic[] args);
 
         public bool IsDebug { get; private set; }
         public CollisionComponent SetDebug(bool isDebug)
@@ -39,18 +43,18 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         private MeshComponent DebugMesh { get; set; }
         private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
-                    Cuboid.CreateCentered(ColliderSize, ColliderSize / 2) :
+                    Cuboid.CreateCentered(ColliderSize, ColliderSize / 2 + ColliderOffset) :
                     Array.Empty<MeshComponent.Face>());
 
         #endregion
 
         #region Logic 
 
-        private protected static bool AABBIntersect(CollisionComponent a, CollisionComponent b)
+        private protected bool AABBIntersect(CollisionComponent b)
         {
-            var posA = a.Gameobject.Transform.Position;
-            var minA = posA - a.ColliderSize / 2;
-            var maxA = posA + a.ColliderSize / 2;
+            var posA = Gameobject.Transform.Position + ColliderOffset;
+            var minA = posA - ColliderSize / 2;
+            var maxA = posA + ColliderSize / 2;
 
             var posB = b.Gameobject.Transform.Position;
             var minB = posB - b.ColliderSize / 2;

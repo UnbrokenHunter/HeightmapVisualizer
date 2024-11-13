@@ -4,9 +4,19 @@ namespace HeightmapVisualizer.src.Components.Collision
 {
     internal class BoxAABBCollisionComponent : CollisionComponent
     {
-        public override CollisionComponent SetCollider(dynamic vector3)
+        public override CollisionComponent SetCollider(dynamic[] vector3s)
         {
-            ColliderSize = vector3;
+            if (vector3s.Length > 2)
+                throw new ArgumentException("There should only be one or two parameters");
+
+            if (vector3s[0] is Vector3)
+                ColliderSize = vector3s[0];
+            else throw new ArgumentException("Set Collider Expects a Vector3");
+
+            if (vector3s[1] is Vector3)
+                ColliderSize = vector3s[1];
+            else if (vector3s.Length == 2) throw new ArgumentException("Set Collider Expects a Vector3");
+
             return this;
         }
 
@@ -18,7 +28,7 @@ namespace HeightmapVisualizer.src.Components.Collision
             {
                 if (collision.Equals(this)) continue;
 
-                if (AABBIntersect(this, collision))
+                if (AABBIntersect(collision))
                     Console.WriteLine("Colliding" + GetHashCode() + " " + collision.GetHashCode());
             }
         }
