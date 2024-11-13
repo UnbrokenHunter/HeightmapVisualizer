@@ -36,14 +36,14 @@ namespace HeightmapVisualizer.src.Scene
             return this;
         }
 
-        public int TryGetComponents<T>(out Component[] result)
+        public int TryGetComponents<T>(out T[] result)
         {
-            List<Component> res = new List<Component>();
+            List<T> res = new List<T>();
 			foreach (var component in Components)
 			{
-				if (component is T) // Checks if component is of type T or derives from T
+				if (component is T comp) // Checks if component is of type T or derives from T
 				{
-					res.Add(component);
+					res.Add(comp);
 				}
 			}
 			result = res.ToArray();
