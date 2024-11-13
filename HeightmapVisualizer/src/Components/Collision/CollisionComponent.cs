@@ -6,7 +6,12 @@ namespace HeightmapVisualizer.src.Components.Collision
 {
     internal abstract class CollisionComponent : Component
     {
-        public CollisionComponent() => IsDebug = true;
+        public CollisionComponent()
+        {
+            IsDebug = true;
+            ColliderSize = Vector3.One;
+            ColliderOffset = Vector3.Zero;
+        }
 
         public override void Init(Gameobject gameobject)
         {
@@ -41,7 +46,7 @@ namespace HeightmapVisualizer.src.Components.Collision
             return this;
         }
 
-        private MeshComponent DebugMesh { get; set; }
+        private protected MeshComponent DebugMesh { get; private set; }
         private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
                     Cuboid.CreateCentered(ColliderSize, ColliderSize / 2 + ColliderOffset) :
                     Array.Empty<MeshComponent.Face>());

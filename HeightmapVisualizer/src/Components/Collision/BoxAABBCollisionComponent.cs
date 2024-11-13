@@ -20,8 +20,6 @@ namespace HeightmapVisualizer.src.Components.Collision
             return this;
         }
 
-        public BoxAABBCollisionComponent() : base() => ColliderSize = Vector3.One;
-
         private protected override void ColliderCalculation(List<CollisionComponent> colliders)
         {
             foreach (var collision in colliders)
