@@ -46,6 +46,12 @@ namespace HeightmapVisualizer.src.Components
 
         #region Operations
 
+        public Vector3 GetMeshCenter()
+        {
+            var bounds = GetAxisAlignedBounds();
+            return bounds.Item2 - bounds.Item1;
+        }
+
         public (Vector3, Vector3) GetAxisAlignedBounds()
         {
             var points = Vertices.Keys.ToArray();
