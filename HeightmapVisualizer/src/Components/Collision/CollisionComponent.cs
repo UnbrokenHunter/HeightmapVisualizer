@@ -1,6 +1,5 @@
 ﻿using HeightmapVisualizer.src.Factories;
 using HeightmapVisualizer.src.Scene;
-using System.Drawing;
 using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components.Collision
@@ -8,7 +7,6 @@ namespace HeightmapVisualizer.src.Components.Collision
     internal abstract class CollisionComponent : Component
     {
         public CollisionComponent() => IsDebug = true;
-
 
         public override void Init(Gameobject gameobject)
         {
@@ -27,6 +25,27 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         private protected abstract void ColliderCalculation(List<CollisionComponent> colliders);
 
+        #region Properties
+
+        public Vector3 ColliderSize { get; private protected set; }
+        public abstract CollisionComponent SetCollider(dynamic args);
+
+        public bool IsDebug { get; private set; }
+        public CollisionComponent SetDebug(bool isDebug)
+        {
+            IsDebug = isDebug;
+            return this;
+        }
+
+        private MeshComponent DebugMesh { get; set; }
+        private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
+                    Cuboid.CreateCentered(ColliderSize, ColliderSize / 2) :
+                    Array.Empty<MeshComponent.Face>());
+
+        #endregion
+
+        #region Logic 
+
         private protected static bool AABBIntersect(CollisionComponent a, CollisionComponent b)
         {
             var posA = a.Gameobject.Transform.Position;
@@ -43,27 +62,6 @@ namespace HeightmapVisualizer.src.Components.Collision
                 minA.Z <= maxB.Z && maxA.Z >= minB.Z    // Z-axis overlap
             ;
         }
-
-        #region Properties
-
-        private protected Vector3 ColliderSize { get; set; }
-
-        public Vector3 GetCollider() => ColliderSize;
-        public abstract CollisionComponent SetCollider(dynamic args);
-
-        private bool IsDebug { get; set; }
-
-        public bool GetDebug() => IsDebug;
-        public CollisionComponent SetDebug(bool isDebug)
-        {
-            IsDebug = isDebug;
-            return this;
-        }
-
-        private MeshComponent DebugMesh { get; set; }
-        private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
-                    Cuboid.CreateCentered(ColliderSize, ColliderSize / 2) :
-                    Array.Empty<MeshComponent.Face>());
 
         #endregion
     }

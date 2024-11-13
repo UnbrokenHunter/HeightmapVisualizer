@@ -47,7 +47,7 @@ namespace HeightmapVisualizer.src
         private Scene.Scene CreateScene()
         {
             Gameobject camera = new Gameobject(new Vector3(0, -10, -30))
-                .AddComponent(new ControllerComponent(1))
+                .AddComponent(new ControllerComponent().SetSpeed(0.5f))
                 .AddComponent(new PerspectiveCameraComponent(priority: 2));
 
 			Gameobject camera2 = new Gameobject(new Vector3(-0.5f, -0.5f, 1.5f))

@@ -9,13 +9,15 @@ namespace HeightmapVisualizer.src.Components
     {
 
         private Vector3 KeyInput = new Vector3();
-		private float Speed { get; set; }
-
-
-		public ControllerComponent(float speed = 0.1f)
+		public float Speed { get; private set; }
+        public ControllerComponent SetSpeed(float speed)
         {
-            Speed = speed;
+            this.Speed = speed;
+            return this;
         }
+
+
+        public ControllerComponent() => Speed = 0.1f;
 
         public override void Init(Gameobject gameobject)
         {
