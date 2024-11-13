@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Components.Camera;
 using HeightmapVisualizer.src.Rendering;
 using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Utilities;
@@ -10,7 +11,7 @@ namespace HeightmapVisualizer.src.Scene
     internal class Scene
     {
         private Renderer renderer {  get; set; }
-        public Camera Camera { get; set; }
+        public CameraComponent Camera { get; set; }
         public Gameobject[] Gameobjects { get; set; }
         public UIElement[] UIElements { get; set; }
 
@@ -45,7 +46,7 @@ namespace HeightmapVisualizer.src.Scene
         public void UpdateSelectedCamera()
         {
             // Find all Cameras
-            var cameras = IDManager.GetObjectsByType<Camera>();
+            var cameras = IDManager.GetObjectsByType<CameraComponent>();
 
 			// If no cameras are present, add a default one
 			if (cameras.Count <= 0)

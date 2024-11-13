@@ -27,7 +27,7 @@ namespace HeightmapVisualizer.src.Components
                     Gameobject.Transform.ToLocalSpace(tri.Value.V1.LocalPosition, true),
                     Gameobject.Transform.ToLocalSpace(tri.Value.V2.LocalPosition, true),
                     Gameobject.Transform.ToLocalSpace(tri.Value.V3.LocalPosition, true),
-                    tri.Value.Face.Color ?? GetColor(),
+                    tri.Value.Face.Color ?? Color,
                     IsWireframe));
             }
 
@@ -36,11 +36,8 @@ namespace HeightmapVisualizer.src.Components
 
         #region Properties
 
-        private Color Color { get; set; }
-        private bool IsWireframe { get; set; }
-
-        public Color GetColor() => Color;
-        public bool GetWireFrame() => IsWireframe;
+        public Color Color { get; private set; }
+        public bool IsWireframe { get; private set; }
 
         public MeshComponent SetColor(Color color) { this.Color = color; return this; }
         public MeshComponent SetWireframe(bool isWireframe) { this.IsWireframe = isWireframe; return this; }
