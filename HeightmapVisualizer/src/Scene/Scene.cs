@@ -45,7 +45,7 @@ namespace HeightmapVisualizer.src.Scene
         public void UpdateSelectedCamera()
         {
             // Find all Cameras
-            var cameras = IDManager.DeepGetObjectsByType<Camera>().Cast<Camera>().ToList();
+            var cameras = IDManager.GetObjectsByType<Camera>();
 
 			// If no cameras are present, add a default one
 			if (cameras.Count <= 0)
