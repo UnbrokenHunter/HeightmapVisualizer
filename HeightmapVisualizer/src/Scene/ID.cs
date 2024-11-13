@@ -41,10 +41,10 @@ namespace HeightmapVisualizer.src.Scene
 
 		public static IIdentifiable GetObjectById(Guid id) => _objectsById.TryGetValue(id, out var obj) ? obj : null;
 
-		public static List<IIdentifiable> GetObjectsByType<T>() where T : IIdentifiable
+		public static List<T> GetObjectsByType<T>() where T : IIdentifiable
 		{
 			Type type = typeof(T);
-			return _objectsByType.TryGetValue(type, out var list) ? list : new List<IIdentifiable>();
+			return _objectsByType.TryGetValue(type, out var list) ? list.Cast<T>().ToList() : new List<T>();
 		}
 
 		/// <summary>
