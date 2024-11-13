@@ -26,7 +26,18 @@ namespace HeightmapVisualizer.src.Scene
 				_objectsByType[type] = new List<IIdentifiable>();
 			}
 			_objectsByType[type].Add(obj);
-		}
+
+			Type? parent = type.BaseType;
+			while (parent != null) {
+                if (!_objectsByType.ContainsKey(parent))
+                {
+                    _objectsByType[parent] = new List<IIdentifiable>();
+                }
+                _objectsByType[parent].Add(obj);
+
+				parent = parent.BaseType;
+            }
+        }
 
 		public static IIdentifiable GetObjectById(Guid id) => _objectsById.TryGetValue(id, out var obj) ? obj : null;
 
