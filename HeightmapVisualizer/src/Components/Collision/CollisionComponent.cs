@@ -5,40 +5,10 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components.Collision
 {
-    internal class CollisionComponent : Component
+    internal abstract class CollisionComponent : Component
     {
+        public CollisionComponent() => IsDebug = true;
 
-        #region Properties
-
-        private Vector3 ColliderSize { get; set; }
-        private bool IsDebug { get; set; }
-
-        public Vector3 GetColliderSize() => ColliderSize;
-        public CollisionComponent SetColliderSize(Vector3 colliderSize)
-        {
-            ColliderSize = colliderSize;
-            return this;
-        }
-
-        public bool GetDebug() => IsDebug;
-        public CollisionComponent SetDebug(bool isDebug)
-        {
-            IsDebug = isDebug;
-            return this;
-        }
-
-        #endregion
-
-        private MeshComponent DebugMesh { get; set; }
-        private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
-                    Cuboid.CreateCentered(ColliderSize, ColliderSize / 2) :
-                    Array.Empty<MeshComponent.Face>());
-
-        public CollisionComponent()
-        {
-            ColliderSize = Vector3.One;
-            IsDebug = true;
-        }
 
         public override void Init(Gameobject gameobject)
         {
@@ -52,18 +22,12 @@ namespace HeightmapVisualizer.src.Components.Collision
         {
             UpdateDebugOutlines();
 
-            var collisions = IDManager.GetObjectsByType<CollisionComponent>();
-
-            foreach (var collision in collisions)
-            {
-                if (collision.Equals(this)) continue;
-
-                if (AABBIntersect(this, collision))
-                    Console.WriteLine("Colliding" + GetHashCode() + " " + collision.GetHashCode());
-            }
+            ColliderCalculation(IDManager.GetObjectsByType<CollisionComponent>());
         }
 
-        private static bool AABBIntersect(CollisionComponent a, CollisionComponent b)
+        private protected abstract void ColliderCalculation(List<CollisionComponent> colliders);
+
+        private protected static bool AABBIntersect(CollisionComponent a, CollisionComponent b)
         {
             var posA = a.Gameobject.Transform.Position;
             var minA = posA - a.ColliderSize / 2;
@@ -79,5 +43,28 @@ namespace HeightmapVisualizer.src.Components.Collision
                 minA.Z <= maxB.Z && maxA.Z >= minB.Z    // Z-axis overlap
             ;
         }
+
+        #region Properties
+
+        private protected Vector3 ColliderSize { get; set; }
+
+        public Vector3 GetCollider() => ColliderSize;
+        public abstract CollisionComponent SetCollider(dynamic args);
+
+        private bool IsDebug { get; set; }
+
+        public bool GetDebug() => IsDebug;
+        public CollisionComponent SetDebug(bool isDebug)
+        {
+            IsDebug = isDebug;
+            return this;
+        }
+
+        private MeshComponent DebugMesh { get; set; }
+        private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
+                    Cuboid.CreateCentered(ColliderSize, ColliderSize / 2) :
+                    Array.Empty<MeshComponent.Face>());
+
+        #endregion
     }
 }
