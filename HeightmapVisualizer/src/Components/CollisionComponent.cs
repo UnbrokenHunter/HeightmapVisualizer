@@ -12,67 +12,44 @@ namespace HeightmapVisualizer.src.Components
 
         #region Debug
 
-        private bool CreateDebugOnInit = false;
-        private Guid IsDebug { get; set; }
-        public Guid GetDebug() => IsDebug;
+        private bool IsDebug = false;
+        private MeshComponent DebugMesh { get; set; }
+        public bool GetDebug() => IsDebug;
         public CollisionComponent SetDebug(bool isDebug) 
 		{ 
-			// Is now debug, but wasnt before
-			if (isDebug && IsDebug == Guid.Empty)
-			{
-				if (Gameobject != null)
-                    CreateDebugOutline();
-                else
-					CreateDebugOnInit = true;
-
-            }
-
-			if (!isDebug)
-			{
-				Gameobject.RemoveComponent((Component)IDManager.GetObjectById(IsDebug));
-				IsDebug = Guid.Empty;
-			}
-
+            IsDebug = isDebug;
 			return this; 
 		}
+
+        private void UpdateDebugOutlines()
+        {
+            if (IsDebug)
+                DebugMesh.SetFaces(Cuboid.CreateCentered(ColliderSize));
+
+            else
+                DebugMesh.SetFaces(Array.Empty<MeshComponent.Face>());
+        }
+
+        #endregion
 
         public override void Init(Gameobject gameobject)
         {
             base.Init(gameobject);
 
-			if (CreateDebugOnInit)
-            {
-                CreateDebugOutline();
-            }
+            DebugMesh = new MeshComponent(Cuboid.CreateCentered(ColliderSize)).SetWireframe(true).SetColor(Color.LightGreen);
+            Gameobject.AddComponent(DebugMesh);
         }
-
-        private void CreateDebugOutline()
-        {
-            var component = new MeshComponent(Cuboid.CreateCentered(ColliderSize)).SetWireframe(true).SetColor(Color.LightGreen);
-            Gameobject.AddComponent(component);
-            IsDebug = component.ID;
-        }
-
-        private void UpdateDebugOutlines()
-        {
-            if (IsDebug != Guid.Empty)
-            {
-                var debug = (MeshComponent)IDManager.GetObjectById(IsDebug);
-                debug.SetFaces(Cuboid.CreateCentered(ColliderSize));
-            }
-        }
-
-        #endregion 
 
         public override void Update()
         {
             UpdateDebugOutlines();
 
-            var collisions = IDManager.GetObjectsByType<CollisionComponent>().Cast<CollisionComponent>().ToList();
+            var collisions = IDManager.GetObjectsByType<CollisionComponent>();
         
             foreach (var collision in collisions)
             {
                 if (collision.Equals(this)) continue;
+
                 if (Intersect(this, collision))
                     Console.WriteLine("Colliding" + this.GetHashCode() + " " + collision.GetHashCode());
             }
