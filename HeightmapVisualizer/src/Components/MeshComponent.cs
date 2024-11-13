@@ -49,6 +49,28 @@ namespace HeightmapVisualizer.src.Components
 
         #region Operations
 
+        public (Vector3, Vector3) GetAxisAlignedBounds()
+        {
+            var points = Vertices.Keys.ToArray();
+
+			Vector3 min = points[0];
+            Vector3 max = points[0];
+
+            for (int i = 1; i < Vertices.Count; i++)
+            {
+				min.X = Math.Min(min.X, points[i].X);
+				min.Y = Math.Min(min.Y, points[i].Y);
+				min.Z = Math.Min(min.Z, points[i].Z);
+
+				max.X = Math.Max(max.X, points[i].X);
+				max.Y = Math.Max(max.Y, points[i].Y);
+				max.Z = Math.Max(max.Z, points[i].Z);
+			}
+            return (min, max);
+		}
+
+        public Vector3[] GetPoints() => Vertices.Keys.ToArray();
+
         /// <summary>
         /// Replaces all current faces with the new faces
         /// </summary>
