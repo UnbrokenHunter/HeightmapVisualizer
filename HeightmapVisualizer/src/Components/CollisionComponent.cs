@@ -8,12 +8,19 @@ namespace HeightmapVisualizer.src.Components
 {
 	internal class CollisionComponent : Component
 	{
-		private Vector3 ColliderSize = new Vector3(1, 1, 1);
 
-        #region Debug
+        #region Properties
 
-        private bool IsDebug = false;
-        private MeshComponent DebugMesh { get; set; }
+        private Vector3 ColliderSize { get; set; }
+        private bool IsDebug { get; set; }
+
+        public Vector3 GetColliderSize() => ColliderSize;
+        public CollisionComponent SetColliderSize(Vector3 colliderSize)
+        {
+            this.ColliderSize = colliderSize;
+            return this;
+        }
+
         public bool GetDebug() => IsDebug;
         public CollisionComponent SetDebug(bool isDebug) 
 		{ 
@@ -21,22 +28,24 @@ namespace HeightmapVisualizer.src.Components
 			return this; 
 		}
 
-        private void UpdateDebugOutlines()
-        {
-            if (IsDebug)
-                DebugMesh.SetFaces(Cuboid.CreateCentered(ColliderSize));
-
-            else
-                DebugMesh.SetFaces(Array.Empty<MeshComponent.Face>());
-        }
-
         #endregion
+
+        private MeshComponent DebugMesh { get; set; }
+        private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
+                    Cuboid.CreateCentered(ColliderSize, ColliderSize / 2) :
+                    Array.Empty<MeshComponent.Face>());
+
+        public CollisionComponent()
+        {
+            this.ColliderSize = Vector3.One;
+            this.IsDebug = true;
+        }
 
         public override void Init(Gameobject gameobject)
         {
             base.Init(gameobject);
 
-            DebugMesh = new MeshComponent(Cuboid.CreateCentered(ColliderSize)).SetWireframe(true).SetColor(Color.LightGreen);
+            DebugMesh = new MeshComponent(Cuboid.CreateCentered(ColliderSize, ColliderSize / 2)).SetWireframe(true).SetColor(Color.LightGreen);
             Gameobject.AddComponent(DebugMesh);
         }
 
@@ -50,12 +59,12 @@ namespace HeightmapVisualizer.src.Components
             {
                 if (collision.Equals(this)) continue;
 
-                if (Intersect(this, collision))
+                if (AABBIntersect(this, collision))
                     Console.WriteLine("Colliding" + this.GetHashCode() + " " + collision.GetHashCode());
             }
         }
 
-        private static bool Intersect(CollisionComponent a, CollisionComponent b)
+        private static bool AABBIntersect(CollisionComponent a, CollisionComponent b)
         {
             var posA = a.Gameobject.Transform.Position;
             var minA = posA - (a.ColliderSize / 2);
