@@ -9,15 +9,15 @@ namespace HeightmapVisualizer.src.Components.Collision
         public CollisionComponent()
         {
             IsDebug = true;
-            ColliderSize = Vector3.One;
-            ColliderOffset = Vector3.Zero;
+            ColliderMinCorner = -Vector3.One / 2;
+            ColliderMaxCorner = Vector3.One / 2;
         }
 
         public override void Init(Gameobject gameobject)
         {
             base.Init(gameobject);
 
-            DebugMesh = new MeshComponent(Cuboid.CreateCentered(ColliderSize, ColliderSize / 2 + ColliderOffset))
+            DebugMesh = new MeshComponent(Cuboid.CreateFromTwoPoints(ColliderMinCorner, ColliderMaxCorner))
                 .SetWireframe(true)
                 .SetColor(Color.LightGreen);
 
@@ -26,17 +26,17 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         public override void Update()
         {
-            UpdateDebugOutlines();
-
             ColliderCalculation(IDManager.GetObjectsByType<CollisionComponent>());
+
+            UpdateDebugOutlines();
         }
 
         private protected abstract void ColliderCalculation(List<CollisionComponent> colliders);
 
         #region Properties
 
-        public Vector3 ColliderSize { get; private protected set; }
-        public Vector3 ColliderOffset { get; private protected set; }
+        public Vector3 ColliderMinCorner { get; private protected set; }
+        public Vector3 ColliderMaxCorner { get; private protected set; }
         public abstract CollisionComponent SetCollider(dynamic[] args);
 
         public bool IsDebug { get; private set; }
@@ -48,7 +48,7 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         private protected MeshComponent DebugMesh { get; private set; }
         private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
-                    Cuboid.CreateCentered(ColliderSize, ColliderSize / 2 + ColliderOffset) :
+                    Cuboid.CreateFromTwoPoints(ColliderMinCorner, ColliderMaxCorner) :
                     Array.Empty<MeshComponent.Face>());
 
         #endregion
@@ -57,13 +57,13 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         private protected bool AABBIntersect(CollisionComponent b)
         {
-            var posA = Gameobject.Transform.Position + ColliderOffset;
-            var minA = posA - ColliderSize / 2;
-            var maxA = posA + ColliderSize / 2;
+            var posA = Gameobject.Transform.Position;
+            var minA = posA - ColliderMinCorner / 2;
+            var maxA = posA + ColliderMaxCorner / 2;
 
             var posB = b.Gameobject.Transform.Position;
-            var minB = posB - b.ColliderSize / 2;
-            var maxB = posB + b.ColliderSize / 2;
+            var minB = posB - b.ColliderMinCorner / 2;
+            var maxB = posB + b.ColliderMaxCorner / 2;
 
             return 
                 minA.X <= maxB.X && maxA.X >= minB.X && // X-axis overlap
