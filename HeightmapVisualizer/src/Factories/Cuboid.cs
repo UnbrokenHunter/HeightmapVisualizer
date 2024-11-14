@@ -38,6 +38,24 @@ namespace HeightmapVisualizer.src.Factories
         }
 
         /// <summary>
+        /// Creates a cuboid mesh spanning from one corner to the opposite corner defined by two points.
+        /// </summary>
+        /// <param name="point1">The first corner of the cuboid.</param>
+        /// <param name="point2">The opposite corner of the cuboid.</param>
+        /// <returns>An array of <see cref="Face"/> objects representing the cuboid.</returns>
+        public static Face[] CreateFromTwoPoints(Vector3 point1, Vector3 point2)
+        {
+            // Calculate the size of the cuboid as the absolute difference in each dimension
+            Vector3 size = Vector3.Abs(point2 - point1);
+
+            // Use the minimum point as the offset position (corner)
+            Vector3 position = Vector3.Min(point1, point2);
+
+            // Generate the cuboid using the corner-based method
+            return CreateCorners(size, position);
+        }
+
+        /// <summary>
         /// Helper method that creates the six faces of the cuboid, with an option to center the vertices or not.
         /// </summary>
         private static Face[] CreateCuboidFaces(float width, float height, float depth, bool centered, Vector3 offset)
