@@ -91,12 +91,12 @@ namespace HeightmapVisualizer.src
                         }
                     }
 
-                    names[0].SetPoints(points);
+                    names[0].SetPoints(m, points);
                 }
 
             }
 
-            var values = new float[10, 5];
+            var values = new float[1, 1];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
@@ -113,7 +113,7 @@ namespace HeightmapVisualizer.src
                 g.TryGetComponents(out MeshComponent[] m);
                 (m[0]).SetWireframe(true).SetColor(Color.Blue);
                 g.AddComponent(new ScriptableComponent(update: sine));
-                g.AddComponent(new BoxAABBCollisionComponent().SetDebug(true));
+                g.AddComponent(new MeshAABBCollisionComponent().SetDebug(true));
             });
 
             Gameobject cube = new Gameobject(new Vector3(-1, -1, 2))
@@ -161,7 +161,7 @@ namespace HeightmapVisualizer.src
                 .AddComponent(new MeshComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10))));
 
             var objects = new Gameobject[] { cube, cube2, camera, camera2 };
-            //objects = objects.Concat(hm).ToArray();
+            objects = objects.Concat(hm).ToArray();
 
             static void cam(Button button)
             {
