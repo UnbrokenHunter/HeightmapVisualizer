@@ -124,8 +124,8 @@ namespace HeightmapVisualizer.src.Components
         #region Primitives
 
         private Dictionary<Vector3[], Face> Faces = new Dictionary<Vector3[], Face>();
-        private Dictionary<(Vector3, Vector3, Vector3), Tri> Tris = new();
-        private Dictionary<(Vector3, Vector3), Edge> Edges = new();
+        [Obsolete] private Dictionary<(Vector3, Vector3, Vector3), Tri> Tris = new();
+        [Obsolete] private Dictionary<(Vector3, Vector3), Edge> Edges = new();
         private Dictionary<Vector3, Vertex> Vertices = new();
 
         public struct RenderableTri
@@ -173,7 +173,7 @@ namespace HeightmapVisualizer.src.Components
             /// <param name="points"></param>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
-            public void SetPoints(Vector3[] points)
+            public void SetPoints(MeshComponent mesh, Vector3[] points)
             {
                 if (points == null) throw new ArgumentNullException("Points is null " + nameof(points));
                 if (Vertices == null) throw new ArgumentNullException(nameof(Vertices));
@@ -181,7 +181,9 @@ namespace HeightmapVisualizer.src.Components
 
                 for (int i = 0; i < Vertices.Length; i++)
                 {
+                    mesh.Vertices.Remove(Vertices[i].LocalPosition); // TODO UPDATE FACES AND EDGES AS WELL
                     Vertices[i].LocalPosition = points[i]; // TEST
+                    mesh.Vertices.Add(points[i], Vertices[i]);
                 }
             }
 
