@@ -49,6 +49,12 @@ namespace HeightmapVisualizer.src.Components
         public Vector3 GetMeshCenter()
         {
             var bounds = GetAxisAlignedBounds();
+            return (bounds.Item2 + bounds.Item1) / 2;
+        }
+
+        public Vector3 GetMeshSize()
+        {
+            var bounds = GetAxisAlignedBounds();
             return bounds.Item2 - bounds.Item1;
         }
 

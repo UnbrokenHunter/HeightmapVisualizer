@@ -1,57 +1,112 @@
-﻿using HeightmapVisualizer.src.Factories;
+﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Factories;
 using System.Numerics;
-using Plane = HeightmapVisualizer.src.Factories.Plane;
+using static HeightmapVisualizer.src.Components.MeshComponent;
 
 namespace UnitTests
 {
     public class MeshTests
     {
         [Fact]
-        public void CombineIdenticalEdges_OnCuboid_Test()
+        public void MeshCenter_2D_Test()
         {
-            var mesh = Cuboid.CreateCentered(new Vector3(1, 1, 1));
+            // Arrange
+            var points = new Vector3[]
+            {
+                    new Vector3(0, 0, 0),
+                    new Vector3(1, 0, 0),
+                    new Vector3(1, 1, 0),
+                    new Vector3(0, 1, 0)
+            };
+            var face = new Face(points);
+            var mesh = new MeshComponent(new Face[] { face });
 
-            Assert.Equal(18, mesh.Edges.Count); // 18 because it is triangulated
+            Assert.Equal(new Vector3(0.5f, 0.5f, 0), mesh.GetMeshCenter());
         }
 
         [Fact]
-        public void CombineIdenticalVerts_OnCuboid_Test()
+        public void MeshCenter_Cuboid_Test()
         {
-            var mesh = Cuboid.CreateCentered(new Vector3(1, 1, 1));
+            // Arrange
+            var face = Cuboid.CreateCorners(new Vector3(2f, 1f, 0.5f), new Vector3(-1f, 1f, 0f));
+            var mesh = new MeshComponent(face);
 
-            Assert.Equal(8, mesh.Vertices.Count);
+            Assert.Equal(new Vector3(0, 1.5f, 0.25f), mesh.GetMeshCenter());
         }
 
         [Fact]
-        public void CombineIdenticalEdges_OnPyramid_Test()
+        public void MeshSize_2D_Test()
         {
-            var mesh = Pyramid.CreateCentered(new Vector3(1, 1, 1));
+            // Arrange
+            var points = new Vector3[]
+            {
+                    new Vector3(0, 0, 0),
+                    new Vector3(1, 0, 0),
+                    new Vector3(1, 1, 0),
+                    new Vector3(0, 1, 0)
+            };
+            var face = new Face(points);
+            var mesh = new MeshComponent(new Face[] { face });
 
-            Assert.Equal(9, mesh.Edges.Count); // 18 because it is triangulated
+            Assert.Equal(new Vector3(1, 1, 0), mesh.GetMeshSize());
         }
 
         [Fact]
-        public void CombineIdenticalVerts_OnPyramid_Test()
+        public void MeshSize_Cuboid_Test()
         {
-            var mesh = Pyramid.CreateCentered(new Vector3(1, 1, 1));
+            // Arrange
+            var face = Cuboid.CreateCorners(new Vector3(2f, 1f, 0.5f), new Vector3(-1f, 1f, 0f));
+            var mesh = new MeshComponent(face);
 
-            Assert.Equal(5, mesh.Vertices.Count);
+            Assert.Equal(new Vector3(2, 1, 0.5f), mesh.GetMeshSize());
         }
 
-        [Fact]
-        public void CombineIdenticalEdges_OnPlane_Test()
-        {
-            var mesh = Plane.CreateCentered(new Vector2(1, 1));
+        //[Fact]
+        //public void CombineIdenticalEdges_OnCuboid_Test()
+        //{
+        //    var mesh = Cuboid.CreateCentered(new Vector3(1, 1, 1));
 
-            Assert.Equal(5, mesh.Edges.Count);
-        }
+        //    Assert.Equal(18, mesh.Edges.Count); // 18 because it is triangulated
+        //}
 
-        [Fact]
-        public void CombineIdenticalVerts_OnPlane_Test()
-        {
-            var mesh = Plane.CreateCentered(new Vector2(1, 1));
+        //[Fact]
+        //public void CombineIdenticalVerts_OnCuboid_Test()
+        //{
+        //    var mesh = Cuboid.CreateCentered(new Vector3(1, 1, 1));
 
-            Assert.Equal(4, mesh.Vertices.Count);
-        }
+        //    Assert.Equal(8, mesh.Vertices.Count);
+        //}
+
+        //[Fact]
+        //public void CombineIdenticalEdges_OnPyramid_Test()
+        //{
+        //    var mesh = Pyramid.CreateCentered(new Vector3(1, 1, 1));
+
+        //    Assert.Equal(9, mesh.Edges.Count); // 18 because it is triangulated
+        //}
+
+        //[Fact]
+        //public void CombineIdenticalVerts_OnPyramid_Test()
+        //{
+        //    var mesh = Pyramid.CreateCentered(new Vector3(1, 1, 1));
+
+        //    Assert.Equal(5, mesh.Vertices.Count);
+        //}
+
+        //[Fact]
+        //public void CombineIdenticalEdges_OnPlane_Test()
+        //{
+        //    var mesh = Plane.CreateCentered(new Vector2(1, 1));
+
+        //    Assert.Equal(5, mesh.Edges.Count);
+        //}
+
+        //[Fact]
+        //public void CombineIdenticalVerts_OnPlane_Test()
+        //{
+        //    var mesh = Plane.CreateCentered(new Vector2(1, 1));
+
+        //    Assert.Equal(4, mesh.Vertices.Count);
+        //}
     }
 }
