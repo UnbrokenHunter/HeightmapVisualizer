@@ -58,12 +58,12 @@ namespace HeightmapVisualizer.src.Components.Collision
         private protected bool AABBIntersect(CollisionComponent b)
         {
             var posA = Gameobject.Transform.Position;
-            var minA = posA - ColliderMinCorner / 2;
-            var maxA = posA + ColliderMaxCorner / 2;
+            var minA = posA + ColliderMinCorner;
+            var maxA = posA + ColliderMaxCorner;
 
             var posB = b.Gameobject.Transform.Position;
-            var minB = posB - b.ColliderMinCorner / 2;
-            var maxB = posB + b.ColliderMaxCorner / 2;
+            var minB = posB + b.ColliderMinCorner;
+            var maxB = posB + b.ColliderMaxCorner;
 
             return 
                 minA.X <= maxB.X && maxA.X >= minB.X && // X-axis overlap
