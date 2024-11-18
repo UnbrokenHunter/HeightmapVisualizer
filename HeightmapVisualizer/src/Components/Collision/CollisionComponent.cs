@@ -6,7 +6,7 @@ namespace HeightmapVisualizer.src.Components.Collision
 {
     internal abstract class CollisionComponent : Component
     {
-        public CollisionComponent()
+		public CollisionComponent()
         {
             IsDebug = true;
             ColliderMinCorner = -Vector3.One / 2;
@@ -33,7 +33,14 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         private protected abstract void ColliderCalculation(List<CollisionComponent> colliders);
 
-        #region Properties
+		#region Properties
+
+		public Action<CollisionComponent>? OnCollision { get; private set; }
+        public CollisionComponent SetOnCollision(Action<CollisionComponent> action)
+        {
+            OnCollision = action;
+            return this;
+        }
 
         public Vector3 ColliderMinCorner { get; private protected set; }
         public Vector3 ColliderMaxCorner { get; private protected set; }
@@ -55,6 +62,11 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         #region Logic 
 
+        private protected void Collide(CollisionComponent other)
+        {
+            OnCollision?.Invoke(other);
+		}
+
         private protected bool AABBIntersect(CollisionComponent b)
         {
             var posA = Gameobject.Transform.Position;
@@ -72,6 +84,6 @@ namespace HeightmapVisualizer.src.Components.Collision
             ;
         }
 
-        #endregion
-    }
+		#endregion
+	}
 }

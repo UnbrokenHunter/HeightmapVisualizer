@@ -33,7 +33,7 @@ namespace HeightmapVisualizer.src.Components.Collision
                 if (collision.Equals(this)) continue;
 
                 if (AABBIntersect(collision))
-                    Console.WriteLine("Colliding" + GetHashCode() + " " + collision.GetHashCode());
+                    Collide(collision);
             }
         }
     }
