@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.src.Components;
+using HeightmapVisualizer.src.Components.Collision;
 using HeightmapVisualizer.src.Utilities;
 using System.Numerics;
 
@@ -60,5 +61,8 @@ namespace HeightmapVisualizer.src.Scene
                 }
             }
         }
-    }
+
+        public delegate void Collision(CollisionComponent other);
+        public Collision OnCollision;
+	}
 }

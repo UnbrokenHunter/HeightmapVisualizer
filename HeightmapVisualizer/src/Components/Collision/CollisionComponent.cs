@@ -35,13 +35,6 @@ namespace HeightmapVisualizer.src.Components.Collision
 
 		#region Properties
 
-		public Action<CollisionComponent>? OnCollision { get; private set; }
-        public CollisionComponent SetOnCollision(Action<CollisionComponent> action)
-        {
-            OnCollision = action;
-            return this;
-        }
-
         public Vector3 ColliderMinCorner { get; private protected set; }
         public Vector3 ColliderMaxCorner { get; private protected set; }
         public abstract CollisionComponent SetCollider(dynamic[] args);
@@ -64,7 +57,7 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         private protected void Collide(CollisionComponent other)
         {
-            OnCollision?.Invoke(other);
+            Gameobject.OnCollision?.Invoke(other);
 		}
 
         private protected bool AABBIntersect(CollisionComponent b)

@@ -11,6 +11,7 @@ using HeightmapVisualizer.src.Factories;
 using HeightmapVisualizer.src.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using HeightmapVisualizer.src.Components.Collision;
+using HeightmapVisualizer.src.Components.Physics;
 
 namespace HeightmapVisualizer.src
 {
@@ -118,11 +119,13 @@ namespace HeightmapVisualizer.src
 
             Gameobject cube = new Gameobject(new Vector3(-1, -1, 2))
                 .AddComponent(new MeshComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1))).SetColor(Color.Green).SetWireframe(true))
-                .AddComponent(new BoxAABBCollisionComponent().SetDebug(true));
-            Gameobject cube2 = new Gameobject(new Vector3(1, -1, 2))
+				.AddComponent(new BoxAABBCollisionComponent().SetDebug(true))
+			    .AddComponent(new KineticPhysicsComponent().SetVelocity(new Vector3(0.01f, 0, 0)));
+			Gameobject cube2 = new Gameobject(new Vector3(1, -1, 2))
                 .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1))).SetColor(Color.Red).SetWireframe(true))
-                .AddComponent(new BoxAABBCollisionComponent().SetDebug(true));
-            Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
+                .AddComponent(new BoxAABBCollisionComponent().SetDebug(true))
+                .AddComponent(new StaticPhysicsComponent());
+			Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
                 .AddComponent(new MeshComponent(Plane.CreateCentered(new Vector2(10, 10))).SetWireframe(true));
             Gameobject wallPlane = new Gameobject(new Vector3(0, -5, 0), new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll()) 
                 .AddComponent(new MeshComponent(Plane.CreateCentered(new Vector2(10, 10))).SetWireframe(true)
@@ -140,7 +143,7 @@ namespace HeightmapVisualizer.src
 
             static void move(Gameobject g)
             {
-                g.Transform.Position += new Vector3(0.001f, 0, 0);
+                // g.Transform.Position += new Vector3(0.01f, 0, 0);
                 //if (g.Components.Find(c => c.GetType() == typeof(MeshComponent)) is MeshComponent m)
                 //{
                 //    var names = m.GetFacesByName("Left");
