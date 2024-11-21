@@ -9,8 +9,8 @@ namespace HeightmapVisualizer.src.Components
 
 		public ScriptableComponent(Action<Gameobject>? init = null, Action<Gameobject>? update = null)
         {
-            ScriptableInit = init;
-            ScriptableUpdate = update;
+            ScriptableInit += init;
+            ScriptableUpdate += update;
         }
 
         public override void Init(Gameobject gameobject)
