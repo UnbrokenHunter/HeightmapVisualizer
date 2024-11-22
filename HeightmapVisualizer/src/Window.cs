@@ -120,13 +120,13 @@ namespace HeightmapVisualizer.src
             });
 
             Gameobject cube = new Gameobject(new Vector3(-5.5f, -5, 1))
-                .AddComponent(new MeshComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1))).SetColor(Color.Green).SetWireframe(true))
+                .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 1, 1))).SetColor(Color.Green).SetWireframe(true))
 				.AddComponent(new MeshAABBCollisionComponent().SetDebug(true))
 			    .AddComponent(new PhysicsComponent()
                     .SetMovementModule(new KineticMovementPhysicsModule())
                     .SetCollisionModule(new KineticCollisionPhysicsModule())
                     .SetVelocity(new Vector3(.05f, 0.05f, 0))
-                    .SetMass(1)
+                    .SetMass(5)
                     .SetRestitution(1.0f)
 
                     );
@@ -140,7 +140,7 @@ namespace HeightmapVisualizer.src
                     .SetCollisionModule(new KineticCollisionPhysicsModule())
                     .SetVelocity(new Vector3(-.05f, -.05f, 0))
                     .SetMass(1)
-                    .SetRestitution(1f)
+                    .SetRestitution(0f)
 
                     );
 
