@@ -7,7 +7,7 @@ namespace HeightmapVisualizer.src.Components.Physics.Collision
 {
     internal abstract class CollisionPhysicsModule
     {
-        internal abstract void Collision(PhysicsComponent physics, CollisionComponent other, Vector3 otherVelocity);
+        internal abstract void Collision(CollisionInfo collision);
 
     }
 }

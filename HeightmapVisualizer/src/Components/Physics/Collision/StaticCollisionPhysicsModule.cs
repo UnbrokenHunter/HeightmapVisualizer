@@ -11,6 +11,6 @@ namespace HeightmapVisualizer.src.Components.Physics.Collision
     internal class StaticCollisionPhysicsModule : CollisionPhysicsModule
     {
         // Do nothing
-        internal override void Collision(PhysicsComponent physics, CollisionComponent other, Vector3 otherVelocity) { }
+        internal override void Collision(CollisionInfo collision) { }
     }
 }

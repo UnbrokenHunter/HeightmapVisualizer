@@ -63,14 +63,11 @@ namespace HeightmapVisualizer.src.Scene
 
 					if (CollisionComponent.AABBIntersect(colliders[i], colliders[j]))
                     {
-                        colliders[i].Gameobject.TryGetComponents(out PhysicsComponent[] phy1);
-                        var vec1 = phy1[0].Velocity;
+                        var info1 = new CollisionInfo(colliders[i], colliders[j]);
+                        var info2 = new CollisionInfo(colliders[j], colliders[i]);
 
-						colliders[j].Gameobject.TryGetComponents(out PhysicsComponent[] phy2);
-						var vec2 = phy2[0].Velocity;
-
-						colliders[i].Collide(colliders[j], vec2);
-						colliders[j].Collide(colliders[i], vec1);
+						colliders[i].Collide(info1);
+						colliders[j].Collide(info2);
 					}
 				}
 			}

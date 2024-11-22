@@ -59,13 +59,12 @@ namespace HeightmapVisualizer.src.Components.Physics
 			Movement = new KineticMovementPhysicsModule();
         }
 
+		private void CollisionTrigger(CollisionInfo collision) => Collision.Collision(collision);
 		public override void Init(Gameobject gameobject)
 		{
 			base.Init(gameobject);
 			Gameobject.OnCollision += CollisionTrigger;
 		}
-
-        private void CollisionTrigger(CollisionComponent other, Vector3 otherVelocity) => Collision.Collision(this, other, otherVelocity);
 
         public override void Update()
 		{
