@@ -62,7 +62,7 @@ namespace HeightmapVisualizer.src.Scene
             }
         }
 
-        public delegate void Collision(CollisionComponent other);
+        public delegate void Collision(CollisionComponent other, Vector3 otherVelocity);
         public Collision OnCollision;
 	}
 }

@@ -1,10 +1,13 @@
 ﻿using HeightmapVisualizer.src.Components;
 using HeightmapVisualizer.src.Components.Camera;
+using HeightmapVisualizer.src.Components.Collision;
+using HeightmapVisualizer.src.Components.Physics;
 using HeightmapVisualizer.src.Rendering;
 using HeightmapVisualizer.src.UI;
 using HeightmapVisualizer.src.Utilities;
 using System;
 using System.Numerics;
+using static HeightmapVisualizer.src.Scene.Gameobject;
 
 namespace HeightmapVisualizer.src.Scene
 {
@@ -25,7 +28,9 @@ namespace HeightmapVisualizer.src.Scene
 
         public void Update()
         {
-            UpdateGameobjects();
+            UpdateColliders();
+
+			UpdateGameobjects();
         }
 
         public void Render(Graphics g)
@@ -41,6 +46,34 @@ namespace HeightmapVisualizer.src.Scene
             {
                 gameobject.Update();
             }
+        }
+
+        private void UpdateColliders()
+        {
+            var colliders = IDManager.GetObjectsByType<CollisionComponent>();
+
+			for (int i = 0; i < colliders.Count; i++)
+            {
+                for (int j = i;  j < colliders.Count; j++)
+                {
+					if (colliders[i].Equals(colliders[j])) continue;
+
+                    colliders[i].ColliderCalculation();
+                    colliders[j].ColliderCalculation();
+
+					if (CollisionComponent.AABBIntersect(colliders[i], colliders[j]))
+                    {
+                        colliders[i].Gameobject.TryGetComponents(out PhysicsComponent[] phy1);
+                        var vec1 = phy1[0].Velocity;
+
+						colliders[j].Gameobject.TryGetComponents(out PhysicsComponent[] phy2);
+						var vec2 = phy2[0].Velocity;
+
+						colliders[i].Collide(colliders[j], vec2);
+						colliders[j].Collide(colliders[i], vec1);
+					}
+				}
+			}
         }
 
         public void UpdateSelectedCamera()

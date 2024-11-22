@@ -26,15 +26,6 @@ namespace HeightmapVisualizer.src.Components.Collision
             return this;
         }
 
-        private protected override void ColliderCalculation(List<CollisionComponent> colliders)
-        {
-            foreach (var collision in colliders)
-            {
-                if (collision.Equals(this)) continue;
-
-                if (AABBIntersect(collision))
-                    Collide(collision);
-            }
-        }
+		internal override void ColliderCalculation() { }
     }
 }

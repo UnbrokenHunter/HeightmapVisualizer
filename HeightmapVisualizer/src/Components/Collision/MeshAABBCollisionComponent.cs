@@ -37,19 +37,11 @@ namespace HeightmapVisualizer.src.Components.Collision
             return this;
         }
 
-        private protected override void ColliderCalculation(List<CollisionComponent> colliders)
+        internal override void ColliderCalculation()
         {
             var bounds = meshComponent.GetAxisAlignedBounds();
             ColliderMinCorner = bounds.Item1;
             ColliderMaxCorner = bounds.Item2;
-
-            foreach (var collision in colliders)
-            {
-                if (collision.Equals(this)) continue;
-
-                if (AABBIntersect(collision))
-					Collide(collision);
-			}
 		}
     }
 }

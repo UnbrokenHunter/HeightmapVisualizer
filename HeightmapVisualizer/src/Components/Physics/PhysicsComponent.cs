@@ -65,7 +65,7 @@ namespace HeightmapVisualizer.src.Components.Physics
 			Gameobject.OnCollision += CollisionTrigger;
 		}
 
-        private void CollisionTrigger(CollisionComponent other) => Collision.Collision(this, other);
+        private void CollisionTrigger(CollisionComponent other, Vector3 otherVelocity) => Collision.Collision(this, other, otherVelocity);
 
         public override void Update()
 		{

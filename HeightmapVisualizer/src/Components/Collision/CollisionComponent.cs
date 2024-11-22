@@ -26,19 +26,19 @@ namespace HeightmapVisualizer.src.Components.Collision
 
         public override void Update()
         {
-            ColliderCalculation(IDManager.GetObjectsByType<CollisionComponent>());
+            ColliderCalculation();
 
             UpdateDebugOutlines();
         }
 
-        private protected abstract void ColliderCalculation(List<CollisionComponent> colliders);
+		internal abstract void ColliderCalculation();
 
 		#region Properties
 
         public Vector3 ColliderMinCorner { get; private protected set; }
         public Vector3 ColliderMaxCorner { get; private protected set; }
         public abstract CollisionComponent SetCollider(dynamic[] args);
-
+            
         public bool IsDebug { get; private set; }
         public CollisionComponent SetDebug(bool isDebug)
         {
@@ -51,20 +51,20 @@ namespace HeightmapVisualizer.src.Components.Collision
                     Cuboid.CreateFromTwoPoints(ColliderMinCorner, ColliderMaxCorner) :
                     Array.Empty<MeshComponent.Face>());
 
-        #endregion
+		#endregion
 
-        #region Logic 
+		#region Logic 
 
-        private protected void Collide(CollisionComponent other)
+		internal void Collide(CollisionComponent other, Vector3 otherVelocity)
         {
-            Gameobject.OnCollision?.Invoke(other);
+            Gameobject.OnCollision?.Invoke(other, otherVelocity);
 		}
 
-        private protected bool AABBIntersect(CollisionComponent b)
+        internal static bool AABBIntersect(CollisionComponent a, CollisionComponent b)
         {
-            var posA = Gameobject.Transform.Position;
-            var minA = posA + ColliderMinCorner;
-            var maxA = posA + ColliderMaxCorner;
+            var posA = a.Gameobject.Transform.Position;
+            var minA = posA + a.ColliderMinCorner;
+            var maxA = posA + a.ColliderMaxCorner;
 
             var posB = b.Gameobject.Transform.Position;
             var minB = posB + b.ColliderMinCorner;

@@ -5,7 +5,7 @@ namespace HeightmapVisualizer.src.Components.Physics.Collision
 {
     internal class KineticCollisionPhysicsModule : CollisionPhysicsModule
     {
-        internal override void Collision(PhysicsComponent physics, CollisionComponent other)
+        internal override void Collision(PhysicsComponent physics, CollisionComponent other, Vector3 otherVelocity)
         {
             var e1 = physics.Restitution;
             var e2 = 1.0f;
@@ -14,14 +14,13 @@ namespace HeightmapVisualizer.src.Components.Physics.Collision
             var m2 = 1.0f;
 
             var v1 = physics.Velocity;
-            var v2 = Vector3.Zero;
+            var v2 = otherVelocity;
 
             other.Gameobject.TryGetComponents(out PhysicsComponent[] components);
             if (components.Length > 0)
             {
                 e2 = components[0].Restitution;
                 m2 = components[0].Mass;
-                v2 = components[0].Velocity;
             }
 
             var combinedMass = (m1 + m2);
