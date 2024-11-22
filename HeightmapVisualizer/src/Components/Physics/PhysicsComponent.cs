@@ -25,6 +25,13 @@ namespace HeightmapVisualizer.src.Components.Physics
 			return this;
 		}
 
+        public float Restitution { get; private set; }
+        public PhysicsComponent SetRestitution(float restitution)
+        {
+            Restitution = restitution;
+            return this;
+        }
+
         #endregion
 
         #region Modules

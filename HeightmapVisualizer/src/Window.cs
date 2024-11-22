@@ -12,6 +12,7 @@ using HeightmapVisualizer.src.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using HeightmapVisualizer.src.Components.Collision;
 using HeightmapVisualizer.src.Components.Physics;
+using HeightmapVisualizer.src.Components.Physics.Collision;
 
 namespace HeightmapVisualizer.src
 {
@@ -117,14 +118,31 @@ namespace HeightmapVisualizer.src
                 g.AddComponent(new MeshAABBCollisionComponent().SetDebug(true));
             });
 
-            Gameobject cube = new Gameobject(new Vector3(-1, -1, 2))
+            Gameobject cube = new Gameobject(new Vector3(-5, -1, 2))
                 .AddComponent(new MeshComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1))).SetColor(Color.Green).SetWireframe(true))
-				.AddComponent(new BoxAABBCollisionComponent().SetDebug(true))
-			    .AddComponent(new PhysicsComponent().SetVelocity(new Vector3(0.01f, 0, 0)));
-			Gameobject cube2 = new Gameobject(new Vector3(1, -1, 2))
+				.AddComponent(new MeshAABBCollisionComponent().SetDebug(true))
+			    .AddComponent(new PhysicsComponent()
+                    .SetCollision(new KineticCollisionPhysicsModule())
+                    .SetVelocity(new Vector3(.1f, 0, 0))
+                    .SetMass(1)
+                    .SetRestitution(1)
+
+                    );
+
+
+
+			Gameobject cube2 = new Gameobject(new Vector3(5, -1, 2))
                 .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1))).SetColor(Color.Red).SetWireframe(true))
                 .AddComponent(new BoxAABBCollisionComponent().SetDebug(true))
-                .AddComponent(new PhysicsComponent());
+                .AddComponent(new PhysicsComponent()
+                    .SetCollision(new KineticCollisionPhysicsModule())
+                    .SetVelocity(new Vector3(-.1f, 0, 0))
+                    .SetMass(1)
+                    .SetRestitution(1f)
+
+                    );
+
+
 			Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
                 .AddComponent(new MeshComponent(Plane.CreateCentered(new Vector2(10, 10))).SetWireframe(true));
             Gameobject wallPlane = new Gameobject(new Vector3(0, -5, 0), new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll()) 
