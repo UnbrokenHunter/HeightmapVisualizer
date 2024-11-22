@@ -13,6 +13,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using HeightmapVisualizer.src.Components.Collision;
 using HeightmapVisualizer.src.Components.Physics;
 using HeightmapVisualizer.src.Components.Physics.Collision;
+using HeightmapVisualizer.src.Components.Physics.Movement;
 
 namespace HeightmapVisualizer.src
 {
@@ -122,7 +123,8 @@ namespace HeightmapVisualizer.src
                 .AddComponent(new MeshComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1))).SetColor(Color.Green).SetWireframe(true))
 				.AddComponent(new MeshAABBCollisionComponent().SetDebug(true))
 			    .AddComponent(new PhysicsComponent()
-                    .SetCollision(new StaticCollisionPhysicsModule())
+                    .SetMovementModule(new StaticMovementPhysicsModule())
+                    .SetCollisionModule(new StaticCollisionPhysicsModule())
                     .SetVelocity(new Vector3(.0f, 0, 0))
                     .SetMass(1)
                     .SetRestitution(1.0f)
@@ -135,7 +137,7 @@ namespace HeightmapVisualizer.src
                 .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1))).SetColor(Color.Red).SetWireframe(true))
                 .AddComponent(new BoxAABBCollisionComponent().SetDebug(true))
                 .AddComponent(new PhysicsComponent()
-                    .SetCollision(new KineticCollisionPhysicsModule())
+                    .SetCollisionModule(new KineticCollisionPhysicsModule())
                     .SetVelocity(new Vector3(-.2f, 0, 0))
                     .SetMass(1)
                     .SetRestitution(1f)

@@ -36,17 +36,17 @@ namespace HeightmapVisualizer.src.Components.Physics
 
         #region Modules
 
-        public CollisionPhysicsModule Collision { get; private set; }
-        public PhysicsComponent SetCollision(CollisionPhysicsModule collision)
+        public CollisionPhysicsModule CollisionModule { get; private set; }
+        public PhysicsComponent SetCollisionModule(CollisionPhysicsModule collision)
         {
-            Collision = collision;
+            CollisionModule = collision;
             return this;
         }
 
-        public MovementPhysicsModule Movement { get; private set; }
-        public PhysicsComponent SetMovement(MovementPhysicsModule movement)
+        public MovementPhysicsModule MovementModule { get; private set; }
+        public PhysicsComponent SetMovementModule(MovementPhysicsModule movement)
         {
-            Movement = movement;
+            MovementModule = movement;
             return this;
         }
 
@@ -55,11 +55,11 @@ namespace HeightmapVisualizer.src.Components.Physics
         public PhysicsComponent()
 		{
 			// Defaults - Will be overridden if desired
-            Collision = new KineticCollisionPhysicsModule();
-			Movement = new KineticMovementPhysicsModule();
+            CollisionModule = new KineticCollisionPhysicsModule();
+			MovementModule = new KineticMovementPhysicsModule();
         }
 
-		private void CollisionTrigger(CollisionInfo collision) => Collision.Collision(collision);
+		private void CollisionTrigger(CollisionInfo collision) => CollisionModule.Collision(collision);
 		public override void Init(Gameobject gameobject)
 		{
 			base.Init(gameobject);
@@ -70,7 +70,7 @@ namespace HeightmapVisualizer.src.Components.Physics
 		{
 			base.Update();
 
-            Movement.Movement(this);
+            MovementModule.Movement(this);
 		}
     }
 }
