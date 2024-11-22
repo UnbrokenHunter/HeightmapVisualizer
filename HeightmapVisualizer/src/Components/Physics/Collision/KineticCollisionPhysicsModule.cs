@@ -30,8 +30,7 @@ namespace HeightmapVisualizer.src.Components.Physics.Collision
             var finalVelocity = ((m1 - combinedRestitution * m2) / combinedMass * v1) + ((1 + combinedRestitution) * m2 / combinedMass * v2);
 
             // Maybe change to use reflect? Requires the normal tho
-            physics.SetVelocity(finalVelocity);
+            physics.DelayedSetVelocity(finalVelocity);
         }
-
     }
 }
