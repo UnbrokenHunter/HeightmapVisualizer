@@ -1,4 +1,5 @@
 ﻿using HeightmapVisualizer.src.Components.Collision;
+using System;
 using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components.Physics.Collision
@@ -19,10 +20,24 @@ namespace HeightmapVisualizer.src.Components.Physics.Collision
             var combinedMass = m1 + m2;
             var combinedRestitution = (e1 * m1 + e2 * m2) / combinedMass;
 
-            var finalVelocity = ((m1 - combinedRestitution * m2) / combinedMass * v1) + ((1 + combinedRestitution) * m2 / combinedMass * v2);
+            // Relative velocity
+            var relativeVelocity = v1 - v2;
 
-			// Maybe change to use reflect? Requires the normal tho
-			collision.Physics?.SetVelocity(finalVelocity);
+            // Compute the normal and tangential components
+            var normal = collision.ColliderNormal; // Assume this is already normalized
+            var normalVelocity = Vector3.Dot(relativeVelocity, normal) * normal; // Normal component
+            var tangentialVelocity = relativeVelocity - normalVelocity;          // Tangential component
+
+            // Apply restitution to the normal component
+            var reflectedNormalVelocity = -combinedRestitution * normalVelocity;
+
+            // Combine adjusted normal and tangential velocities
+            var finalVelocity = tangentialVelocity + reflectedNormalVelocity;
+
+            Console.WriteLine($"Final Velocity: {finalVelocity}");
+
+            // Update the velocity in the physics system
+            collision.Physics?.SetVelocity(finalVelocity);
         }
     }
 }
