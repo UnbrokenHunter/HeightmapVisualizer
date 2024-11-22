@@ -7,12 +7,14 @@ namespace HeightmapVisualizer.src.Components.Collision
 	internal struct CollisionInfo
 	{
 		internal readonly CollisionComponent Collider { get; }
+		internal readonly Vector3 ColliderNormal { get; }
 		internal readonly PhysicsComponent? Physics { get; }
 		internal readonly Vector3 Velocity { get; }
 		internal readonly float Restitution { get; }
 		internal readonly float Mass { get; }
 
 		internal readonly CollisionComponent OtherCollider { get; }
+		internal readonly Vector3 OtherColliderNormal { get; }
 		internal readonly PhysicsComponent? OtherPhysics { get; }
 		internal readonly Vector3 OtherVelocity { get; }
 		internal readonly float OtherRestitution { get; }
@@ -22,6 +24,9 @@ namespace HeightmapVisualizer.src.Components.Collision
 		{
 			this.Collider = collider;
 			this.OtherCollider = other;
+
+			this.ColliderNormal = CollisionComponent.CalculateCollisionNormal(collider, other);
+			this.OtherColliderNormal = CollisionComponent.CalculateCollisionNormal(other, collider);
 
 			collider.Gameobject.TryGetComponents(out PhysicsComponent[] p1);
 			this.Physics = p1[0];

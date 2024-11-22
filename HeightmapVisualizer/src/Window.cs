@@ -99,7 +99,7 @@ namespace HeightmapVisualizer.src
 
             }
 
-            var values = new float[1, 1];
+            var values = new float[0, 0];
             //Random random = new Random();
             for (int i = 0; i < values.GetLength(0); i++)
             {
@@ -119,13 +119,13 @@ namespace HeightmapVisualizer.src
                 g.AddComponent(new MeshAABBCollisionComponent().SetDebug(true));
             });
 
-            Gameobject cube = new Gameobject(new Vector3(-5, -1, 2))
+            Gameobject cube = new Gameobject(new Vector3(-5.5f, -5, 1))
                 .AddComponent(new MeshComponent(Cuboid.CreateCorners(new Vector3(1, 1, 1))).SetColor(Color.Green).SetWireframe(true))
 				.AddComponent(new MeshAABBCollisionComponent().SetDebug(true))
 			    .AddComponent(new PhysicsComponent()
-                    .SetMovementModule(new StaticMovementPhysicsModule())
-                    .SetCollisionModule(new StaticCollisionPhysicsModule())
-                    .SetVelocity(new Vector3(.0f, 0, 0))
+                    .SetMovementModule(new KineticMovementPhysicsModule())
+                    .SetCollisionModule(new KineticCollisionPhysicsModule())
+                    .SetVelocity(new Vector3(.05f, 0.05f, 0))
                     .SetMass(1)
                     .SetRestitution(1.0f)
 
@@ -133,12 +133,12 @@ namespace HeightmapVisualizer.src
 
 
 
-			Gameobject cube2 = new Gameobject(new Vector3(5, -1, 2))
-                .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 2, 1))).SetColor(Color.Red).SetWireframe(true))
+			Gameobject cube2 = new Gameobject(new Vector3(5.5f, 5, 1))
+                .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 1, 1))).SetColor(Color.Red).SetWireframe(true))
                 .AddComponent(new BoxAABBCollisionComponent().SetDebug(true))
                 .AddComponent(new PhysicsComponent()
                     .SetCollisionModule(new KineticCollisionPhysicsModule())
-                    .SetVelocity(new Vector3(-.2f, 0, 0))
+                    .SetVelocity(new Vector3(-.05f, -.05f, 0))
                     .SetMass(1)
                     .SetRestitution(1f)
 
