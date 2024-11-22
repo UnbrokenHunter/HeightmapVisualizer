@@ -18,24 +18,6 @@ namespace HeightmapVisualizer.src.Components.Physics
 			return this;
 		}
 
-        private bool IsDelayedVelocity = false;
-        private Vector3 DelayedVelocity = new();
-        public PhysicsComponent DelayedSetVelocity(Vector3 velocity)
-        {
-            IsDelayedVelocity = true;
-            DelayedVelocity = velocity;
-            return this;
-        }
-
-        private void UpdateDelayedVelocity()
-        {
-            if (IsDelayedVelocity)
-            {
-                IsDelayedVelocity = false;
-                Velocity = DelayedVelocity;
-            }
-        }
-
         public float Mass { get; private set; }
 		public PhysicsComponent SetMass(float mass)
 		{
@@ -88,8 +70,6 @@ namespace HeightmapVisualizer.src.Components.Physics
         public override void Update()
 		{
 			base.Update();
-
-            UpdateDelayedVelocity();
 
             Movement.Movement(this);
 		}
