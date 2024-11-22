@@ -1,10 +1,13 @@
 ﻿
+using HeightmapVisualizer.src.Components.Collision;
+using HeightmapVisualizer.src.Components.Physics.Collision;
+using HeightmapVisualizer.src.Components.Physics.Movement;
 using HeightmapVisualizer.src.Scene;
 using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components.Physics
 {
-	internal abstract class PhysicsComponent : Component
+	internal class PhysicsComponent : Component
 	{
 		#region Properties
 
@@ -22,22 +25,46 @@ namespace HeightmapVisualizer.src.Components.Physics
 			return this;
 		}
 
-		#endregion
+        #endregion
+
+        #region Modules
+
+        public CollisionPhysicsModule Collision { get; private set; }
+        public PhysicsComponent SetCollision(CollisionPhysicsModule collision)
+        {
+            Collision = collision;
+            return this;
+        }
+
+        public MovementPhysicsModule Movement { get; private set; }
+        public PhysicsComponent SetMovement(MovementPhysicsModule movement)
+        {
+            Movement = movement;
+            return this;
+        }
+
+        #endregion
+
+        public PhysicsComponent()
+		{
+			// Defaults - Will be overridden if desired
+            Collision = new KineticCollisionPhysicsModule();
+			Movement = new KineticMovementPhysicsModule();
+        }
 
 		public override void Init(Gameobject gameobject)
 		{
 			base.Init(gameobject);
-			Gameobject.OnCollision += Collision;
+			Gameobject.OnCollision += CollisionTrigger;
 		}
 
-		public override void Update()
+        private void CollisionTrigger(CollisionComponent other) => Collision.Collision(this, other);
+
+        public override void Update()
 		{
 			base.Update();
 
-			UpdateVelocity();
+            Movement.Movement(this);
 		}
-
-		private protected abstract void UpdateVelocity();
-		private protected abstract void Collision(Collision.CollisionComponent other);
-	}
+    }
 }
