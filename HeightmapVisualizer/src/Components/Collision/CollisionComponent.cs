@@ -4,31 +4,12 @@ using System.Numerics;
 
 namespace HeightmapVisualizer.src.Components.Collision
 {
-    internal abstract class CollisionComponent : Component
+    internal abstract partial class CollisionComponent : Component
     {
 		public CollisionComponent()
         {
-            IsDebug = true;
             ColliderMinCorner = -Vector3.One / 2;
             ColliderMaxCorner = Vector3.One / 2;
-        }
-
-        public override void Init(Gameobject gameobject)
-        {
-            base.Init(gameobject);
-
-            DebugMesh = new MeshComponent(Cuboid.CreateFromTwoPoints(ColliderMinCorner, ColliderMaxCorner))
-                .SetWireframe(true)
-                .SetColor(Color.LightGreen);
-
-            Gameobject.AddComponent(DebugMesh);
-        }
-
-        public override void Update()
-        {
-            ColliderCalculation();
-
-            UpdateDebugOutlines();
         }
 
 		internal abstract void ColliderCalculation();
@@ -39,25 +20,13 @@ namespace HeightmapVisualizer.src.Components.Collision
         public Vector3 ColliderMaxCorner { get; private protected set; }
         public abstract CollisionComponent SetCollider(dynamic[] args);
             
-        public bool IsDebug { get; private set; }
-        public CollisionComponent SetDebug(bool isDebug)
-        {
-            IsDebug = isDebug;
-            return this;
-        }
-
-        private protected MeshComponent DebugMesh { get; private set; }
-        private void UpdateDebugOutlines() => DebugMesh.SetFaces(IsDebug ?
-                    Cuboid.CreateFromTwoPoints(ColliderMinCorner, ColliderMaxCorner) :
-                    Array.Empty<MeshComponent.Face>());
-
 		#endregion
 
 		#region Logic 
 
-		internal void Collide(CollisionComponent other, Vector3 otherVelocity)
+		internal void Collide(CollisionInfo collision)
         {
-            Gameobject.OnCollision?.Invoke(other, otherVelocity);
+            Gameobject.OnCollision?.Invoke(collision);
 		}
 
         internal static bool AABBIntersect(CollisionComponent a, CollisionComponent b)
