@@ -50,7 +50,7 @@ namespace HeightmapVisualizer.src
 
         private Scene.Scene CreateScene()
         {
-            Gameobject camera = new Gameobject(new Vector3(0, -10, -30))
+            Gameobject camera = new Gameobject(new Vector3(0, -10, -60))
                 .AddComponent(new ControllerComponent().SetSpeed(0.5f))
                 .AddComponent(new PerspectiveCameraComponent(priority: 2));
 
@@ -120,35 +120,48 @@ namespace HeightmapVisualizer.src
                 g.AddComponent(new MeshAABBCollisionComponent().SetDebug(true));
             });
 
-            Gameobject cube = new Gameobject(new Vector3(-5.5f, -5, 1))
-                .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 1, 1))).SetColor(Color.Green).SetWireframe(true))
-				.AddComponent(new MeshAABBCollisionComponent().SetDebug(true))
+            Gameobject earth = new Gameobject(new Vector3(0, 0, 0))
+                .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 1, 1))).SetColor(Color.Blue).SetWireframe(true))
+				.AddComponent(new MeshAABBCollisionComponent().SetDebug(false))
 			    .AddComponent(new PhysicsComponent()
                     .SetMovementModule(new KineticMovementPhysicsModule())
                     .SetCollisionModule(new KineticCollisionPhysicsModule())
-                    .SetGravityModule(new UniversalGravityPhysicsModule())
-                    .SetVelocity(new Vector3(.05f, 0.00f, 0))
-                    .SetMass(100000000)
-                    .SetRestitution(0.1f)
+                    .SetGravityModule(new UniversalGravityPhysicsModule().SetGravitationalConstant(0.1f))
+                    .SetVelocity(new Vector3(0, 0, 0))
+                    .SetMass(10)
+                    .SetRestitution(1f)
 
                     );
 
 
 
-			Gameobject cube2 = new Gameobject(new Vector3(5.5f, 5, 1))
-                .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 1, 1))).SetColor(Color.Red).SetWireframe(true))
-                .AddComponent(new BoxAABBCollisionComponent().SetDebug(true))
+			Gameobject moon = new Gameobject(new Vector3(-20, 0, 0))
+                .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 1, 1))).SetColor(Color.Gray).SetWireframe(true))
+                .AddComponent(new MeshAABBCollisionComponent().SetDebug(false))
                 .AddComponent(new PhysicsComponent()
                     .SetCollisionModule(new KineticCollisionPhysicsModule())
-                    .SetGravityModule(new UniversalGravityPhysicsModule())
-                    .SetVelocity(new Vector3(-.05f, -.00f, 0))
-                    .SetMass(1000000000)
-                    .SetRestitution(0.1f)
+                    .SetGravityModule(new UniversalGravityPhysicsModule().SetGravitationalConstant(0.1f))
+                    .SetVelocity(new Vector3(0f, -0.2f, 0))
+                    .SetMass(1)
+                    .SetRestitution(1f)
 
                     );
 
 
-			Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
+            //Gameobject sun = new Gameobject(new Vector3(5, 0, 0))
+            //    .AddComponent(new MeshComponent(Cuboid.CreateCentered(new Vector3(1, 1, 1))).SetColor(Color.Violet).SetWireframe(true))
+            //    .AddComponent(new MeshAABBCollisionComponent().SetDebug(false))
+            //    .AddComponent(new PhysicsComponent()
+            //        .SetCollisionModule(new KineticCollisionPhysicsModule())
+            //        .SetGravityModule(new UniversalGravityPhysicsModule().SetGravitationalConstant(0.1f))
+            //        .SetVelocity(new Vector3(0, 0, 0))
+            //        .SetMass(1)
+            //        .SetRestitution(1f)
+
+            //        );
+
+
+            Gameobject floorPlane = new Gameobject(new Vector3(0, 5, 0))
                 .AddComponent(new MeshComponent(Plane.CreateCentered(new Vector2(10, 10))).SetWireframe(true));
             Gameobject wallPlane = new Gameobject(new Vector3(0, -5, 0), new Vector3((float)Math.PI / 2f, 0f, 0f).CreateQuaternionFromYawPitchRoll()) 
                 .AddComponent(new MeshComponent(Plane.CreateCentered(new Vector2(10, 10))).SetWireframe(true)
@@ -181,12 +194,12 @@ namespace HeightmapVisualizer.src
                 //}
             }
 
-            cube.AddComponent(new ScriptableComponent(null, move));
+            earth.AddComponent(new ScriptableComponent(null, move));
 
                 Gameobject line = new Gameobject()
                 .AddComponent(new MeshComponent(Line.CreateCorners(Vector3.Zero, new Vector3(0, 10, 10))));
 
-            var objects = new Gameobject[] { cube, cube2, camera, camera2 };
+            var objects = new Gameobject[] { earth, moon, camera, camera2 };
             objects = objects.Concat(hm).ToArray();
 
             static void cam(Button button)

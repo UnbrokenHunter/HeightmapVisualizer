@@ -6,7 +6,16 @@ namespace HeightmapVisualizer.src.Components.Physics.Gravity
 {
     internal class UniversalGravityPhysicsModule : GravityPhysicsModule
     {
-        private const float GravitationalConstant = 0.000000000066743f;
+        internal float GravitationalConstant { get; private set; }
+        internal UniversalGravityPhysicsModule SetGravitationalConstant(float gravitationalConstant)
+        {
+            this.GravitationalConstant = gravitationalConstant;
+            return this;
+        }
+        internal UniversalGravityPhysicsModule()
+        {
+            GravitationalConstant = 6.6743e-11f;
+        }
 
         internal override void Gravity(PhysicsComponent physics)
         {
@@ -20,11 +29,12 @@ namespace HeightmapVisualizer.src.Components.Physics.Gravity
 
                 var direction = Vector3.Normalize(obj.Gameobject.Transform.Position - physics.Gameobject.Transform.Position);
                 var distance = Vector3.Distance(physics.Gameobject.Transform.Position, obj.Gameobject.Transform.Position);
-                var forceOfGravity = GravitationalConstant * (physics.Mass + obj.Mass) / (distance * distance);
+                var forceOfGravity = GravitationalConstant * (physics.Mass * obj.Mass) / (MathF.Max(distance * distance, 1e-7f));
                 force += direction * forceOfGravity;
             }
 
-            physics.SetVelocity (physics.Velocity + force);
+            var acceleration = force / physics.Mass;
+            physics.SetVelocity(physics.Velocity + acceleration);
         }
     }
 }
