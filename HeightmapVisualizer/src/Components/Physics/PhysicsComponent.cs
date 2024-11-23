@@ -1,6 +1,7 @@
 ﻿
 using HeightmapVisualizer.src.Components.Collision;
 using HeightmapVisualizer.src.Components.Physics.Collision;
+using HeightmapVisualizer.src.Components.Physics.Gravity;
 using HeightmapVisualizer.src.Components.Physics.Movement;
 using HeightmapVisualizer.src.Scene;
 using System.Numerics;
@@ -50,6 +51,13 @@ namespace HeightmapVisualizer.src.Components.Physics
             return this;
         }
 
+        public GravityPhysicsModule GravityModule { get; private set; }
+        public PhysicsComponent SetGravityModule(GravityPhysicsModule gravity)
+        {
+            GravityModule = gravity;
+            return this;
+        }
+
         #endregion
 
         public PhysicsComponent()
@@ -57,6 +65,7 @@ namespace HeightmapVisualizer.src.Components.Physics
 			// Defaults - Will be overridden if desired
             CollisionModule = new KineticCollisionPhysicsModule();
 			MovementModule = new KineticMovementPhysicsModule();
+            GravityModule = new StaticGravityPhysicsModule();
         }
 
 		private void CollisionTrigger(CollisionInfo collision) => CollisionModule.Collision(collision);
@@ -70,6 +79,7 @@ namespace HeightmapVisualizer.src.Components.Physics
 		{
 			base.Update();
 
+            GravityModule.Gravity(this);
             MovementModule.Movement(this);
 		}
     }
