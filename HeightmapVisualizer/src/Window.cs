@@ -14,6 +14,7 @@ using HeightmapVisualizer.src.Components.Collision;
 using HeightmapVisualizer.src.Components.Physics;
 using HeightmapVisualizer.src.Components.Physics.Collision;
 using HeightmapVisualizer.src.Components.Physics.Movement;
+using HeightmapVisualizer.src.Components.Physics.Gravity;
 
 namespace HeightmapVisualizer.src
 {
@@ -125,9 +126,10 @@ namespace HeightmapVisualizer.src
 			    .AddComponent(new PhysicsComponent()
                     .SetMovementModule(new KineticMovementPhysicsModule())
                     .SetCollisionModule(new KineticCollisionPhysicsModule())
-                    .SetVelocity(new Vector3(.05f, 0.05f, 0))
-                    .SetMass(5)
-                    .SetRestitution(1.0f)
+                    .SetGravityModule(new UniversalGravityPhysicsModule())
+                    .SetVelocity(new Vector3(.05f, 0.00f, 0))
+                    .SetMass(100000000)
+                    .SetRestitution(0.1f)
 
                     );
 
@@ -138,9 +140,10 @@ namespace HeightmapVisualizer.src
                 .AddComponent(new BoxAABBCollisionComponent().SetDebug(true))
                 .AddComponent(new PhysicsComponent()
                     .SetCollisionModule(new KineticCollisionPhysicsModule())
-                    .SetVelocity(new Vector3(-.05f, -.05f, 0))
-                    .SetMass(1)
-                    .SetRestitution(0f)
+                    .SetGravityModule(new UniversalGravityPhysicsModule())
+                    .SetVelocity(new Vector3(-.05f, -.00f, 0))
+                    .SetMass(1000000000)
+                    .SetRestitution(0.1f)
 
                     );
 
